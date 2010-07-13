@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="desc/annotator/|desc/consumer/|desc/reader/|desc/type/" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk"/>
+	<classpathentry exported="true" kind="var" path="UIMA_HOME/lib/uima-core.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file://home/tereza/apache-uima/docs/api"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="UIMA_HOME/lib/uima-cpe.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file://home/tereza/apache-uima/docs/api"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/maxent-2.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/tar.jar"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.apache.dictionaryannotator-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.apache.regularexpressionannotator-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.annotationwriter-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.filesystemreader-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.inlinexmlcasconsumer-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.languageidentifier-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.runtime-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.segmenter.breakiteratorsegmenter-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.segmenter.common-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.snowballstemmer-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.spellchecker-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.transforminginlinexmlcasconsumer-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.treetagger-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.type-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.util-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.xmiwritercasconsumer-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.core.xmlreader-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.misc.disttemplate-0.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.ugd.applychangesannotator-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.ugd.backmapper-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.ugd.languagetoolchecker-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.ugd.npschatreader-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/de.tudarmstadt.ukp.dkpro.ugd.spellingcorrector-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/uutuc-0.9.6.jar"/>
+	<classpathentry kind="lib" path="lib/org.annolab.core.util-0.5.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.annolab.tt4j-1.0.12.jar"/>
+	<classpathentry kind="lib" path="lib/warc-tools-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xerces-2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/mg4j-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/fastutil-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/libidn-0.6.5.jar"/>
+	<classpathentry kind="lib" path="lib/boilerpipe-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/nekohtml.jar"/>
+	<classpathentry exported="true" kind="var" path="UIMA_HOME/lib/uima-document-annotation.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file://home/tereza/apache-uima/docs/api"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="UIMA_HOME/lib/uima-tools.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file://home/tereza/apache-uima/docs/api"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="UIMA_HOME/lib/uima-examples.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/fontbox-0.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jempbox-0.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-3.1-FINAL.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-scratchpad-3.1-FINAL.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/asm-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/bcmail-jdk14-136.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/bcprov-jdk14-136.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/icu4j-3.4.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/opennlp-tools-1.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/trove.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/uimaj-examples"/>
+	<classpathentry kind="var" path="UIMA_HOME"/>
+	<classpathentry kind="var" path="DKproWorkspace"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>true</primitive>
+  <annotatorImplementationName>org.apache.uima.tika.MarkupAnnotator</annotatorImplementationName>
+  <analysisEngineMetaData>
+    <name>org.apache.uima.tika.MarkupAnnotator</name>
+    <description>Uses Tika to generate annotations from original markup</description>
+    <version>1.0</version>
+    <vendor>DigitalPebble</vendor>
+    <configurationParameters>
+      <configurationParameter>
+        <name>ORIGINAL_VIEW_PARAM_NAME</name>
+        <description>Name of the view used for storing the original content</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>TEXT_VIEW_PARAM_NAME</name>
+        <description>Name of the view used to store the text extracted from the original document</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>SET_TEXT_VIEW_DEFAULT_PARAM_NAME</name>
+        <description>Indicates whether the Text view should be marked as the one to use by default</description>
+        <type>Boolean</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>ORIGINAL_VIEW_PARAM_NAME</name>
+        <value>
+          <string>_InitialView</string>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>TEXT_VIEW_PARAM_NAME</name>
+        <value>
+          <string>textView</string>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>SET_TEXT_VIEW_DEFAULT_PARAM_NAME</name>
+        <value>
+          <boolean>true</boolean>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <typeSystemDescription>
+      <imports>
+        <import location="MarkupAnnotationTypeSystem.xml"/>
+      </imports>
+    </typeSystemDescription>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type allAnnotatorFeatures="true">org.apache.uima.MarkupAnnotation</type>
+        </outputs>
+        <languagesSupported>
+          <language>x-unspecified</language>
+        </languagesSupported>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>true</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  <externalResourceDependencies>
+    <externalResourceDependency>
+      <key>tikaConfigFile</key>
+      <description>XML configuration file for Tika</description>
+      <optional>true</optional>
+    </externalResourceDependency>
+  </externalResourceDependencies>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+        <name>tikaConfigFile</name>
+        <description>XMLconfig file for Tika. If not found the component will rely on the default config</description>
+        <fileLanguageResourceSpecifier>
+          <fileUrlPrefix>tika_config.xml</fileUrlPrefix>
+          <fileUrlSuffix>./desc/</fileUrlSuffix>
+        </fileLanguageResourceSpecifier>
+      </externalResource>
+    </externalResources>
+    <externalResourceBindings>
+      <externalResourceBinding>
+        <key>tikaConfigFile</key>
+        <resourceName>tikaConfigFile</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+  </resourceManagerConfiguration>
+</analysisEngineDescription>

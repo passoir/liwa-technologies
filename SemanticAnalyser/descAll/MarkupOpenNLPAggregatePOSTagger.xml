@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>false</primitive>
+  <delegateAnalysisEngineSpecifiers>
+    <delegateAnalysisEngine key="OpenNLPSentenceDetector">
+      <import location="OpenNLPSentenceDetector.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OpenNLPPOSTagger">
+      <import location="OpenNLPPOSTagger.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OpenNLPParser">
+      <import location="OpenNLPParser.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OpenNLPTokenizer">
+      <import location="OpenNLPTokenizer.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="MarkupAnnotator">
+      <import location="MarkupAnnotator.xml"/>
+    </delegateAnalysisEngine>
+  </delegateAnalysisEngineSpecifiers>
+  <analysisEngineMetaData>
+    <name>MarkupOpenNLPAggregatePOSTagger</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters/>
+    <configurationParameterSettings/>
+    <flowConstraints>
+      <fixedFlow>
+        <node>MarkupAnnotator</node>
+        <node>OpenNLPSentenceDetector</node>
+        <node>OpenNLPTokenizer</node>
+        <node>OpenNLPPOSTagger</node>
+        <node>OpenNLPParser</node>
+      </fixedFlow>
+    </flowConstraints>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs/>
+        <languagesSupported/>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  <resourceManagerConfiguration/>
+</analysisEngineDescription>

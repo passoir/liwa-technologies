@@ -1,0 +1,65 @@
+
+/***************************************************************************/
+/* How to use the Semantic Analyser                                               */
+/* Author: Tereza Iofciu, L3S, Germany . LIWA               */
+/***************************************************************************/
+
+The Semantic Analyser consists of two main classes: 
+ - CPESetup.ARCCollectionParserCPM is used to parse a collection of ARC archives. It reads all the files of text/html 
+ mimetype from archives and it extracts all the nouns appearing around conjunctions in the text. It then 
+ stores the lemmas of the nouns plus location information in a MySQL database. It takes as input either the URL
+ where the archives are listed, or the folder with the archives and the number of archives to be processed.  
+ - graphs.CreateGraphs is used to extract lemma co-occurrence matrixes for different time intervals from
+ the database. 
+ 
+ If either of the programs is called without arguments, it will print information about its usage. 
+ 
+Requirements:
+ 
+  - Operating system: Linux
+  - Memory: 2G
+  - Java version: 1.6.x
+ 
+Installation: 
+  
+  The SemanticAnalyser itself requires no special installation, but due to licensing issues, the additionally 
+  needed packages cannot be distributed with the package. 
+  
+  - UIMA from http://uima.apache.org/ has to be priorly installed on the system and the environment variable
+  has to be set using the following command, assuming that you have extracted UIMA to the directory /opt:
+  
+  		export UIMA_HOME=/opt/apache-uima
+  
+  - TreeTagger from http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/ has to be installed on the
+  platform and then again the environment variable TAGDIR has to be set, assuming that you have extracted TreeTagger
+  to the directory /opt: 
+  
+  		export TAGDIR=/data/iofciu/uimatools/TreeTagger
+  
+  Also download the following model files for your platform and place them in to the models 
+  sub-directory of your TreeTagger directory:
+		• English parameter file (gzip compressed, Latin1)
+  
+  - DKPro from http://www.ukp.tu-darmstadt.de/?id=2643 has to be extracted on the platform. The variable 
+  DKProWorkspace has to be set, assuming that DKPro was extracted in \opt:
+ 
+ 
+ 		export DKproWorkspace=/opt/DKPRo-UGD/workspace
+ 		
+ The environment variables will be set only in the terminal window in which you have issued
+the command. You need to start the SemanticAnalyser from the very same terminal window later.
+
+Database setup:
+
+- todo
+
+Running:
+
+todo: create a running shell
+
+Bug Report: 
+  - do not hesitate to send us a mail to iofciu@l3s.de to report any bugs.
+
+ 		
+ 
+ 

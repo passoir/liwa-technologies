@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Wed Jun 02 16:56:58 CEST 2010
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=reader_new_graphs.jar
+manifest.mergeall=true
+manifest.mainclass=graphs.CreateGraphs
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|SemanticAnalyser>~.svn/
+includes=
