@@ -25,22 +25,21 @@ public class Connect {
 	// connection settings
 
 	//oracle db
-	static String userName_aux = "liwal3s";
-	static String passwd_aux = "liwa08";
+	static String userName_oracle_liwa = "liwal3s";
+	static String passwd_oracle_liwa = "liwa08";
 	
-	static String oracleURL_aux = "jdbc:mysql://oracle.l3s.uni-hannover.de:3308/LiwaTerminology";
+	static String oracleURL_liwa = "jdbc:mysql://oracle.l3s.uni-hannover.de:3308/LiwaTerminology";
 
-
+	//other db (for us pharos)
+	static String driver = DB.getString("db.driver"); //$NON-NLS-1$
+	static String userName = DB.getString("db.username"); //$NON-NLS-1$
+	static String passwd = DB.getString("db.password"); //$NON-NLS-1$
+	static String otherURL = DB.getString("db.url"); //$NON-NLS-1$
 	
-	static String userName = "iofciu";
-	static String passwd = "liwa10";
-	
-	static String oracleURL = "jdbc:mysql://pharos.l3s.uni-hannover.de:3306/liwa";
-	static String driver = "com.mysql.jdbc.Driver";
-
 	public Connect() {
 		super();
 		// TODO Auto-generated constructor stub
+		
 		this.con = null;
 	}
 
@@ -55,9 +54,9 @@ public class Connect {
 			Class.forName(driver).newInstance();
 			
 			if(dbUsed.equals("p")){
-				con = DriverManager.getConnection(oracleURL, userName, passwd);
+				con = DriverManager.getConnection(otherURL, userName, passwd);
 			}else{
-				con = DriverManager.getConnection(oracleURL_aux, userName_aux, passwd_aux);
+				con = DriverManager.getConnection(oracleURL_liwa, userName_oracle_liwa, passwd_oracle_liwa);
 			}
 			System.out.println("Connected to db "+dbUsed);
 			// entities

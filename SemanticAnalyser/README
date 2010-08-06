@@ -19,6 +19,7 @@ Requirements:
   - Operating system: Linux
   - Memory: 2G
   - Java version: 1.6.x
+  - MySQL database
  
 Installation: 
   
@@ -51,11 +52,23 @@ the command. You need to start the SemanticAnalyser from the very same terminal 
 
 Database setup:
 
-- todo
+In order to setup the database connection the script __liwa__mysql.sql has to be run on the MySql server. 
+This will create the needed database schema. The credentials for connecting to the database have then to be written in the properties file db.properties found in src/de/l3s/database/
 
 Running:
 
-todo: create a running shell
+First two Jars have to be created, one for extracting the information from archives (using as main class ARCCollectionParserCPMPharos.java from src/CPESetup/) and one for extracting the co-occurrence graphs (with main class src/graphs/CreateGraphs.java)
+
+ - command for information extraction:
+
+java -jar -Xms3G SemanticAnalyser_reader.jar p path_to_archive_directory number_of_archives_to_be_read
+
+- command for graph extraction:
+
+java -jar -Xms3G SemanticAnalyser_graphs.jar beginning_date end_date middle_date p
+
+where dates are with the form: 2004-01-01
+and p for using the database from the properties file
 
 Bug Report: 
   - do not hesitate to send us a mail to iofciu@l3s.de to report any bugs.
