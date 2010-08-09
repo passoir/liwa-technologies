@@ -1,0 +1,332 @@
+<Root>
+  <!-- This part describes the source of data, usually a database. --> 
+  <Datasource>
+    <Type>DataBaseDataSource</Type>
+    <Config>
+      <DataBase>
+        <Type>oracle</Type>
+        <Config>
+          <Host>ask-adri</Host>
+          <SID>ask-adri</SID>
+          <User>ask-adri</User>
+          <Password>ask-adri</Password>
+        </Config>
+      </DataBase>
+    </Config>
+  </Datasource>
+
+  <!-- Another option (for testing):
+       <Datasource>
+         <Type>FileDataSource</Type>
+         <Config>
+           <HostsPath>AssessmentUserInterface/test/host_table.csv</HostsPath>
+           <UsersPath>AssessmentUserInterface/test/user_table.csv</UsersPath>
+           <AssessmentHistoryPath>AssessmentUserInterface/test/spam_history_table.csv</AssessmentHistoryPath>
+         </Config>
+       </Datasource>
+       -->
+
+  <!-- The Warc browser that contains the pages to be evaluated. -->
+  <WarcBrowser>uranus.ilab.sztaki.hu:8080</WarcBrowser>
+
+  <!-- The Wayback Machine's address that contains the pages to be evaluated.-->
+  <!-- <WaybackBrowser>http://web.archive.org/web/</WaybackBrowser> -->
+  <!--<WaybackBrowser>http://ia201113.eu.archive.org/qa_euspam/</WaybackBrowser>-->
+  <WaybackBrowser>http://194.109.159.7/qa_euspam/</WaybackBrowser> 
+
+  <!-- Choose between "warc" and "wayback" -->
+  <WebPageServer>wayback</WebPageServer>
+  
+  <HostAttributes>
+  </HostAttributes>
+  
+  <!-- Labels that can be asssigned to the hosts. -->
+  <AssessmentLabels>
+
+    <LabelSetGroup type="IfNotTheDefaultIsSelectedThenDone" >
+
+      <LabelSet name="Hosting Type">
+        <Label> 
+          <NameOnUi>Normal</NameOnUi>
+          <LabelName>HTNormal</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Multiple</NameOnUi>
+          <LabelName>HTMultiple</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Language" defaultSource="langForm:usersLanguage"
+                tooltip="Language of the host" >
+        <!-- The first Label is the default, except for the language where the 
+             user's lang is the default. -->
+
+        <Label> 
+          <NameOnUi>English</NameOnUi>
+          <LabelName>en</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>German</NameOnUi>
+          <LabelName>de</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>French</NameOnUi>
+          <LabelName>fr</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Other</NameOnUi>
+          <LabelName>unknown</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Mixed</NameOnUi>
+          <LabelName>mixed</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Too few text</NameOnUi>
+          <LabelName>TooFewText</LabelName>
+        </Label> 
+      </LabelSet>
+
+      <LabelSet name="Adult Content" tooltip="Porn page">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonAdult</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Adult</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Other Problem" fillCommentRequired="true"
+                tooltip="Any problem that keeps you from assessing the host, e.g. the pages are not available.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NoOtherProblem</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>OtherProblem</LabelName>
+        </Label>
+      </LabelSet>
+
+    </LabelSetGroup>
+
+    <LabelSetGroup type="IfNotTheDefaultIsSelectedThenDone">
+
+      <LabelSet name="Web Spam"
+                tooltip="'Any deliberate action that is meant to trigger an unjustifiably favorable ranking, considering the page's true value.'" >
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonSpam</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Spam</LabelName>
+        </Label>
+      </LabelSet>
+
+    </LabelSetGroup>
+
+    <LabelSetGroup type="SelectOneAtLeast">
+
+      <LabelSet name="News/Editorial" tooltip="Posts announcing news. Factual texts reporting on a state of affairs. Posts discussing, analyzing a specific social/environmental/technological/economic issue, including propaganda adverts, political pamphlets.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonNews-Edit</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>News-Edit</LabelName>
+        </Label>
+      </LabelSet>
+      
+      <LabelSet name="Commercial"
+                tooltip="Product reviews, product shopping, on-line store, product catalogue, service catalogue, product related how-tos, FAQs, tutorials.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonCommercial</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Commercial</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Educational/Research"
+                tooltip="Tutorials, guidebooks, how-to guides, instructional material, educational material. Research papers, books. Catalogues, glossaries. Conferences, institutions, project pages. Health-related pages.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonEducational</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Educational</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Discussion"
+                tooltip="Dedicated forums, chat spaces, blogs, etc. Standard comment forms do not count.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonDiscussion</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Discussion</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Personal/Leisure"
+                tooltip="Arts, music, home, family, kids, games, horoscopes etc. A personal blog for example belongs both here and to Discussion.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonPersonal-Leisure</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Personal-Leisure</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Media"
+                tooltip="Video, audio, ... In general a site where the main content is not text but media. But for example a site about music is probably leisure and not media.">
+        <Label> 
+          <NameOnUi>No</NameOnUi>
+          <LabelName>NonMedia</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Media</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Database"
+                tooltip="A 'deep web' site whose content can be retrieved only by querying a database. Sites offering forms fall in this category.">
+        <Label> 
+          <NameOnUi>No </NameOnUi>
+          <LabelName>NonDatabase</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Yes</NameOnUi>
+          <LabelName>Database</LabelName>
+        </Label>
+      </LabelSet>
+
+    </LabelSetGroup>
+
+    <LabelSetGroup type="Dependant">
+
+      <LabelSet name="Readability-Vis"
+                tooltip="Mark 'Bad' if you see serious perceptual issues: contrasting color, layout, etc. that makes the text hard to read">
+        <Label> 
+          <NameOnUi>Good</NameOnUi>
+          <LabelName>2</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Bad</NameOnUi>
+          <LabelName>1</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Readability-Lang"
+                tooltip="Mark 'Bad' if there are serious linguistic correctness issues - the text is poorly written: incorrect style, abundant grammar and spelling errors.">
+        <Label> 
+          <NameOnUi>Good</NameOnUi>
+          <LabelName>2</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Bad</NameOnUi>
+          <LabelName>1</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Neutrality" requires="Media:Media,Educational/Research:Educational,Database:Database,News/Editorial:News-Edit,Commercial:Commercial"
+                tooltip="">
+        <Label> 
+          <NameOnUi>Facts</NameOnUi>
+          <LabelName>3</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Facts/Opinions</NameOnUi>
+          <LabelName>2</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Opinions</NameOnUi>
+          <LabelName>1</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Bias" requires="Media:Media,Educational/Research:Educational,News/Editorial:News-Edit,Commercial:Commercial"
+                tooltip="Mark if this source seems biased: promotes a particular religion, ideology, philosophy or political standpoint.\nFor more info see Wikipedia : Neutral Point of View (http://en.wikipedia.org/wiki/NPOV). A company home page advertising its own product qualify as neutral unless biased opinion is included towards competitors.">
+        <Label> 
+          <NameOnUi>Not biased</NameOnUi>
+          <LabelName>2</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Biased</NameOnUi>
+          <LabelName>1</LabelName>
+        </Label>
+      </LabelSet>
+
+      <LabelSet name="Trustiness" requires="Media:Media,Educational/Research:Educational,Database:Database,News/Editorial:News-Edit,Commercial:Commercial"
+                tooltip="Is this an authoritative source of information?">
+        <Label> 
+          <NameOnUi>I trust it</NameOnUi>
+          <LabelName>3</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>I trust a bit</NameOnUi>
+          <LabelName>2</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>I do not trust</NameOnUi>
+          <LabelName>1</LabelName>
+        </Label>
+      </LabelSet>
+
+    </LabelSetGroup>
+
+    <LabelSetGroup>
+
+      <LabelSet name="Confidence" fillCommentRequired="true"
+                tooltip="Mark 'Not sure' in case you face problems in assessing either of the labels above. Problems may be caused both by the labels we provide being inappropriate or by some lack of domain knowledge, background information (you have no knowledge of the topic).">
+        <Label>
+          <NameOnUi>Confident</NameOnUi>
+          <LabelName>Sure</LabelName>
+        </Label>
+        <Label> 
+          <NameOnUi>Not sure</NameOnUi>
+          <LabelName>Unsure</LabelName>
+        </Label>
+      </LabelSet>
+
+    </LabelSetGroup>
+
+
+  </AssessmentLabels>
+
+  <ExcludedHosts>
+    <UrlEndsWith>treeauts.eu</UrlEndsWith>
+    <UrlEndsWith>nightauts.eu</UrlEndsWith>
+    <UrlEndsWith>dryauts.eu</UrlEndsWith>
+    <UrlEndsWith>lifeauts.eu</UrlEndsWith>
+    <UrlEndsWith>.77k.eu</UrlEndsWith>
+    <UrlEndsWith>-palace.eu</UrlEndsWith>
+    <UrlEndsWith>mp3-stazeni-zdarma.eu</UrlEndsWith>
+  </ExcludedHosts>
+
+  <!-- A snapshot is a 'crawl'; we need these to get the exact pages from the warc browser. -->
+  <!-- This is not used now ! -->
+  <Snapshots>
+    <Snapshot>
+      <Name>2009 July</Name>
+      <Timestamp>1252262401</Timestamp>
+    </Snapshot>
+    <Snapshot>
+      <Name>2009 August</Name>
+      <Timestamp>1252266402</Timestamp>
+    </Snapshot>
+  </Snapshots>
+
+</Root>

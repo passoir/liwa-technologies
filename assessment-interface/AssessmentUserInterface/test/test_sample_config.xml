@@ -1,0 +1,172 @@
+<Root>
+  <Datasource>
+    <Type>FileDataSource</Type>
+    <Config>
+      <HostsPath>AssessmentUserInterface/test/host_table.csv</HostsPath>
+      <UsersPath>AssessmentUserInterface/test/user_table.csv</UsersPath>
+      <AssessmentHistoryPath>AssessmentUserInterface/test/spam_history_table.csv</AssessmentHistoryPath>
+    </Config>
+  </Datasource>
+  <WarcBrowser>uranus.ilab.sztaki.hu:8080</WarcBrowser>
+  <WaybackBrowser>http://web.archive.org/web/</WaybackBrowser>
+  <WebPageServer>warc</WebPageServer>
+  <HostAttributes>
+  </HostAttributes>
+   <!-- Labels that can be asssigned to the hosts. -->
+  <AssessmentLabels>
+
+    <LabelSet name="Language" type="selectOneMenu">
+
+      <!-- should be combobox? or add an extra inpuut field? -->
+      <Label> 
+        <NameOnUi>English</NameOnUi>
+        <LabelName>LEnglish</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>German</NameOnUi>
+        <LabelName>LGerman</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>French</NameOnUi>
+        <LabelName>LFrench</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>Other</NameOnUi>
+        <LabelName>LOther</LabelName>
+      </Label>
+      <Label>
+        <NameOnUi>I don't know</NameOnUi>
+        <LabelName>LDontknow</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>Non text</NameOnUi>
+        <LabelName>LNonText</LabelName>
+      </Label> 
+    </LabelSet>
+
+    <LabelSet name="HostingType" type="selectOneMenu">
+      <Label> 
+        <NameOnUi>Normal</NameOnUi>
+        <LabelName>HTNormal</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>Multiple</NameOnUi>
+        <LabelName>HTMultiple</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>I don't know</NameOnUi>
+        <LabelName>HTDontknow</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsEditorial" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CEditorial</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonEditorial</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsNews" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CNews</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonNews</LabelName>
+      </Label>
+    </LabelSet>
+    
+    <LabelSet name="ContIsCommercial" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CCommercial</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonCommercial</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsEducational" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CEducational</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonEducational</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsDiscussion" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CDiscussion</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonDiscussion</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsMedia" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CMedia</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonMedia</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsDatabase" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CDatabase</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonDatabase</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsAdult" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CAdult</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonAdult</LabelName>
+      </Label>
+    </LabelSet>
+
+    <LabelSet name="ContIsSpam" type="radioButton">
+      <Label> 
+        <NameOnUi>Yes</NameOnUi>
+        <LabelName>CSpam</LabelName>
+      </Label>
+      <Label> 
+        <NameOnUi>No</NameOnUi>
+        <LabelName>CNonSpam</LabelName>
+      </Label>
+    </LabelSet>
+
+  </AssessmentLabels>
+  <Snapshots>
+      <Snapshot>
+	<Name>2009 July</Name>
+	<Timestamp>1252262401</Timestamp>
+      </Snapshot>
+      <Snapshot>
+ 	<Name>2009 August</Name>
+	<Timestamp>1252266402</Timestamp>
+      </Snapshot>
+  </Snapshots>
+</Root>

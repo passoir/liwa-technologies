@@ -1,0 +1,16 @@
+#UserID;HostURL;Date;Comment;IsLast;Language;HostingType;ContIsEditorial;ContIsNews;ContIsCommercial;ConitIsEducational;ContIsDiscussion;ContIsMedia;ContIsDatabase;ContIsAdult;ContIsSpam;ContReadability;ContTrustiness;ContNeutrality
+1;freesaj.org.uk;1255262401;comm;0;english;normal;yes;yes;no;yes;no;no;no;no;yes;3;2;2
+1;freesaj.org.uk;1255262601;comm;0;french;normal;yes;no;no;yes;no;no;no;no;no;3;2;2
+1;freesaj.org.uk;1255272601;;1;english;normal;yes;yes;no;no;no;yes;no;no;yes;3;2;2
+1;ahpr.co.uk;1255332901;;0;no-text;normal;yes;yes;no;yes;no;no;no;yes;yes;3;2;2
+1;ahpr.co.uk;1255338901;;1;german;normal;yes;yes;yes;yes;yes;no;yes;yes;yes;3;2;2
+2;freesaj.org.uk;1255262601;comment;0;english;normal;yes;yes;no;yes;yes;no;no;no;no;3;2;2
+2;freesaj.org.uk;1255282601;comm;1;english;normal;yes;yes;no;yes;no;no;no;yes;yes;3;2;2
+2;ahpr.co.uk;1255338901;;1;german;normal;yes;yes;no;yes;no;no;no;yes;no;3;2;2
+3;ahpr.co.uk;1255332901;comm;0;english;normal;yes;yes;no;yes;no;no;no;no;yes;3;2;2
+3;ahpr.co.uk;1255338901;;1;english;normal;yes;yes;no;yes;no;no;no;no;no;3;2;2
+4;freesaj.org.uk;1255262401;;0;english;normal;yes;yes;no;yes;no;no;no;no;no;3;2;2
+4;freesaj.org.uk;1255262601;;0;english;normal;yes;yes;no;no;no;no;no;no;yes;3;2;2
+4;freesaj.org.uk;1255292601;;1;english;normal;yes;yes;no;no;no;no;no;no;no;3;2;2
+4;ahpr.co.uk;1255332901;;0;other;normal;yes;yes;no;yes;yes;no;no;yes;no;3;2;2
+4;ahpr.co.uk;1255338901;commtz;1;dontknow-lang;normal;no;no;no;yes;no;no;no;no;no;3;2;2

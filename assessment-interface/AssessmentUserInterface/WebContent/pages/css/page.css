@@ -1,0 +1,141 @@
+.pageLayout {
+    width: 100%;
+    height: 100%;
+}
+
+.pageHeader {
+    background-color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    height: 1px;
+    overflow: visible;
+    color: #FFFFFF;
+    padding: 0px;
+    margin: 0px;
+}
+
+.pageHeader1 {
+    
+}
+
+.pageHeader2 {
+    width: 100%;
+}
+
+.pageHeader2col1 {
+    background-color: #FFFFFF;
+}
+
+.pageNavigation {
+    text-align: left;
+    vertical-align: top;
+    width: 170px;
+    background-color: #E7EFF7;
+    border: 1px solid #6392C6;
+    padding: 10px;
+}
+
+.pageBody {
+    text-align: left;
+    vertical-align: top;
+    height: 100%;
+    padding: 20px;
+    background-color: #FFFFFF;
+    
+}
+
+.pageFooter {
+    text-align: right;
+    font-size: xx-small;
+    height: 1px;
+    overflow: visible;
+    background-color: #6392C6;
+    color: #FFFFFF;
+}
+
+.emptyHeader {
+    background-color: #FFFFFF;
+    border-top: 0px none;
+    border-right: 0px none;
+    border-bottom: 0px none;
+    border-left: 0px none;
+}
+
+div.titlebar {
+    background: #C7D0D9;
+    color: black;
+    border: 1px solid #8CACBB;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin: 1px 1px;
+    clear: both;
+}
+
+.myHidden {
+    display:none;
+}
+
+.smallText {
+    font-size: 14px;
+}
+
+.smallText td {
+    height: 14px;
+} 
+
+h1 {
+    color:#0088CD;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1.4em;
+    font-weight:bold;
+    margin:0;
+    padding:10px 0 0;
+    text-decoration:none;
+}
+h2 {
+    color:#68B7EE;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1.2em;
+    font-weight:bold;
+    margin:0;
+    padding:0;
+    text-decoration:none;
+}
+h3 {
+    color:#A5BC00;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1.2em;
+    font-weight:normal;
+    margin:0;
+    padding:0;
+    text-decoration:none;
+}
+h4 {
+    color:#A5BC00;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1.1em;
+    font-weight:normal;
+    margin:0 0 5px;
+    padding:0;
+    text-decoration:none;
+}
+h5 {
+    color:#A5BC00;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1em;
+    font-weight:normal;
+    margin:0;
+    padding:0;
+    text-decoration:none;
+}
+h6 {
+    color:#A5BC00;
+    font-family:Verdana,Tahoma,Arial,Serif;
+    font-size:1em;
+    font-weight:normal;
+    margin:0;
+    padding:0;
+    text-decoration:none;
+}
