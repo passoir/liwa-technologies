@@ -1,0 +1,585 @@
+/*     webArchiveUIKit    */
+
+
+/****************************************/
+/*             	 colors			        */							
+/****************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+/****************************************/
+/* blank core general css customisation */							
+/****************************************/
+
+body
+{
+	background-color: white;
+/*	background-image: url(../images/);*/
+	background-position: left top;
+	background-repeat: no-repeat;
+	
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 10pt;
+/*	line-height: 1.4em;*/
+	
+	text-align: center;
+}
+body.index
+{
+}
+body.dossier
+{
+}
+body.document
+{
+}
+
+
+
+.content, .contenu
+{
+	border: none;
+}
+
+
+.bannerContent, .banniereContenu, .banner .content, .banner .contenu
+{
+	padding: 0px;
+}
+
+.block
+{
+	
+}
+
+.blockContent, .blockContenu, .block .content, .block .contenu
+{
+	padding: 0px;
+}
+
+.quotation, .citation
+{
+	border: none;
+	color: #32488C;
+	font-style: italic;
+}
+
+
+ul.menuBar.vertical
+{
+	margin-top: 15px;
+	margin-right: 40px;
+	text-align: right;
+}
+
+ul.menuBar.vertical li a
+{
+	color: #777;
+	background-color: white;
+	font-size: 11px;
+	line-height: 13px;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	border-radius: 0.5em;
+	border: 1px solid white;
+}
+ul.menuBar.vertical li a:hover
+{
+	background-color: #EDE7F7;
+	border: 1px #DDD1EB solid;
+}
+
+ul {
+	list-style: none;
+}
+
+b {
+	font-weight: bold;
+}
+
+
+
+/****************************************/
+/*             metabrowser              */							
+/****************************************/
+
+#metabrowser {
+	border-bottom: 1px solid #BBB;
+	text-align: left;
+	font-size: 14px;
+	height: auto;
+	
+}
+
+#metabrowser #metabrowserTop {
+	display: block;
+	padding: 5px 10px 0px 10px;
+	font-size: 9pt;
+}
+
+/****************************************/
+/*              branding                */							
+/****************************************/
+
+#metabrowser #branding a {
+	
+	display: block;
+	width: 28%;
+	height: 108px;
+	float: left;
+	background: transparent url(../images/uiklogo.png) no-repeat;
+	text-decoration: none;
+}
+
+
+
+/****************************************/
+/*              metadata                */							
+/****************************************/
+
+#metabrowser #metadata {
+	
+	width: 70%;
+	float: right;
+	margin: 5px 0px 0px 0px;
+	color: #999;
+}
+
+#metabrowser #metadata #archiveBreadCrumb {
+	display: block;
+	float: right;
+	width: auto;
+}
+
+#archiveBreadCrumb a
+{
+	color: #999;
+	text-decoration: none;
+}
+
+#archiveBreadCrumb a:hover
+{
+	color: #333;
+	text-decoration: underline;
+}
+
+#archiveTitle
+{
+	font-size: 10pt;	
+	font-weight: bold;
+	display: block;
+	margin: 10px 0 5px 0;
+}
+
+#archiveOriginalUrl 
+{
+	font-size: 10pt;	
+	font-weight: bold;
+	display: block;
+	margin: 0px 0 5px 0;
+}
+#archiveOriginalUrl a
+{
+	color: #FF6600;
+	text-decoration: none;
+}
+#archiveOriginalUrl a:hover
+{
+	color: #FF6600;
+	text-decoration: underline;
+}
+
+#metabrowser #metadata #archiveDescription
+{
+	font-size: 0.8em;
+	line-height: 1.2em;
+	margin: 0px 0px 1.5em 0px;
+}	
+
+
+/****************************************/
+/*               tools                  */							
+/****************************************/
+
+#tools {
+	padding: 0px 10px 0px 10px;
+	position: relative;
+	
+}
+
+.folderList
+{
+	display: block;
+	height: auto;
+	clear:both;
+}
+
+
+#tools .folderList > ul
+{
+
+		
+}
+
+#tools ul {
+
+	margin: 5px 0px 0px 0px;
+}
+
+#tools li {
+	padding-bottom: 5px;
+}
+
+
+  
+/****************************************/
+/*               navigation             */							
+/****************************************/
+
+
+#tools #navigation {
+	width: 70%;
+	float: right;
+	margin: -1.5em 0px 15px 0px;
+	color: #999;
+}
+#navigation a
+{
+	font-size: 9pt;
+	display: block;
+	float: left;
+	width: auto;
+	margin: 0px 10px 0px 0px;
+	padding: 1px 4px 1px 4px;
+	background: #BBB url(../images/button.png) repeat-x center center;
+	color: white;
+	text-decoration: none;
+	-moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
+	-o-border-radius: 0.3em;
+	border-radius: 0.3em;
+	
+}
+#navigation a.seeAll { background-color: #FF8C39; }
+
+#navigation a:hover
+{
+	background-color: #FF6600;
+}
+
+
+/****************************************/
+/*            tools drawers             */							
+/****************************************/
+
+/****************************************/
+/*          absolute version           */							
+/****************************************/
+
+
+#tools.juxtaposed
+{
+	height: 3.1em;
+	
+	/*height: 5.5em;*/
+}
+
+#tools.juxtaposed .toolsDrawer
+{
+	position: absolute;
+	width: 48%;
+	height: auto;
+	z-index: 1000;
+	margin: 0px 0px 0px 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+#tools.juxtaposed .toolsDrawer.opened
+{
+	box-shadow: 5px 5px 6px #AAA;
+	-moz-box-shadow: 5px 5px 6px #AAA;
+	-webkit-box-shadow: 5px 5px 6px #AAA;
+}
+#tools.juxtaposed #timeBrowser1, #tools.juxtaposed #timeBrowser1.closed
+{
+	top: 0.5em;
+	left: 10px;
+	z-index: 10000;
+}
+#tools.juxtaposed #timeBrowser1.opened
+{
+	top: 0.5em;
+	left: 10px;
+	right: 50px;
+	width: auto;
+	z-index: 10000;
+}
+
+#tools.juxtaposed #organizer1
+{
+	top: 0.5em;
+	/* top: 3em; */
+	right: 10px;
+}
+
+
+
+/****************************************/
+/*          relative version           */							
+/****************************************/
+
+
+
+
+#tools.superimposed .toolsDrawer
+{
+
+	margin: 0px 0px 10px 0px;
+	padding: 0px;
+	background-color: white;
+}
+
+
+/****************************************/
+/*            tools drawers...          */							
+/****************************************/
+
+
+.toolsDrawer > .label
+{
+	background-color: #bbb;
+	color: #FFF;
+	padding: 5px 10px 5px 35px;
+	cursor: pointer;
+	height: 1.3em;
+	text-transform: uppercase;
+	-moz-border-radius-topleft: 0.5em;
+	-moz-border-radius-topright: 0.5em;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	letter-spacing: 0.05em;
+}
+
+.toolsDrawer.closed > .label
+{
+	background: #bbb url('../images/drawer_handle_closed.png') no-repeat 10px 10px;
+}
+
+.toolsDrawer.opened > .label
+{
+	background-color: #FF781E;
+	background-image: url('../images/drawer_handle_opened.png');
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+}
+
+.toolsDrawerContent {
+	display: none;
+	height: auto;
+	padding: 10px 10px 10px 10px;
+	border: solid #bbb;
+	border-width: 0px 1px 1px 1px; 
+	background-color: rgba(255,255,255,100);
+}
+
+#timeBrowser1 .toolsDrawerContent
+{
+	max-height: 620px;
+	overflow: auto;
+}
+.calendarSlider
+{
+	display: block;
+	width: 10000px;
+	height: auto;
+}
+#organizer1 .toolsDrawerContent
+{
+	max-height: 300px;
+	overflow: auto;
+}
+
+
+.toolsDrawerContent .label 
+{
+	color: #555;
+	font-size: 1.2em;
+	margin-bottom: 5px;
+}
+
+
+
+/****************************************/
+/*              organizer              */							
+/****************************************/
+
+.organizer a
+{
+	text-decoration: none;
+}
+
+
+/* folders & archive units */
+
+.organizer .folder > .label
+{
+	border-bottom: 1px solid #DDD;
+	margin: 0px 0px 0px 0px;
+	padding: 3px 0px 5px 0px;
+	font-weight: bold;
+}
+
+.organizer li .label
+{
+	display: block;
+	
+	margin: 0px 0px 0px 0px;
+	padding: 3px 0px 0px 20px;
+	
+	font-weight: normal;
+	color: #555;
+	font-size: 1em;
+
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 16px 16px;
+	/* a nettoyer */
+	-moz-background-size: 16px 16px;
+	-safari-background-size: 16px 16px;
+}
+
+.organizer li .label .name
+{
+	cursor: pointer;
+}
+
+.archiveUnit > .label
+{
+	cursor: default;
+	background: url('../images/archive_default_favicon.png') no-repeat left center;
+	padding-left: 25px;
+}
+
+.archiveUnit, .folder
+{
+	padding-left: 15px;
+}
+
+
+.folder.closed
+{
+	background: url('../images/handle_closed.png') no-repeat left 6px;
+}
+
+.folder.opened
+{
+	background: url('../images/handle_opened.png') no-repeat left 6px;
+}
+
+
+/****************************************/
+/*      folders and AU details         */							
+/****************************************/
+
+.detail
+{
+	cursor: default;
+	padding: 4px 0px 0px 20px;
+	margin: 0px 0px 10px 0px;
+}
+
+.detail .description, .detail .creation
+{
+	font-size: 0.8em;
+	line-height: 1.2em;
+	color: #777;
+}
+
+
+
+/****************************************/
+/*               editors                */							
+/****************************************/
+
+#folderList1Editor, #tagList1Editor, #groupList1Editor, #pageAnnotations1ToolsEditor
+{
+	margin-bottom: 10px;
+}
+
+.editor {
+	display: linline;
+	vertical-align: middle;
+	margin-left: 20px;
+}
+
+.editor .icon
+{
+	display: inline-block;
+}
+
+.editor .config
+{
+	background: url('../images/edit.png') no-repeat top left;
+	height: 15px;
+	width: 18px;
+}
+
+.editor .infos
+{
+	background: url('../images/add.png') no-repeat top left;
+	height: 15px;
+	width: 17px;
+}
+
+.editor .config:hover
+{
+	background-image:url('../images/edit-act.png');
+}
+
+.editor .infos:hover
+{
+	background-image: url('../images/add-act.png');
+}
+
+
+
+/****************************************/
+/*      iframe for archived page        */
+/****************************************/
+
+#mainFrame
+{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+
+/****************************************/
+/*   when metabrowser is in an iframe   */
+/****************************************/
+
+.embedded #metabrowser
+{
+	border: none;
+}
+
+.embedded #archiveDescription
+{
+}
+
+.embedded #tools
+{
+	height: 1em;
+}

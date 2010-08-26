@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!ELEMENT webArchiveUIKit (metaBrowser?, organizer?, timeBrowser?, searchFilter?)>
+
+
+<!--+++++++++++++++++++++++++++++++++++++++-->
+<!--               metaBrowser             -->
+<!--+++++++++++++++++++++++++++++++++++++++-->
+
+<!ELEMENT metaBrowser (branding, widgets)>
+<!ATTLIST metaBrowser 
+	type CDATA #REQUIRED
+>
+<!-- le type de code de metaBrowser sera déterminé selon audit de la page cible -->
+
+	<!ELEMENT branding (#PCDATA)><!-- texte et logo de l'archive -->
+
+	<!ELEMENT widgets (metadata?, tools?)>
+
+		<!ELEMENT metadata (timestamp?, title?, originalUrl?, breadCrumb?, description?)>
+			<!ELEMENT timestamp (#PCDATA)>
+			<!ELEMENT title (#PCDATA)>
+			<!ELEMENT originalUrl (#PCDATA)>
+			<!ELEMENT breadCrumb (#PCDATA)>
+			<!ELEMENT description (#PCDATA)>
+
+		<!ELEMENT tools (organizer?, timeBrowser?, searchBox?, navigation?, pageAnnotations?)>
+			<!-- organizer est défini plus bas -->
+			
+			<!-- timeBrowser est défini plus bas -->
+			<!-- searchBox est défini plus bas -->
+			<!ELEMENT navigation (#PCDATA)>
+			<!ATTLIST navigation 
+				type CDATA #REQUIRED	
+			><!-- liens "premier" "précedent" "suivant" "dernier" ou timeline -->
+			
+			
+			<!ELEMENT pageAnnotations (editor?, pageAnnotationList)>
+				<!ELEMENT editor (#PCDATA)>
+				<!ELEMENT pageAnnotationList (pageAnnotation*)>
+				<!ELEMENT pageAnnotation (target, title, annotation, editor?)>
+				<!ATTLIST pageAnnotation 
+						author CDATA #REQUIRED
+						timestamp CDATA #REQUIRED
+					>
+					<!ELEMENT target (#PCDATA)>
+					<!ELEMENT title (#PCDATA)>
+					<!ELEMENT annotation (#PCDATA)>
+
+
+
+
+
+<!--+++++++++++++++++++++++++++++++++++++++-->
+<!--                organizer              -->
+<!--+++++++++++++++++++++++++++++++++++++++-->
+
+<!ELEMENT organizer (folderList | tagList | groupList)*>
+
+	
+
+	<!--           dossiers hiérarchiques            -->
+	<!ELEMENT folderList (editor?, folder*)>
+	<!ELEMENT folder (editor?,(folder | archiveUnit)*, description)>
+	
+	<!ATTLIST folder 
+		label CDATA #REQUIRED
+		creator CDATA #REQUIRED
+		timestamp CDATA #REQUIRED
+	>
+<!-- 
+attention manque commentaire qui permettrait de coller des
+	éléments de politique doc
+ -->
+	
+	
+	<!ELEMENT archiveUnit (editor?, description, instanceList?)>
+	<!ATTLIST archiveUnit 
+		label CDATA #REQUIRED
+		creator CDATA #REQUIRED
+		timestamp CDATA #REQUIRED
+		icon CDATA #IMPLIED
+	>
+	<!-- instanceList est défini plus bas -->
+
+
+	
+	<!--           tags            -->
+	<!ELEMENT tagList (editor?,tag*)>
+	<!ELEMENT tag (editor?, description?, (folder | tag | group | archiveUnit | instance)*)>
+	<!ATTLIST tag
+		label CDATA #REQUIRED
+		creator CDATA #REQUIRED
+		occurrences CDATA #REQUIRED
+	>
+
+
+	<!--           dossiers thématiques            -->
+	<!ELEMENT groupList (editor?, group*)>
+	<!ELEMENT group (editor?, description, (archiveUnit | instance | folder | tag | group)*)>
+	<!ATTLIST group
+		label CDATA #REQUIRED
+		creator CDATA #REQUIRED
+		timestamp CDATA #REQUIRED
+		icon CDATA #IMPLIED
+	>
+	<!--  instance est défini plus bas -->
+
+
+
+
+
+
+<!--+++++++++++++++++++++++++++++++++++++++-->
+<!--               timeBrowser             -->
+<!--+++++++++++++++++++++++++++++++++++++++-->
+
+
+<!ELEMENT timeBrowser (browseYearList | browseMonthList | browseWeekList | browseDayList | browseHourList | instanceList)?>
+<!ATTLIST timeBrowser
+	type (table|horizDrawers|vertDrawers) #REQUIRED
+	dateFormat CDATA #REQUIRED
+><!-- voir ISO 8601 -->
+	<!ELEMENT browseYearList (browseYear+)>
+	<!ELEMENT browseYear (browseMonthList)>
+	<!ATTLIST browseYear
+		label CDATA #REQUIRED
+		instances CDATA #IMPLIED
+	>
+	
+		<!ELEMENT browseMonthList (browseMonth+)>
+		<!ELEMENT browseMonth (browseWeekList)>
+		<!ATTLIST browseMonth
+			label CDATA #REQUIRED
+			instances CDATA #IMPLIED
+		>
+		
+			<!ELEMENT browseWeekList (browseWeek+)>
+			<!ELEMENT browseWeek (browseDayList)>
+			<!ATTLIST browseWeek
+				label CDATA #REQUIRED
+				instances CDATA #IMPLIED
+			>
+			
+				<!ELEMENT browseDayList (browseDay+)>
+				<!ELEMENT browseDay (browseHourList)>
+				<!ATTLIST browseDay
+					label CDATA #REQUIRED
+					instances CDATA #IMPLIED
+				>
+				
+					<!ELEMENT browseHourList (browseHour+)>
+					<!ELEMENT browseHour (instanceList)>
+					<!ATTLIST browseHour
+						label CDATA #REQUIRED
+						instances CDATA #IMPLIED
+					>
+					
+						<!ELEMENT instanceList (instance+)>
+						<!ELEMENT instance (#PCDATA)>
+						<!ATTLIST instance
+							timestamp CDATA #REQUIRED
+							url CDATA #REQUIRED
+							thumbnail CDATA #IMPLIED
+						>
+
+
+
+<!--           STOP ICI        -->
+
+
+<!--+++++++++++++++++++++++++++++++++++++++-->
+<!--             search filter V1          -->
+<!--+++++++++++++++++++++++++++++++++++++++-->
+<!-- note la recherche V1 porte sur url folders groups tags -->
+
+
+<!ELEMENT searchFilter (searchForm, searchResults)>
+	<!ELEMENT searchForm (searchBox)>
+	<!ATTLIST searchForm
+		type (normal|advanced) #REQUIRED
+	>
+	<!ELEMENT searchBox (#PCDATA)>
+	
+	<!ELEMENT searchResults (searchWidgets?, searchResultList)>
+	<!ATTLIST searchResults
+		number CDATA #REQUIRED
+		key CDATA #REQUIRED
+	>	
+		<!ELEMENT searchWidgets (searchString, orderBy, pager)>
+			<!ELEMENT searchString (#PCDATA)>
+			<!ELEMENT orderBy (#PCDATA)>
+			<!ELEMENT pager (#PCDATA)>
+			<!ATTLIST pager
+				number CDATA #REQUIRED
+			>	
+			
+		<!ELEMENT searchResultList (searchResult*)>
+			<!ELEMENT searchResult (folder?, tag?, group?, archiveUnit?, instance?, title?, extract?, url?, timestamp?, mimeType?, breadCrumb?)>
+				<!ELEMENT title (#PCDATA)>
+				<!ELEMENT extract (#PCDATA | target)*>
+					<!ELEMENT target (#PCDATA)>
+				<!ELEMENT url (#PCDATA)>
+				<!ELEMENT mimeType (#PCDATA)>
+				<!-- breadCrumb est défini plus haut -->

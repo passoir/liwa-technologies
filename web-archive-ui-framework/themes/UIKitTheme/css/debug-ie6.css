@@ -1,0 +1,39 @@
+/* debuggage internet explorer : voir l'excellent http://esprit-creatif.blog.mongenie.com/index.php?idblogp=406297 */
+
+html
+{
+	overflow:auto;
+}
+*
+{
+	behavior: url(/helpers/iepngfix/iepngfix.htc);
+}
+
+/* menus */
+
+ul.menuBar.vertical
+{
+	margin: 15px 0px 0px 0px;
+}
+
+ul.tabBar li a
+{
+	margin-top:3px;
+}
+ul.tabBar li a:hover
+{
+	margin-top:0px;
+}
+ul.tabBar li.selected a
+{
+	margin-top:0px;
+}
+ul.menuBar.vertical li a
+{
+	height: 100%;
+}
+a.logo
+
+{
+background: transparent url(../images/logoBlank.gif) no-repeat left 
+}
