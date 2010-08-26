@@ -1,0 +1,105 @@
+/****************************************/
+/*     	        formulaires             */							
+/****************************************/
+
+/* used against spam */
+.piege, .textFieldKey
+{
+	display: none;
+}
+#document label
+{
+	display: block;
+	float: left;
+	width: 80px;
+	margin-right: 15px;
+}
+
+#document label.piege
+{
+	display: none;
+}
+
+
+
+
+/* html5 */
+
+input[type=range] {}
+
+
+input[type=search] {}
+/* attribut html autofocus */
+
+
+
+
+
+
+
+#document input[type=text]
+
+{
+}
+
+
+#document .textField
+{
+	width: 220px;
+	color: #444;
+	font-size: 1em;
+	line-height: 1.3em;
+	background-color: white;
+	padding: 3px;
+	margin-bottom: 4px;
+	border: 1px solid #888;
+	
+}
+#document .textField:focus
+{
+	width: 220px;
+	color: #444;
+	background-color: #FDFFAE;
+	padding: 3px;
+	margin-bottom: 4px;
+	border: 1px #CDC618 solid;
+}
+
+#document textarea
+{	
+	width: 316px;
+	color: #444;
+	font-size: 1em;
+	line-height: 1.3em;
+	background-color: white;
+	border: 1px solid #888;
+}
+
+#document textarea:focus
+{	
+	background-color: #FDFFAE;
+}
+
+#document input[type=submit]
+{
+	padding: 3px;
+	font-weight: bold;
+	color: #DDD;
+	background-color: #888;
+	border-top: 1px solid #555;
+	border-left: 1px solid #555;
+	border-right: 1px solid #333;
+	border-bottom: 1px solid #333;
+	cursor: pointer;
+}
+#document input[type=submit]:hover
+{
+	padding: 3px;
+	font-weight: bold;
+	color: #333;
+	background-color: #AAA;
+	border-top: 1px solid #333;
+	border-left: 1px solid #333;
+	border-right: 1px solid #555;
+	border-bottom: 1px solid #555;
+}

@@ -1,0 +1,249 @@
+/****************************************/
+/*     	        simple tabs    	       	*/
+/****************************************/
+
+ul.tabBar
+{
+	display: block;
+	clear: both;
+	width: 100%;
+	float: left;
+	list-style-type: none;
+	text-align: left;
+	
+	background-color: #EEE;
+}
+
+ul.tabBar li
+{
+	clear: none;
+	display: block;
+	float: left;
+	margin-left: 7px;
+	height:100%;
+}
+/*display: inline-block;*/
+
+ul.tabBar li a
+{
+	text-decoration: none;
+	clear: none;
+	display: block;
+	width:auto;
+	float: left;
+	padding: 3px 5px 3px 5px;
+	color: white;
+	background-color: #AAA;
+}
+ul.tabBar li a:hover
+{
+	margin-top: -3px;
+	padding: 3px 5px 6px 5px;
+	
+	color: white;
+	background-color: #BBB;
+}
+ul.tabBar li.selected a
+{
+	margin-top: -3px;
+	padding: 3px 5px 6px 5px;
+	
+	color: #555;
+	background-color: #CCC;
+}
+
+
+/****************************************/
+/*     	      menuBar vertical	       	*/
+/****************************************/
+
+ul.menuBar.vertical
+{
+	display: block;
+	clear: both;
+	width: 100%;
+	float: left;
+	list-style-type: none;
+	text-align: left;
+	
+
+}
+
+ul.menuBar.vertical li
+{
+	display: block;
+	width: 100%;
+	height:100%;
+	margin: 0px;
+}
+
+
+ul.menuBar.vertical li a
+{
+	text-decoration: none;
+	display: block;
+	padding: 3px 5px 3px 5px;
+	color: #333;
+	background-color: #CCC;
+	margin:0px;
+}
+ul.menuBar.vertical li a:hover
+{
+
+	padding: 3px 5px 3px 7px;
+	
+	color: black;
+	background-color: #BBB;
+}
+ul.menuBar.vertical li.selected a
+{
+
+	padding: 3px 5px 3px 7px;
+	
+	color: #555;
+	background-color: #AAA;
+}
+
+
+/****************************************/
+/*     	    menus deroulants    		*/
+/****************************************/
+
+
+ul.menuBar.horizontal
+{
+	display: block;
+	clear: both;
+	width: 100%;
+	float: left;
+	list-style-type: none;
+	text-align: left;
+	background-color: #CCC;
+
+}
+
+ul.menuBar.horizontal li
+{
+	display: block;
+	width: auto;
+	float: left;
+	position: relative;
+	line-height: 1.4em;
+	height:100%;
+}
+/*display: inline-block;*/
+
+ul.menuBar.horizontal li a
+{
+	text-decoration: none;
+	display: block;
+	padding: 0.4em;
+	color: white;
+	background-color: #CCC;
+	border-right: 1px dotted white;
+}
+ul.menuBar.horizontal li a:hover
+{
+	color: white;
+	background-color: #BBB;
+}
+ul.menuBar.horizontal li.selected a
+{
+	color: #555;
+	background-color: #AAA;
+}
+ul.menuBar.horizontal li ul
+{
+	display: none;
+}
+
+
+
+
+
+ul.menuBar.horizontal li:hover > ul
+{
+	display: block;
+	background-color: red;
+	width: auto;
+	position: absolute;
+	top: 2.1em;
+	left: 0.5em;
+	z-index: 100;
+}
+
+ul.menuBar.horizontal li ul li
+{
+	display: block;
+	clear: both;
+	width: 100%;
+	white-space: nowrap;
+}
+ul.menuBar.horizontal li ul li a
+{
+	text-decoration: none;
+	display: block;
+	width: auto;
+	padding: 0.4em;
+	color: white;
+	background-color: #CCC;
+	border-top: 1px dotted white;
+}
+ul.menuBar.horizontal li.selected ul li a
+{
+	color: white;
+	background-color: #CCC;
+}
+ul.menuBar.horizontal li ul li a:hover
+{
+	color: white;
+	background-color: #BBB;
+}
+
+/****************************************/
+/*     	        fil d'Ariane  	       	*/
+/****************************************/
+
+
+ul.filAriane, ul.breadCrumb,
+#document ul.filAriane, #document ul.breadCrumb
+{
+	display: block;
+	text-align: right;
+	list-style-type: none;
+	color: #5CABD0;
+}
+
+ul.filAriane li, ul.breadCrumb li,
+#document ul.filAriane li, #document ul.breadCrumb li
+{
+	display: inline;
+	font-size: 0.8em;
+	height: 100%;
+	color: #A2C0D0;
+}
+ul.filAriane li:after, ul.breadCrumb li:after,
+#document ul.filAriane li:after, #document ul.breadCrumb li:after
+{
+	content:" | "; 
+}
+ul.filAriane li.last:after, ul.breadCrumb li.last:after,
+#document ul.filAriane li.last:after, #document ul.breadCrumb li.last:after
+{
+	content:""; 
+}
+ul.filAriane li a, ul.breadCrumb li a,
+#document ul.filAriane li a, #document ul.breadCrumb li a
+{
+	color: #5CABD0;
+	text-decoration: none;
+	padding: 0px 3px 0px 3px;
+}
+
+
+ul.filAriane li a:hover, ul.breadCrumb li a:hover,
+#document ul.filAriane li a:hover, #document ul.breadCrumb li a:hover
+{
+	color: #5790BF;
+	text-decoration: underline;
+}
