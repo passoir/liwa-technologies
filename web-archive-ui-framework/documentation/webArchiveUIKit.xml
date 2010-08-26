@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml-stylesheet href="webArchive.css" type="text/css"?>-->
+<!DOCTYPE webArchiveUIKit SYSTEM "webArchiveUIKit_modif.dtd">
+
+
+<webArchiveUIKit>
+
+<metaBrowser type="DOMBased">
+	
+	<branding>The Archive name</branding>
+
+	<widgets>
+	
+		<metadata>
+			<timestamp>XXXX-XX-XX XX:XX UTC</timestamp>
+			<title>Le Monde</title>
+			<originalUrl>http://www.lemonde.fr</originalUrl>
+			<breadCrumb>France / Journaux / Le Monde</breadCrumb>
+			<description>Le quotidien Français Le Monde</description>
+		</metadata>
+		
+		<tools>
+			<organizer><!--../Le Monde--></organizer>
+			<timeBrowser type="horizDrawers" dateFormat="timestamp"><!-- ../XXXX-XX-XX XX:XX UTC --></timeBrowser>
+			<searchBox />
+			<navigation type="links">First / Previous / All / Next / Last</navigation>
+			
+			<pageAnnotations>
+				<editor>Add</editor>
+				<pageAnnotationList>
+					<pageAnnotation author="Nicolas" timestamp="2009-07-06 20:00 UTC">
+						<target><!-- xpath ou snippet --></target>
+						<title>Ma première annotation</title>
+						<annotation>C'est un dimanche qu'il faut prendre une telle décision.</annotation>
+						<editor>Edit / Delete</editor>
+					</pageAnnotation>
+					<pageAnnotation author="Nicolas" timestamp="2009-06-03 20:00 UTC">
+						<target><!-- xpath ou snippet --></target>
+						<title>Ma deuxième annotation</title>
+						<annotation>Il y a un défaut d'affichage ici !</annotation>
+						<editor>Edit / Delete</editor>
+					</pageAnnotation>
+				</pageAnnotationList>
+			</pageAnnotations>
+		</tools>
+		
+	</widgets>
+
+</metaBrowser>
+
+
+<organizer>
+		
+	<folderList>
+		<editor>Add</editor>
+		
+		<folder label="France" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC">
+				<editor>Add / Edit / Delete</editor>
+				<archiveUnit label="Portail" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<editor>Edit / Delete</editor>
+					<description>
+					Le portail France.fr
+					</description>
+					<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+				</archiveUnit>
+				<folder label="Journaux" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC">
+					<editor>Add / Edit / Delete</editor>
+					<archiveUnit label="Le Monde" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+						<editor>Edit / Delete</editor>
+						<description>
+						Le quotidien le monde est un excellent journal
+						</description>
+						<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+					</archiveUnit>
+					<archiveUnit label="Libération" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+						<editor>Edit / Delete</editor>
+						<description>
+						Le quotidien libération est un formidable journal
+						</description>
+						<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+					</archiveUnit>
+					<archiveUnit label="Figaro" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+						<editor>Edit / Delete</editor>
+						<description>
+						Le quotidien Le Figaro est un passionnant journal
+						</description>
+						<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+					</archiveUnit>
+				</folder>
+		</folder>
+	</folderList>
+	
+	<tagList>
+		<editor>Add</editor>
+		<tag label="passionnant" creator="julien" occurrences="1" >
+			<editor>Add / Edit / Delete</editor>
+			<archiveUnit label="le Figaro" creator="julien" timestamp="XXXX-XX-XX XX:XX UTC">
+				<editor>Edit / Delete</editor>
+				<description>
+				Le quotidien Le Figaro est un passionnant journal
+				</description>
+				<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+			</archiveUnit>
+		</tag>
+		<tag label="presse" creator="julien" occurrences="4" >
+			<editor>Add / Edit / Delete</editor>
+			
+				<archiveUnit label="Le Monde" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<editor>Edit / Delete</editor>
+					<description>
+					Le quotidien le monde est un excellent journal
+					</description>
+					<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+				</archiveUnit>
+				<archiveUnit label="Libération" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<editor>Edit / Delete</editor>
+					<description>
+					Le quotidien libération est un formidable journal
+					</description>
+					<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+				</archiveUnit>
+				<archiveUnit label="Figaro" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<editor>Edit / Delete</editor>
+					<description>
+					Le quotidien Le Figaro est un passionnant journal
+					</description>
+					<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+				</archiveUnit>
+		</tag>
+	</tagList>
+	
+	<!-- un dossier thématique -->
+	<groupList>
+		<editor>Add</editor>
+		<group label="La presse de droite en France" creator="nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+		<editor>Add / Edit / Delete</editor>
+				<description>Je n'ai dans mes collections qu'un journal de droite (quoique certains discuteraient bien la chose).</description>
+				
+				<archiveUnit label="Figaro" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<editor>Edit / Delete</editor>
+					<description>
+					Le quotidien Le Figaro est un passionnant journal
+					</description>
+					<timeBrowser type="horizDrawers"  dateFormat="timestamp" ><!-- voir les instances --></timeBrowser>
+				</archiveUnit>
+				
+		</group>
+	</groupList>
+</organizer>
+
+
+<timeBrowser type="vertDrawers" dateFormat="YYYY-MM-DDThh:mm:ss">
+	<browseYearList>
+		<browseYear label="2008" instances="4">
+			<browseMonthList>
+				<browseMonth label="janvier" instances="2">
+					<browseWeekList>
+						<browseWeek label="semaine 3" instances="1">
+							<browseDayList>
+								<browseDay label="mardi" instances="1">
+									<browseHourList>
+										<browseHour label="22:00" instances="1">
+											<instanceList>
+												<instance timestamp="XXXX-XX-XX XX:XX UTC" url="http://lemonde.fr/sports/" thumbnail="thumb.jpg" />
+											</instanceList>
+										</browseHour>
+									</browseHourList>
+								</browseDay>
+							</browseDayList>
+						</browseWeek>
+						<browseWeek label="semaine 4" instances="1">
+							<browseDayList>
+								<browseDay label="jeudi" instances="1">
+									<browseHourList>
+										<browseHour label="12:00" instances="1">
+											<instanceList>
+												<instance timestamp="XXXX-XX-XX XX:XX UTC" url="http://lemonde.fr/sports/" thumbnail="thumb.jpg" />
+											</instanceList>
+										</browseHour>
+									</browseHourList>
+								</browseDay>
+							</browseDayList>
+						</browseWeek>
+					</browseWeekList>
+				</browseMonth>
+			</browseMonthList>
+		</browseYear>
+		<browseYear label="2007" instances="4">
+			<browseMonthList>
+				<browseMonth label="mars" instances="2">
+					<browseWeekList>
+						<browseWeek label="semaine 8" instances="1">
+							<browseDayList>
+								<browseDay label="samedi" instances="1">
+									<browseHourList>
+										<browseHour label="20:00" instances="1">
+											<instanceList>
+												<instance timestamp="XXXX-XX-XX XX:XX UTC" url="http://lemonde.fr/sports/" thumbnail="thumb.jpg" />
+											</instanceList>
+										</browseHour>
+									</browseHourList>
+								</browseDay>
+							</browseDayList>
+						</browseWeek>
+						<browseWeek label="semaine 9" instances="1">
+							<browseDayList>
+								<browseDay label="jeudi" instances="1">
+									<browseHourList>
+										<browseHour label="12:00" instances="1">
+											<instanceList>
+												<instance timestamp="XXXX-XX-XX XX:XX UTC" url="http://lemonde.fr/sports/" thumbnail="thumb.jpg" />
+											</instanceList>
+										</browseHour>
+									</browseHourList>
+								</browseDay>
+							</browseDayList>
+						</browseWeek>
+					</browseWeekList>
+				</browseMonth>
+			</browseMonthList>
+		</browseYear>
+	</browseYearList>
+</timeBrowser>
+
+
+
+<!--           STOP ICI        -->
+
+<searchFilter>
+	<searchForm type="normal">
+		<searchBox />
+	</searchForm>
+
+	<searchResults number="23089" key="relevance">
+		
+		<searchWidgets>
+			<searchString>journa</searchString>
+			<orderBy>date / relevance</orderBy>
+			<pager number="10">first 23 24 25 26 27 last</pager>
+		</searchWidgets>
+	
+		<searchResultList>
+		
+			<searchResult>
+				<folder label="Journaux" creator="Nicolas"><!-- France / journaux --></folder>
+			</searchResult>
+		
+			<searchResult>
+				<group label="La presse de droite en France" creator="nicolas" timestamp="XXXX-XX-XX XX:XX UTC">
+					<description>Le Figaro est un passionnant journal de droite</description>
+				</group>
+			</searchResult>
+		
+			<searchResult>
+				<archiveUnit label="Le Monde" creator="Nicolas" timestamp="XXXX-XX-XX XX:XX UTC" icon="">
+					<description>Le quotidien le monde est un excellent journal</description>
+					<timeBrowser type="vertDrawers" dateFormat="timestamp"><!-- Visiter les archives --></timeBrowser>
+				</archiveUnit>
+			</searchResult>
+			
+			<searchResult>
+				<instance timestamp="XXXX-XX-XX XX:XX UTC" url="http://lemonde.fr/sports/" thumbnail="thumb.jpg" />
+			</searchResult>
+			
+			<searchResult><!-- plus tard -->
+					<title>journal d'un fêtard</title>
+					<extract>il faisait très chaud jeudi alors on m'a servi un vin limé</extract>
+					<url>http://www.recettes.fr/cockails/blog/</url>
+					<timestamp>XXXX-XX-XX XX:XX UTC</timestamp>
+					<mimeType>text/html</mimeType>
+			</searchResult>		
+		</searchResultList>
+
+	</searchResults>
+		
+
+
+</searchFilter>
+
+</webArchiveUIKit>

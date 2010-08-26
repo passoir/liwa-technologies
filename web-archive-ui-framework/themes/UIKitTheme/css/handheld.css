@@ -1,0 +1,10 @@
+/*@import url("media-screen.css"); */  
+
+.handHeldOnly
+{
+	display: block;
+}
+.screenOnly, .printOnly
+{
+	display: none;
+}

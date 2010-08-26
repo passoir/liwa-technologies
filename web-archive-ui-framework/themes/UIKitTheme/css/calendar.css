@@ -1,0 +1,250 @@
+/** general calendar **/
+.scale
+{
+	font-size: 14pt;
+	line-height: 17pt;
+	font-family: Helvetica, Arial, sans-serif;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.scale.bigScale
+{
+	font-size: 12pt;
+	line-height: 14pt;
+}
+
+.scale.smallScale
+{
+	font-size: 3pt;
+	line-height: 4pt;
+}
+
+.year
+{
+	display: inline-block;
+	vertical-align: top;
+	background-color: #D8D8D8;
+	width: auto;
+	min-width: 36em;
+	height: auto;
+	margin: 0em 0em 0em 0em;
+	padding: 0 0 0.2em 0.2em;
+	position: relative;
+	/*overflow: hidden;*/
+}
+
+.monthCalendar
+{
+	position: relative;
+	height: auto;
+}
+
+.year .month
+{
+	display: block;
+	float: left;
+	background-color: #e5e5e5;
+	width: 3em;
+	margin-top: 2.5em;
+	margin-right: 0.25em;
+	margin-left: 0em;
+}
+
+/** labels **/
+.scale .label
+{
+	margin-top: 0em;
+	height: 1em;
+	padding-left: 0em;
+	color: #888;
+}
+
+.year > .label
+{
+	display: block;
+	float: left;
+	width: auto;
+	font-size: 40px;
+	line-height: 45px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.month > .label
+{
+	margin: -2em 0px 0px 0px;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+/** counters **/
+.counter
+{
+	color: #777;
+	display: block;
+	font-size: 0.7em;
+	font-weight: normal;
+}
+
+.year > .counter
+{
+	display: block;
+	float: left;
+	width: auto;
+	font-size: 14px;
+	line-height: 16px;
+	margin-top: 1.4em;
+	height: 1em;
+	padding-left: 0.6em;
+	vertical-align: bottom;
+}
+
+/** instances **/
+.year .instanceList
+{
+	display: block;
+	position: absolute;
+	float: none;
+	top: 1.5em;
+	left: -3.25em;
+	width: 40em;
+	z-index: 100;
+}
+
+.year .instance
+{
+	display: block;
+	width: 3em;
+	height: 1em;
+	line-height: 1em;
+	/*overflow: hidden;*/
+	position: absolute;
+	left: 0em;
+	top: 0px;
+	margin: 0em;
+	margin-top: 0em;
+	padding: 0;
+	text-align: center;
+}
+
+.year .instance a
+{
+	color: #0741D4;
+	font-size: 0.7em;
+	text-decoration: none;
+	display: block;
+	width: 100%;
+	height: 1.36em;
+	background-color: rgba(129,162,255,0.3);
+}
+
+.year .instance a:hover
+{
+	text-decoration: none;
+	background-color: rgba(129,162,255,1);
+	color: #F3F3F3;
+}
+
+.year .instance a.multipleInstanceLabel, .year .instance a.multipleInstanceLabel.inactive { background-color: rgb(205, 198, 219); }
+.year .instance a.multipleInstanceLabel:hover { background-color: rgb(143, 136, 162); }
+
+.year .instance a.multipleInstanceLabel.active
+{
+	background-color: rgb(143, 136, 162);
+	color: #F3F3F3;
+}
+
+.multipleInstance
+{
+	width: auto;
+	display: none;
+	float: left;
+	color: #FDFDFD;
+	position: relative;
+	z-index: 1000;
+	box-shadow: 2px 2px 2px #666;
+	-moz-box-shadow: 2px 2px 2px #666;
+	-webkit-box-shadow: 2px 2px 2px #666;
+}
+
+.year .instance .multipleInstance a
+{
+	display: block;
+	white-space: nowrap;
+	background-color: rgb(175, 170, 188);
+	color: #FDFDFD;
+	padding: 2px 3px 2px 3px;
+}
+
+.year .instance .multipleInstance a:hover { background-color: rgb(143, 136, 162); }
+
+/**** different calendar styles ****/
+/** proportional **/
+.proportional .year .month { height: 31.2em; }
+
+/** non proportional **/
+.nonproportional .year .instanceList { height: auto; }
+.nonproportional .year .instance { position: default !important; }
+
+/** simple list by years **/
+.simpleList .smallScale, .simpleList .bigScale { font-size: 1.3em; }
+
+.simpleList .year
+{
+	min-width: inherit;
+	margin-right: 10px;
+	padding: 0px 5px 10px 5px;
+	background-color: #FFF;
+}
+
+.simpleList .year > .label { font-size: 25px; }
+.simpleList .monthCalendar { padding-top: 5px; }
+.simpleList .month { display: none; }
+
+.simpleList .instanceList
+{
+	position: static;
+	width: auto;
+}
+
+.simpleList .instance
+{
+	position: static;
+	height: auto;
+	text-align: left;
+}
+
+.simpleList .year .instance a, .simpleList .year .multipleInstance a
+{
+	color: #0741D4;
+	background-color: transparent;
+	padding: 0px;
+}
+
+.simpleList .year .instance a:hover, .simpleList .year .multipleInstance a:hover
+{
+	color: #042476;
+	background-color: transparent;
+}
+
+.simpleList .year .instance .multipleInstanceLabel { display: none; }
+
+.simpleList .multipleInstance
+{
+	display: block;
+	width: auto;
+	float: none;
+	color: #FDFDFD;
+	position: static;
+	z-index: 1000;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+/** yearLabelOnly : display only year labels when calendar is small **/
+.yearLabelOnly .smallScale .year { background-color: #FFFFFF; }
+/*.yearLabelOnly .bigScale .year { background-color: #F5F5F5; }*/
+.yearLabelOnly .smallScale .monthCalendar { display: none; }
+.yearLabelOnly .bigScale .monthCalendar { display: block; }

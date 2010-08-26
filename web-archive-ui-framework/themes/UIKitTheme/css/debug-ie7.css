@@ -1,0 +1,84 @@
+/* debuggage internet explorer : voir l'excellent http://esprit-creatif.blog.mongenie.com/index.php?idblogp=406297 */
+html
+{
+	overflow:auto;
+}
+#tools {
+	display: block;
+	padding: 0px 10px 0px 10px;
+	position: static;
+	height: auto;
+}
+
+.toolsDrawer .label
+{
+	background-color: #bbb;
+	color: #FFF;
+	padding: 5px 10px 5px 35px;
+	cursor: pointer;
+	height: 1.3em;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.toolsDrawer.closed .label
+{
+	background: #bbb url('../images/drawer_handle_closed.png') no-repeat 10px 10px;
+}
+
+.toolsDrawer.opened .label
+{
+	background-color: #FF781E;
+	background-image: url('../images/drawer_handle_opened.png');
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+}
+.toolsDrawerContent .label, 
+{
+	background-color: tranparent;
+	color: #555;
+	padding: 0;
+	cursor: default;
+	height: auto;
+	text-transform: normal;
+	letter-spacing: 0em;
+}
+
+.toolsDrawer.closed .toolsDrawerContent .label
+{
+	background-color: transparent;
+	background-image: none;
+}
+
+.toolsDrawer.opened .toolsDrawerContent  .label
+{
+	background-color: transparent;
+	background-image: none;
+}
+.calendarSlider
+{
+	background-color: yellow;
+}
+
+.scale
+{
+	font-size: 14pt;
+	line-height: 17pt;
+	font-family: Helvetica, Arial, sans-serif;
+	display: block;
+	float: left;
+	width: auto;
+}
+.year
+{
+	display: block;
+	float: left;
+	background-color: #D8D8D8;
+	min-width: 36em;
+	width: auto;
+	height: auto;
+	margin: 0em 0em 0em 0em;
+	padding: 0 0 0.2em 0.2em;
+	position: relative;
+	/*overflow: hidden;*/
+}
