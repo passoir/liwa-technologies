@@ -1,0 +1,8 @@
+[#urls] [#bytes] [host] [#robots] [#remaining] [#novel-urls] [#novel-bytes] [#dup-by-hash-urls] [#dup-by-hash-bytes] [#not-modified-urls] [#not-modified-bytes]
+110 2638226 www.mpi-inf.mpg.de 0 29 110 2638226 0 0 0 0 
+7 54354 people.mmci.uni-saarland.de 0 0 7 54354 0 0 0 0 
+6 366 dns: 0 0 6 366 0 0 0 0 
+6 3248 www.mpii.mpg.de 0 0 6 3248 0 0 0 0 
+2 1052 mpi-inf.mpg.de 0 0 2 1052 0 0 0 0 
+2 3138 search.mpi-inf.mpg.de 0 0 2 3138 0 0 0 0 
+2 1485 search.mpi-sb.mpg.de 0 0 2 1485 0 0 0 0 

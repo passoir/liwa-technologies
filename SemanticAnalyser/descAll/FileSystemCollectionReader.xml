@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collectionReaderDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <implementationName>org.apache.uima.tika.FileSystemCollectionReader</implementationName>
+  <processingResourceMetaData>
+    <name>File System Collection Reader</name>
+    <description>Reads files from the filesystem. Uses Tika to convert markups into annotation</description>
+    <version>1.0</version>
+    <vendor>DigitalPebble</vendor>
+    <configurationParameters>
+      <configurationParameter>
+        <name>InputDirectory</name>
+        <description>Directory containing input files</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>Language</name>
+        <description>ISO language code for the documents</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>tikaConfigFile</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>MIME</name>
+        <description>MIME type can be forced by the user instead of being detected automatically</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>MIME</name>
+        <value>
+          <string>text/html</string>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>InputDirectory</name>
+        <value>
+          <string>data</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <typeSystemDescription>
+      <imports>
+        <import location="MarkupAnnotationTypeSystem.xml"/>
+        <import name="org.apache.uima.examples.SourceDocumentInformation"/>
+      </imports>
+    </typeSystemDescription>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type allAnnotatorFeatures="true">com.digitalpebble.uima.SourceDocumentAnnotation</type>
+          <type allAnnotatorFeatures="true">com.digitalpebble.uima.MarkupAnnotation</type>
+          <type allAnnotatorFeatures="true">com.digitalpebble.uima.FeatureValue</type>
+        </outputs>
+        <languagesSupported/>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>false</multipleDeploymentAllowed>
+      <outputsNewCASes>true</outputsNewCASes>
+    </operationalProperties>
+  </processingResourceMetaData>
+  <externalResourceDependencies>
+    <externalResourceDependency>
+      <key>tikaConfigFile</key>
+      <description>XML configuration file for Tika</description>
+      <optional>true</optional>
+    </externalResourceDependency>
+  </externalResourceDependencies>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+        <name>tikaConfigFile</name>
+        <description>XMLconfig file for Tika. If not found the component will rely on the default config</description>
+        <fileResourceSpecifier>
+          <fileUrl>conf/tika_config.xml</fileUrl>
+        </fileResourceSpecifier>
+      </externalResource>
+    </externalResources>
+    <externalResourceBindings>
+      <externalResourceBinding>
+        <key>tikaConfigFile</key>
+        <resourceName>tikaConfigFile</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+  </resourceManagerConfiguration>
+</collectionReaderDescription>

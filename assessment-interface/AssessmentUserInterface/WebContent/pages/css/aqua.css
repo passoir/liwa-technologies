@@ -1,0 +1,13 @@
+@CHARSET "UTF-8";
+
+body {
+	background-color: aqua
+}
+
+.AFDfaultFontFamily:alias {
+	font-family: cursive;
+}
+
+.AFDefaultFont:alias {
+	font-size: 14px
+}

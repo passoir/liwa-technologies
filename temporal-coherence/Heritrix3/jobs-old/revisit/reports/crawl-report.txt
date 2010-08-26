@@ -1,0 +1,22 @@
+crawl name: test-5 
+crawl status: Finished
+duration: 6s280ms
+
+seeds crawled: 1
+seeds uncrawled: 0
+
+hosts visited: 1
+
+URIs processed: 3
+URI successes: 3
+URI failures: 0
+URI disregards: 0
+
+novel URIs: 3
+
+total crawled bytes: 11581 (11 KiB) 
+
+novel crawled bytes: 11581 (11 KiB)
+
+URIs/sec: 0.48
+KB/sec: 1

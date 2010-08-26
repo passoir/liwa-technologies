@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Mon Mar 01 15:18:35 CET 2010
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=extraction.jar
+manifest.mergeall=true
+manifest.mainclass=CPESetup.ARCCollectionParserCPMPharos
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|SemanticAnalyser>~.svn/
+includes=

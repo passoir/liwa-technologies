@@ -1,0 +1,127 @@
+.
+* {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.standard {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+
+.standard_bold {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	font-weight: bold;
+}
+
+.scrollerTable {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	padding: 2;
+	border-style: solid;
+	border-width: 4px;
+	width: 400px;
+}
+
+.scroller {
+	padding-left: 20px;
+}
+
+.paginator {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.standardTable {
+	font-family: verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	padding: 2;
+	border-style: inset;
+	border-width: 1px;
+}
+
+.standardTable_Header {
+	color: #000000;
+	background-color: #EEF3FB;
+	padding: 3;
+	text-align: center;
+	border: none;
+}
+
+.standardTable_SortHeader {
+	background-color: #EEF3FB;
+	color: #000000;
+	padding: 3;
+	text-align: center;
+	border: none;
+	font-weight: bold;
+}
+
+.standardTable_Footer {
+	background-color: #FFFFE0;
+}
+
+.standardTable_Row1 {
+	background-color: #FFFFFF;
+}
+
+.standardTable_Row2 {
+	background-color: #EEF3FB;
+}
+
+.standardTable_Column {
+	
+}
+
+.standardTable_ColumnCentered {
+	text-align: center
+}
+
+.borderTable {
+	border-style: solid;
+	border-width: 1px;
+}
+
+.borderTable1 {
+	border-style: solid;
+	border-width: 1px;
+	width: 100%;
+}
+
+.borderTable2 {
+	border-style: solid;
+	border-width: 1px;
+	width: 300px;
+}
+
+.panelHeading {
+	background-color: E7EFF7;
+	color: #000000;
+	padding: 3;
+	text-align: center;
+	border: none;
+	font-weight: bold;
+}
+
+a {
+	color: #333366;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #333366;
+	text-decoration: underline;
+}
+
+.error {
+	color: #FF0000;
+}
+
+.sortLink {
+	color: #333366;
+	text-decoration: none;
+}

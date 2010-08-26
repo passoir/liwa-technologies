@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <name>julie-document-structure-types</name>
+  <description>The type system contains the types for the annotation of document sutructure.</description>
+  <version>2.0</version>
+  <vendor/>
+  <types>
+    <typeDescription>
+      <name>types.Annotation</name>
+      <description>The super-type for all types.</description>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>confidence</name>
+          <description>The component that made the annotation may put its confidence/score calculated internally here, O</description>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>componentId</name>
+          <description>Indicates which NLP component has been used to derive the annotation, C</description>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>id</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>types.Zone</name>
+      <description>A Zone is a distinct division of text. It is an abstract Type and provides a parent type for sub-types which represent various kinds of text zones.</description>
+      <supertypeName>types.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>types.Title</name>
+      <description>Title annotates titles covering various text units, including the whole paper, sections and subsections.</description>
+      <supertypeName>types.Zone</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>types.ArticleText</name>
+      <description/>
+      <supertypeName>types.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>types.Date</name>
+      <description>Type to store dates</description>
+      <supertypeName>types.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>day</name>
+          <description>day of the month, C</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>month</name>
+          <description>month of the year, C</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>year</name>
+          <description>full year (e.g. 2006 and NOT 06), C</description>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+  </types>
+</typeSystemDescription>

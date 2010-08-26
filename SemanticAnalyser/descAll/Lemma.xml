@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+<name>Lemma</name>
+<description></description>
+<version>1.0</version>
+<vendor></vendor>
+<imports>
+<import name="desc.type.ModifiedToken"/>
+</imports>
+<types>
+<typeDescription>
+<name>de.tudarmstadt.ukp.dkpro.core.type.Lemma</name>
+<description/>
+<supertypeName>de.tudarmstadt.ukp.dkpro.core.type.ModifiedToken</supertypeName>
+<features>
+<featureDescription>
+<name>value</name>
+<description/>
+<rangeTypeName>uima.cas.String</rangeTypeName>
+</featureDescription>
+</features>
+</typeDescription>
+</types>
+</typeSystemDescription>

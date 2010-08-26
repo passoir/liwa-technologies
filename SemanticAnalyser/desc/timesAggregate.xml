@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>false</primitive>
+  <delegateAnalysisEngineSpecifiers>
+    <delegateAnalysisEngine key="BreakIteratorSegmenter">
+      <import name="desc.annotator.BreakIteratorSegmenter"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="TreeTaggerPosLemmaTT4J">
+      <import name="desc.annotator.TreeTaggerPosLemmaTT4J"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="AnnotationsToDBAnnotator">
+      <import location="AnnotationsToDBAnnotator.xml"/>
+    </delegateAnalysisEngine>
+  </delegateAnalysisEngineSpecifiers>
+  <analysisEngineMetaData>
+    <name>timesAggregate</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>LanguageCode</name>
+        <description>The locale of the document language. We use the two character ISO 639-1 codes. If set, it overrides the language set by the language guesser.
+If you do not specify a locale and the document language is not set, TreeTagger will throw an Exception.</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+        <overrides>
+          <parameter>TreeTaggerPosLemmaTT4J/LanguageCode</parameter>
+        </overrides>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>LanguageCode</name>
+        <value>
+          <string>en</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <flowConstraints>
+      <fixedFlow>
+        <node>BreakIteratorSegmenter</node>
+        <node>TreeTaggerPosLemmaTT4J</node>
+        <node>AnnotationsToDBAnnotator</node>
+      </fixedFlow>
+    </flowConstraints>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs/>
+        <languagesSupported/>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>false</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+        <name>TreeTaggerResource</name>
+        <description/>
+        <fileResourceSpecifier>
+          <fileUrl>file:/home/tereza/uimatools/TreeTagger</fileUrl>
+        </fileResourceSpecifier>
+      </externalResource>
+    </externalResources>
+    <externalResourceBindings>
+      <externalResourceBinding>
+        <key>TreeTaggerPosLemmaTT4J/TreeTagger</key>
+        <resourceName>TreeTaggerResource</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+  </resourceManagerConfiguration>
+</analysisEngineDescription>

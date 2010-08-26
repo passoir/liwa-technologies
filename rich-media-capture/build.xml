@@ -1,0 +1,69 @@
+<project name="RichMediaCapture" default="heritrix-plugin" basedir=".">
+
+	<!-- file with global properties -->
+	<property file="build.properties" />
+
+	<!-- path to the source and the resource folders -->
+	<path id="src.path">
+		<pathelement path="${src.main}" />
+	</path>
+
+	<!-- libraries -->
+	<path id="lib.path">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<property name="src" refid="src.path" />
+	<property name="lib" refid="lib.path" />
+
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Copy the resources from ${resources} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}" classpath="${lib}" />
+		<copy todir="${build}">
+			<fileset dir="${resources.main}" />
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile" description="generate the distribution">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+
+		<!-- Put everything in ${build} into the RichMediaCapture-${DSTAMP}.jar file -->
+		<jar jarfile="${dist}/RichMediaCapture-liwa.jar" basedir="${build}" />
+		<!--
+		<copy todir="${dist}/lib">
+			<fileset dir="lib" />
+		</copy>
+		
+		<copy todir="${dist}">
+			<fileset dir="${dist}/lib" defaultexcludes="true">
+				<include name="RichMediaCapture-liwa-${DSTAMP}.jar" />
+			</fileset>
+		</copy>
+		-->
+	</target>
+
+
+
+
+	<target name="heritrix-plugin" depends="clean, jar">
+	</target>
+
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+</project>

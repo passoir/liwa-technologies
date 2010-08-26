@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collectionReaderDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <implementationName>collectionreader.ARCCollectionReader</implementationName>
+  <processingResourceMetaData>
+    <name>TimesReaderDescriptor</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters>
+      <configurationParameter>
+        <name>InputDirectory</name>
+        <description>Directory or url listing arc files to read in</description>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+      <configurationParameter>
+        <name>MaxArchives</name>
+        <description>The number of archives to be processed from a folder</description>
+        <type>Integer</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>InputDirectory</name>
+        <value>
+          <string>testarcs</string>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>MaxArchives</name>
+        <value>
+          <integer>100</integer>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <typeSystemDescription>
+      <imports>
+        <import location="times-basic-types.xml"/>
+        <import location="times-document-structure-types.xml"/>
+      </imports>
+      <types>
+        <typeDescription>
+          <name>types.Crawl</name>
+          <description/>
+          <supertypeName>types.Annotation</supertypeName>
+          <features>
+            <featureDescription>
+              <name>crawlId</name>
+              <description/>
+              <rangeTypeName>uima.cas.Integer</rangeTypeName>
+            </featureDescription>
+            <featureDescription>
+              <name>filename</name>
+              <description/>
+              <rangeTypeName>uima.cas.String</rangeTypeName>
+            </featureDescription>
+            <featureDescription>
+              <name>lastDocument</name>
+              <description>is the document the last in the archive</description>
+              <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+            </featureDescription>
+          </features>
+        </typeDescription>
+      </types>
+    </typeSystemDescription>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs/>
+        <languagesSupported/>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>false</multipleDeploymentAllowed>
+      <outputsNewCASes>true</outputsNewCASes>
+    </operationalProperties>
+  </processingResourceMetaData>
+  <resourceManagerConfiguration/>
+</collectionReaderDescription>

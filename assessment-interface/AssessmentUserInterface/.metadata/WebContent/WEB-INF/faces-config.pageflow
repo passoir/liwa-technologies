@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf12433613085320" configfile="/AssessmentUserInterface/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="login" x="170" y="75" id="pf12433617855921" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" outlinks="pf12433617855932 pf12445596744240" inlinks="pf12445596744240 pf12449133671894" path="/pages/login.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="review" x="288" y="204" id="pf12433617855933" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf12433617855932 pf12449089907832" path="/pages/review.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" x="360" y="24" id="pf12449089907833" referenceLink="//@navigationRule.8/@fromViewId|" outlinks="pf12449089907832 pf12449133671894 pf12449133671896 pf12449133671897 pf124492636882610 pf12450791326770 pf12458453262460" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/help" x="612" y="120" id="pf12449133671898" referenceLink="//@navigationRule.5/@navigationCase.0/@toViewId|" inlinks="pf12449133671897" path="/pages/help.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/privacy" x="572" y="38" id="pf12449133671899" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" inlinks="pf12449133671896" path="/pages/privacy.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/revision" x="451" y="236" id="pf124492636882711" referenceLink="//@navigationRule.6/@navigationCase.0/@toViewId|" inlinks="pf124492636882610" path="/pages/revision.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/assessment" x="626" y="263" id="pf12450797016651" referenceLink="//@navigationRule.7/@navigationCase.0/@toViewId|" inlinks="pf12450791326770" path="/pages/assessment.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/hostsEmpty" x="381" y="286" id="pf12458453262471" referenceLink="//@navigationRule.8/@navigationCase.0/@toViewId|" inlinks="pf12458453262460" path="/pages/hostsEmpty.jsp"/>
+  <links id="pf12433617855932" target="pf12433617855933" source="pf12433617855921" outcome="success"/>
+  <links id="pf12445596744240" target="pf12433617855921" source="pf12433617855921" outcome="failure">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf12449089907832" target="pf12433617855933" source="pf12449089907833" outcome="go_review"/>
+  <links id="pf12449133671894" target="pf12433617855921" source="pf12449089907833" outcome="go_logout"/>
+  <links id="pf12449133671896" target="pf12449133671899" source="pf12449089907833" outcome="go_privacy"/>
+  <links id="pf12449133671897" target="pf12449133671898" source="pf12449089907833" outcome="go_help"/>
+  <links id="pf124492636882610" target="pf124492636882711" source="pf12449089907833" outcome="go_revision"/>
+  <links id="pf12450791326770" target="pf12450797016651" source="pf12449089907833" outcome="go_assessment"/>
+  <links id="pf12458453262460" target="pf12458453262471" source="pf12449089907833" outcome="go_hostsEmpty"/>
+</pageflow:Pageflow>
