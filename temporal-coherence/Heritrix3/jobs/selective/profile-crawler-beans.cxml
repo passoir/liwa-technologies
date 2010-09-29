@@ -39,8 +39,8 @@
 				# http://java.sun.com/javase/6/docs/api/java/util/Properties.html#load%28java.io.Reader%29 #
 
 				metadata.operatorContactUrl=http://www.mpi-inf.mpg.de/departments/d5/
-				metadata.jobName=xi 
-				metadata.description=Basic crawl starting with useful defaults
+				metadata.jobName=selective
+				metadata.description=Basic temporal coherence crawl
 				
 				# properties pf the politeness policy in miliseconds
 				disposition.delayFactor=1
@@ -63,38 +63,24 @@
 		class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
 		<property name="properties">
 			<props>
-			<!-- 
-				<prop key="seeds.textSource.value">
-					# URLS HERE 
-					#http://www.mpi-inf.mpg.de/
-					#http://www.mpi-inf.mpg.de/departments/d1/index.html
-					#http://www.mpi-inf.mpg.de/departments/d2/index.html
-					#http://www.mpi-inf.mpg.de/departments/d3/index.html
-					#http://www.mpi-inf.mpg.de/departments/d4/index.html
-					#http://www.mpi-inf.mpg.de/departments/d5/index.html
-					#http://www.cnn.com/sitemap_index.xml
+				<prop key="sitemaps.textSource.value">
+					http://www.cnn.com/sitemap_index.xml
 					http://www.cnn.com/sitemap_static.xml
-				</prop>
-			                 <prop key="sitemaps.textSource.value">
-				    http://www.dw-world.de/sitemap_00.xml
-					http://www.dw-world.de/sitemap_s.xml
-					http://www.dw-world.de/sitemap_rubriken.xml
-					http://www.dw-world.de/sitemap_01.xml
-				</prop>
-				
-				<prop key="sitemaps.textSource.value">
-					http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/opentopics_00000.xml.gz
-					http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/personaltech_categories_00000.xml.gz
-					http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/personaltech_products_00000.xml.gz
-					http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/sections_00000.xml.gz
-				</prop>
-
-			 -->
-				<prop key="sitemaps.textSource.value">
-				http://fr.euronews.net/sitemaps/sitemap-fr.xml
 			</prop>
 			</props>
 		</property>
+	</bean>
+	
+	<!-- Database Connection -->
+	<bean id="connectionPool"
+	      class="org.liwa.coherence.db.ConnectionPool">
+		<property name="dataSourceName" value="Coherence Data Source" />
+		<property name="serverName" value="infao5802" />
+		<property name="databaseName" value="liwa_coherence" />
+		<property name="user" value="ddenev" />
+		<property name="password" value="liwa" />
+		<property name="maxConnections" value="200" />
+		<property name="dataSourceClass" value="org.postgresql.ds.PGPoolingDataSource"/> 
 	</bean>
 
 	<!-- CRAWL METADATA: including identification of crawler/operator -->
@@ -704,17 +690,5 @@
 	<!-- DB specific queries -->
 	<bean id="queries" class="org.liwa.coherence.db.Queries">
 		<property name="queriesLocation" value="queries.properties" />
-	</bean>
-
-	<!-- Database Connection -->
-	<bean id="connectionPool"
-		class="org.liwa.coherence.db.ConnectionPool">
-		<property name="dataSourceName" value="Coherence Data Source" />
-		<property name="serverName" value="infao5802" />
-		<property name="databaseName" value="liwa_coherence" />
-		<property name="user" value="ddenev" />
-		<property name="password" value="liwa" />
-		<property name="maxConnections" value="200" />
-		<property name="dataSourceClass" value="org.postgresql.ds.PGPoolingDataSource"/> 
 	</bean>
 </beans>
