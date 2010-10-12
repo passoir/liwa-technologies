@@ -32,10 +32,11 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private PathSharingContext ac;
 
 	private List<ParallelJobs> pjs;
-	
+
 	private Configuration configuration;
 
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
+
 	private int run = 0;
 
 	public CoherenceController(File cxml, Engine engine) {
@@ -49,8 +50,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		ac.addApplicationListener(this);
 		ac.refresh();
 		ac.validate();
-		configuration = (Configuration) ac
-		.getBean("coherenceConfiguration");
+		configuration = (Configuration) ac.getBean("coherenceConfiguration");
 	}
 
 	public void onApplicationEvent(ApplicationEvent arg0) {
@@ -63,46 +63,51 @@ public class CoherenceController implements ApplicationListener, JobListener {
 				.getRobotsListLoader().getSitemaps();
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-		pjs.add(new ParallelJobs());
+	
 		for (String robotsTxt : sitemaps.keySet()) {
+			ParallelJobs pj = new ParallelJobs();
+			pjs.add(pj);
+			String domain = robotsTxt.substring(robotsTxt.indexOf("://")
+					+ "://".length(), robotsTxt.indexOf("robots") - 1);
 			List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
 					.get(robotsTxt));
-			startThresholdJob(configuration, sitemapList);
-			startSelectiveJob(configuration, sitemapList);
-			startHottestJob(configuration, sitemapList);
-			startBreadthFirstJob(configuration, sitemapList);
+			startThresholdJob(configuration, domain, sitemapList, pj);
+			startSelectiveJob(configuration, domain, sitemapList, pj);
+			startHottestJob(configuration, domain, sitemapList, pj);
+			startBreadthFirstJob(configuration, domain, sitemapList, pj);
 		}
 	}
 
 	private CrawlController startSelectiveJob(Configuration configuration,
-			List<Sitemap> sitemaps) {
+			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
 		String name = configuration.getSelective();
-		return startJob(name, sitemaps);
+		return startJob(name, domain, sitemaps, pj);
 	}
 
 	private CrawlController startThresholdJob(Configuration configuration,
-			List<Sitemap> sitemaps) {
+			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
 		String name = configuration.getThreshold();
-		return startJob(name, sitemaps);
+		return startJob(name, domain, sitemaps, pj);
 	}
 
 	private CrawlController startHottestJob(Configuration configuration,
-			List<Sitemap> sitemaps) {
+			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
 		String name = configuration.getHottest();
-		return startJob(name, sitemaps);
+		return startJob(name, domain, sitemaps, pj);
 	}
 
 	private CrawlController startBreadthFirstJob(Configuration configuration,
-			List<Sitemap> sitemaps) {
+			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
 		String name = configuration.getBreadthFirst();
-		return startJob(name, sitemaps);
+		return startJob(name, domain, sitemaps, pj);
 	}
 
-	private CrawlController startJob(String jobName, List<Sitemap> sitemaps) {
+	private CrawlController startJob(String jobName, String domain,
+			List<Sitemap> sitemaps, ParallelJobs pj) {
 		CrawlJob cj = engine.getJob(jobName);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-hhmm");
-		String newName = jobName + "-" + sdf.format(new Date());
-
+		String newName = jobName + "-" + domain + "-" + sdf.format(new Date());
+		System.out.println(newName);
 		try {
 			engine.copy(cj, newName, false);
 			CrawlJob job = engine.getJob(newName);
@@ -118,8 +123,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			sl.setSitemaps(sitemaps);
 			SitemapChangeRateProvider changeRateProvider = (SitemapChangeRateProvider) job
 					.getJobContext().getBean("changeRateProvider");
-			pjs.get(pjs.size() - 1)
-					.addCrawlController(job.getCrawlController());
+			pj.addCrawlController(job.getCrawlController());
 			changeRateProvider.setSitemaps(sl);
 			changeRateProvider.afterSitemapSet();
 			AbstractSchedule schedule = (AbstractSchedule) job.getJobContext()
@@ -128,7 +132,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					.getBean("datasetProvider"));
 			CoherenceProcessor cp = (CoherenceProcessor) job.getJobContext()
 					.getBean("coherenceProcessor");
-			cp.addProcessorListener(pjs.get(pjs.size() - 1));
+			cp.addProcessorListener(pj);
 			job.launch();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -157,27 +161,27 @@ public class CoherenceController implements ApplicationListener, JobListener {
 				pj.jobFinished(cc);
 			}
 		}
-		for(ParallelJobs pj: revisitMap.values()){
+		for (ParallelJobs pj : revisitMap.values()) {
 			if (pj.hasController(cc)) {
 				pj.jobFinished(cc);
 			}
 		}
 		checkIfRunning();
 	}
-	
-	private void checkIfRunning(){
-		if(revisitMap.size() == pjs.size()){
+
+	private void checkIfRunning() {
+		if (revisitMap.size() == pjs.size()) {
 			boolean allDone = true;
-			for(ParallelJobs pj: revisitMap.values()){
+			for (ParallelJobs pj : revisitMap.values()) {
 				allDone &= pj.areJobsDone();
 			}
-			if(allDone){
+			if (allDone) {
 				run++;
-				if(run < configuration.getRuns()){
+				if (run < configuration.getRuns()) {
 					startCoherenceJobs();
 				}
 			}
-		}	
+		}
 	}
 
 	public void revisitPending(CrawlController oldController,

@@ -90,6 +90,7 @@ public class ParallelJobs implements ProcessorListener {
 						c.requestCrawlResume();
 					}
 				}
+				started = true;
 			}
 		}
 	}
