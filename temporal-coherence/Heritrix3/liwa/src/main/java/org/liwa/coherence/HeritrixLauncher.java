@@ -11,6 +11,7 @@ public class HeritrixLauncher {
 	public static void main(String[] args) throws Exception {
 		Heritrix heritrix = new Heritrix();
 		heritrix.instanceMain(args); 
-		RevisitLauncherFactory.setHeritrix(heritrix);
+		System.setProperty("coherence.profile-auto", "selective-auto");
+		CoherenceControllerFactory.setHeritrix(heritrix);
 	}
 }

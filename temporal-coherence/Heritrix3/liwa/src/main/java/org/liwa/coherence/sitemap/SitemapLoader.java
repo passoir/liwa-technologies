@@ -38,6 +38,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 
 	private List<Sitemap> sitemapList = new ArrayList<Sitemap>();
 
+	private List<String> sitemapUrls = null;
+
 	private boolean sitemapsInitialized = false;
 
 	/**
@@ -48,16 +50,10 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 	public ReadSource getTextSource() {
 		return textSource;
 	}
-	
-	
 
-	@Required
-	public void setTextSource(ReadSource seedsSource) {
-		this.textSource = seedsSource;
-	}
-
-	public void initSitemaps() {
-		if (!sitemapsInitialized) {
+	private void initializeSitemapUrls() {
+		if (sitemapUrls == null) {
+			sitemapUrls = new ArrayList<String>();
 			BufferedReader reader = new BufferedReader(textSource
 					.obtainReader());
 			try {
@@ -66,6 +62,35 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			} finally {
 				IOUtils.closeQuietly(reader);
 			}
+		}
+	}
+
+	
+	public void setSitemaps(List<Sitemap> sitemaps){
+		this.sitemapList = new ArrayList<Sitemap>();
+		this.sitemapList.addAll(sitemaps);
+		this.sitemapsInitialized = true;
+	}
+
+	public List<String> getSitemapUrls() {
+		if (!sitemapsInitialized) {
+			initializeSitemapUrls();
+		}
+		return sitemapUrls;
+	}
+
+	@Required
+	public void setTextSource(ReadSource seedsSource) {
+		this.textSource = seedsSource;
+	}
+
+	public void initSitemaps() {
+		if (!sitemapsInitialized) {
+			initializeSitemapUrls();
+			for (String sitemap : sitemapUrls) {
+				sitemapList.addAll(SitemapLoader.loadSitemap(sitemap));
+			}
+			sitemapsInitialized = true;
 		}
 	}
 
@@ -95,7 +120,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 	}
 
 	private void sitemapLine(String s) {
-		sitemapList.addAll(SitemapLoader.loadSitemap(s));
+		sitemapUrls.add(s);
 	}
 
 	public List<Sitemap> getSitemaps() {
@@ -297,16 +322,16 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				PublishedUrl url = new PublishedUrl(location, null);
 				if (changeFreq.trim().length() > 0) {
 					url.setChangeRate(changeFreq);
-				}else{
+				} else {
 					url.setChangeRate(ChangeRate.NEVER);
 				}
-//				if (priority.trim().length() > 0) {
-//					url.setPriority(priority);
-//				}
+				// if (priority.trim().length() > 0) {
+				// url.setPriority(priority);
+				// }
 				if (lastMod != null && lastMod.length() > 0) {
 					url.setLastModified(DateParser.parseW3CDateTime(lastMod));
 				}
-				//System.out.println(url);
+				// System.out.println(url);
 				publshedUrls.add(url);
 
 				location = "";
@@ -379,7 +404,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		}
 		return null;
 	}
+
 	public void afterPropertiesSet() throws Exception {
-		initSitemaps();
+		// initSitemaps();
 	}
 }

@@ -1,6 +1,8 @@
 package org.liwa.coherence.processors;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.archive.checkpointing.Checkpointable;
 import org.archive.modules.CrawlURI;
@@ -16,6 +18,8 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 	private static final long serialVersionUID = -1366129749686865803L;
 
 	private CoherenceMetadata metadata;
+	
+	private List<ProcessorListener> listeners = new ArrayList<ProcessorListener>();
 
 	private PageDao pageDao;
 
@@ -30,6 +34,10 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 	public CoherenceMetadata getMetadata() {
 		return metadata;
 	}
+	
+	public void addProcessorListener(ProcessorListener processorListener){
+		listeners.add(processorListener);
+	}
 
 	@Autowired
 	public void setMetadata(CoherenceMetadata metadata) {
@@ -39,8 +47,10 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 	@Override
 	protected void innerProcess(CrawlURI uri) throws InterruptedException {
 		try {
-			Thread.sleep(1000);
 			pageDao.insertPage(this.metadata.getCrawlId(), uri);
+			for(ProcessorListener l: listeners){
+				l.urlProcessed();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
