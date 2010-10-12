@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	HERITRIX 3 CRAWL JOB CONFIGURATION FILE
+	
+	This is a relatively minimal configuration suitable for many crawls.
+	
+	Commented-out beans and properties are provided as an example; values
+	shown in comments reflect the actual defaults which are in effect
+	without specification. (To change from the default behavior, 
+	uncomment AND alter the shown values.)   
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:annotation-config />
+
+	<!-- Database Connection -->
+	<bean id="coherenceConfiguration"
+		class="org.liwa.coherence.Configuration">
+		<property name="robotsListLoader" ref="robotsListLoader" />
+		<property name="selective" value="selective" />
+		<property name="hottest" value="hottest" />
+		<property name="breadthFirst" value="breadth-first" />
+		<property name="threshold" value="threshold" />
+		<property name="runs" value="1" />
+	</bean>
+
+	<bean id="robotsListLoader"
+		class="org.liwa.coherence.RobotsListLoader">
+		<property name="robotsFile" value="robots/robotlist" />
+	</bean>
+
+</beans>
