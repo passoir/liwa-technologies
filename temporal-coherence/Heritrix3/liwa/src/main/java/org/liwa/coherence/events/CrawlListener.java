@@ -1,11 +1,13 @@
 package org.liwa.coherence.events;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.archive.crawler.event.CrawlStateEvent;
 import org.archive.crawler.framework.CrawlController;
+import org.liwa.coherence.CoherenceControllerFactory;
 import org.liwa.coherence.RevisitLauncher;
-import org.liwa.coherence.RevisitLauncherFactory;
 import org.liwa.coherence.dao.CrawlDao;
 import org.liwa.coherence.metadata.CoherenceMetadata;
 import org.liwa.coherence.schedule.Schedule;
@@ -21,6 +23,12 @@ public class CrawlListener implements ApplicationListener,
 	protected CrawlDao crawlDao;
 
 	protected ApplicationContext appCntxt;
+	
+	private List<JobListener> listeners = new ArrayList();
+	
+	public void addJobListener(JobListener listener){
+		listeners.add(listener);
+	}
 
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (event instanceof CrawlStateEvent) {
@@ -56,7 +64,9 @@ public class CrawlListener implements ApplicationListener,
 				cc.requestCrawlResume();
 			}
 		}
-
+		for(JobListener l: listeners){
+			l.jobPaused(cc);
+		}
 	}
 
 	protected void crawlFinished(CrawlController cc) {
@@ -65,13 +75,16 @@ public class CrawlListener implements ApplicationListener,
 				startRecrawl(cc);
 			}
 		}
+		for(JobListener l: listeners){
+			l.jobFinished(cc);
+		}
 	}
 
 	private void startRecrawl(CrawlController oldCrawl) {
 		if (appCntxt.containsBean("schedule")
 				&& appCntxt.isTypeMatch("schedule", Schedule.class)) {
 			Schedule schedule = (Schedule) appCntxt.getBean("schedule");
-			RevisitLauncher revisitLauncher = RevisitLauncherFactory
+			RevisitLauncher revisitLauncher = CoherenceControllerFactory
 					.createNewRevisitLauncher();
 			revisitLauncher.launchRevisit(oldCrawl, schedule.getRevisits());
 		}
@@ -92,11 +105,15 @@ public class CrawlListener implements ApplicationListener,
 				CoherenceMetadata metadata = (CoherenceMetadata) cc
 						.getMetadata();
 				insertCrawl(metadata);
+				for(JobListener l: listeners){
+					l.jobPrepared(cc);
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	private void insertCrawl(CoherenceMetadata metadata) throws SQLException {

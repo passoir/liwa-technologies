@@ -116,9 +116,6 @@
 	
 	<!-- CHANGE RATES -->
 	<bean id="changeRateProvider" class="org.liwa.coherence.sitemap.SitemapChangeRateProvider">
-		<property name="sitemaps">
-			<ref bean="sitemaps"/>
-		</property>
 	</bean>
 	
 	<!-- DATASET -->
@@ -133,10 +130,7 @@
 	</bean>
 	
 	<!-- SCHEDULE -->
-	<bean id="schedule" class="org.liwa.coherence.schedule.PsiSchedule">
-		<property name="datasetProvider">
-			<ref bean="datasetProvider"/>
-		</property>
+	<bean id="schedule" class="org.liwa.coherence.schedule.SelectiveSchedule">
 	</bean>
 	
 	<!-- SEEDS: crawl starting points 

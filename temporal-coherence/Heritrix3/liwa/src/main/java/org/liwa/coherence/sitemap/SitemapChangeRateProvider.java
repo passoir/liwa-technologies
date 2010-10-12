@@ -55,8 +55,13 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 		}
 		return changeRate;
 	}
-
+	
 	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void afterSitemapSet(){
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		for (PublishedUrl url : sitemaps.getPublishedUrls()) {
 				urlChangeRateMap.put(url.getLocation(), url.getChangeRate());
@@ -70,5 +75,6 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 		//System.out.println(map);
 		// System.out.println(urlChangeRateMap);
 	}
-
+	
+	
 }
