@@ -7,7 +7,7 @@ import org.archive.crawler.framework.CrawlController;
 import org.liwa.coherence.processors.ProcessorListener;
 
 public class ParallelJobs implements ProcessorListener {
-	private static final int JOB_COUNT = 4;
+	private static final int JOB_COUNT = 5;
 
 	private List<CrawlController> controllers = new ArrayList<CrawlController>();
 
@@ -18,26 +18,25 @@ public class ParallelJobs implements ProcessorListener {
 	private int calls = 0;
 
 	private boolean finished = false;
+
 	private int jobFinished = 0;
-	
-	public boolean isFilled(){
+
+	public boolean isFilled() {
 		return controllers.size() == JOB_COUNT;
 	}
 
-	public void addCrawlController(CrawlController cc) {
+	public synchronized void addCrawlController(CrawlController cc) {
 		controllers.add(cc);
 		ready.add(false);
 	}
 
-	public void jobFinished(CrawlController cc) {
+	public synchronized void jobFinished(CrawlController cc) {
 		finished = true;
 		jobFinished++;
-		synchronized (this) {
 			notifyAll();
-		}
 	}
-	
-	public boolean areJobsDone(){
+
+	public synchronized boolean areJobsDone() {
 		return jobFinished == JOB_COUNT;
 	}
 
@@ -66,14 +65,15 @@ public class ParallelJobs implements ProcessorListener {
 					}
 				}
 			}
-		}else{
-			synchronized(this){
+		} else {
+			synchronized (this) {
 				notifyAll();
 			}
 		}
 	}
 
-	public void jobPaused(CrawlController cc) {
+	public synchronized void jobPaused(CrawlController cc) {
+		System.out.println("paused " + cc);
 		if (!started) {
 			for (int i = 0; i < controllers.size(); i++) {
 				if (controllers.get(i).equals(cc)) {

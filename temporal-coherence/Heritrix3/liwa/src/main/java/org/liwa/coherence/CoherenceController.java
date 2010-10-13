@@ -18,9 +18,9 @@ import org.liwa.coherence.events.JobListener;
 import org.liwa.coherence.metadata.CoherenceMetadata;
 import org.liwa.coherence.processors.CoherenceProcessor;
 import org.liwa.coherence.schedule.AbstractSchedule;
+import org.liwa.coherence.schedule.ChangeRateProvider;
 import org.liwa.coherence.schedule.DatasetProvider;
 import org.liwa.coherence.sitemap.Sitemap;
-import org.liwa.coherence.sitemap.SitemapChangeRateProvider;
 import org.liwa.coherence.sitemap.SitemapLoader;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
@@ -63,7 +63,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 				.getRobotsListLoader().getSitemaps();
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-	
+
 		for (String robotsTxt : sitemaps.keySet()) {
 			ParallelJobs pj = new ParallelJobs();
 			pjs.add(pj);
@@ -75,12 +75,20 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			startSelectiveJob(configuration, domain, sitemapList, pj);
 			startHottestJob(configuration, domain, sitemapList, pj);
 			startBreadthFirstJob(configuration, domain, sitemapList, pj);
+			startHighestPriorityJob(configuration, domain, sitemapList, pj);
 		}
 	}
 
 	private CrawlController startSelectiveJob(Configuration configuration,
 			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
 		String name = configuration.getSelective();
+		return startJob(name, domain, sitemaps, pj);
+	}
+
+	private CrawlController startHighestPriorityJob(
+			Configuration configuration, String domain, List<Sitemap> sitemaps,
+			ParallelJobs pj) {
+		String name = configuration.getHighestPriority();
 		return startJob(name, domain, sitemaps, pj);
 	}
 
@@ -121,7 +129,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					"crawlListener");
 			cl.addJobListener(this);
 			sl.setSitemaps(sitemaps);
-			SitemapChangeRateProvider changeRateProvider = (SitemapChangeRateProvider) job
+			ChangeRateProvider changeRateProvider = (ChangeRateProvider) job
 					.getJobContext().getBean("changeRateProvider");
 			pj.addCrawlController(job.getCrawlController());
 			changeRateProvider.setSitemaps(sl);
@@ -143,8 +151,11 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	}
 
 	public void jobPaused(CrawlController cc) {
-		for (ParallelJobs pj : pjs) {
-			pj.jobPaused(cc);
+		for (int i = 0; i < pjs.size(); i++) {
+			ParallelJobs pj = pjs.get(i);
+			if (pj.hasController(cc)) {
+				pj.jobPaused(cc);
+			}
 		}
 
 	}

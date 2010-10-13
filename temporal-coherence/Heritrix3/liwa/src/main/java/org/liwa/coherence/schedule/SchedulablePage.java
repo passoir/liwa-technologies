@@ -5,6 +5,14 @@ import java.util.Comparator;
 public class SchedulablePage {
 	private String url;
 	private double changeRate;
+	private double priority;
+	
+	public double getPriority() {
+		return priority;
+	}
+	public void setPriority(double priority) {
+		this.priority = priority;
+	}
 	public double getChangeRate() {
 		return changeRate;
 	}
@@ -35,6 +43,16 @@ public class SchedulablePage {
 		}	
 	}
 	
+	public static class PriorityReverseComparator implements Comparator<SchedulablePage>{
+		public int compare(SchedulablePage o1, SchedulablePage o2) {
+			return (int)Math.signum(-o1.priority + o2.priority);
+		}	
+	}
+	
 	public static final ChangeRateReverseComparator CHANGE_RATE_COMPARATOR = 
 		new ChangeRateReverseComparator();
+	
+	public static final PriorityReverseComparator PRIORITY_COMPARATOR =
+		new PriorityReverseComparator();
+
 }

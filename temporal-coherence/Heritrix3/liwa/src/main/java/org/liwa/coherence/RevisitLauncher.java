@@ -22,7 +22,7 @@ public class RevisitLauncher {
 		this.coherenceController = coherenceController;
 	}
 
-	public void launchRevisit(CrawlController crawlController,
+	public synchronized void launchRevisit(CrawlController crawlController,
 			List<String> revisits) {
 		System.out.println("Revisit requested for "
 				+ crawlController.getMetadata().getJobName());

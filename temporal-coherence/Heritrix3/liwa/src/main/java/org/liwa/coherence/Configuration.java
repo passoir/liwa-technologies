@@ -6,9 +6,20 @@ public class Configuration {
 	private String hottest;
 	private String threshold;
 	private String breadthFirst;
+	private String highestPriority;
+	
 	private int runs;
 	
 	
+	
+	public String getHighestPriority() {
+		return highestPriority;
+	}
+
+	public void setHighestPriority(String highestPriority) {
+		this.highestPriority = highestPriority;
+	}
+
 	public int getRuns() {
 		return runs;
 	}

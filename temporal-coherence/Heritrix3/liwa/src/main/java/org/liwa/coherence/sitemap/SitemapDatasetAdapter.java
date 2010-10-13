@@ -47,6 +47,7 @@ public class SitemapDatasetAdapter implements DatasetProvider {
 			page.setChangeRate(changeRateProvider.getChangeRate(url
 					.getLocation()));
 			page.setUrl(url.getLocation());
+			page.setPriority(url.getPriority());
 			d.addPage(page);
 
 		}

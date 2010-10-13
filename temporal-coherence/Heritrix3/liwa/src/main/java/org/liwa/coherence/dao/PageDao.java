@@ -250,8 +250,8 @@ public class PageDao {
 
 	}
 
-	private void fillPagePrototype(long crawlId, CrawlURI uri, Page prototype)
-			throws SQLException {
+	private void fillPagePrototype(long crawlId, CrawlURI uri,
+			Page prototype) throws SQLException {
 		if (prototype.getVsPageId() == -1) {
 			this.fillUknownPage(crawlId, uri, prototype);
 		} else {
@@ -429,10 +429,10 @@ public class PageDao {
 
 	private long getPageIdByUrl(long crawlId, String url) throws SQLException {
 		Connection c = connectionPool.getConnection();
-		long id=0;
+		long id = 0;
 		try {
-			PreparedStatement ps = c
-					.prepareStatement(queries.getPageIdByUrlQuery());
+			PreparedStatement ps = c.prepareStatement(queries
+					.getPageIdByUrlQuery());
 			id = -1;
 			ps.setLong(1, crawlId);
 			ps.setString(2, url);
@@ -448,7 +448,7 @@ public class PageDao {
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return id;
 	}
@@ -472,7 +472,7 @@ public class PageDao {
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return next;
 
