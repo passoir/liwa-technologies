@@ -63,6 +63,7 @@ public class LinkDao {
 				ps.executeBatch();
 			}
 			ps.close();
+			c.commit();
 			c.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

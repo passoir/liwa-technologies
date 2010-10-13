@@ -30,7 +30,7 @@ public class Selective {
 
 	public Selective(List<SchedulablePage> pages) {
 		int i = 0;
-		
+
 		for (i = 0; i < pages.size(); i++) {
 			SchedulablePage p = pages.get(i);
 			changes.add(p.getChangeRate());
@@ -78,17 +78,20 @@ public class Selective {
 
 		double noDead = 0.0;
 		for (i = from, j = 0; i < changes.size(); i++, j++) {
-			noDead += probSharp(changes.get(i), shortestInterval + 2 * j, delta);
+			noDead += probSharp(myPages.get(i).getPriority(), changes.get(i),
+					shortestInterval + 2 * j, delta);
 		}
 
 		long longestInterval = shortestInterval + 2 * j - 2;
 
 		double dead = 0.0;
 		for (i = from, j = 0; i < changes.size() - 1; i++, j++) {
-			dead += probSharp(changes.get(i + 1), shortestInterval + 2 * j,
+			dead += probSharp(myPages.get(i+1).getPriority(),
+					changes.get(i + 1), shortestInterval + 2 * j,
 					delta);
 		}
-		dead += probSharp(changes.get(from), longestInterval, delta);
+		dead += probSharp(myPages.get(from).getPriority(),
+				changes.get(from), longestInterval, delta);
 
 		// System.out.println("ishopeless: " + noDead + " " + dead);
 		if (noDead - dead >= 0)
@@ -125,8 +128,8 @@ public class Selective {
 			if (isHopeless(i, 2 * shortestIndex, delta)) {
 				// System.out.println(changes.get(i) + " is hopeless");
 				// We've got a hopeless page
-				expectedNNPages += probSharp(changes.get(i), 2 * longestIndex,
-						delta);
+				expectedNNPages += probSharp(myPages.get(i).getPriority(),
+						changes.get(i), 2 * longestIndex, delta);
 				longestIndex--;
 				if (myPages != null)
 					hopeless.add(myPages.get(i));
@@ -136,8 +139,8 @@ public class Selective {
 				}
 			} else {
 				// System.out.println(changes.get(i) + " is ok");
-				expectedNNPages += probSharp(changes.get(i), 2 * shortestIndex,
-						delta);
+				expectedNNPages += probSharp(myPages.get(i).getPriority(),
+						changes.get(i), 2 * shortestIndex, delta);
 				shortestIndex++;
 				if (myPages != null)
 					hopeful.add(myPages.get(i));
@@ -153,63 +156,14 @@ public class Selective {
 			System.out.println("hopeless indexes: " + bi);
 		}
 		return expectedNNPages
-				+ probSharp(changes.get(changes.size() - 1), 2 * shortestIndex,
+				+ probSharp(myPages.get(myPages.size() - 1).getPriority(),
+						changes.get(changes.size() - 1), 2 * shortestIndex,
 						delta);
 	}
 
-	public double autoWicowLinearApx(List<SchedulablePage> hopeful,
-			List<SchedulablePage> hopeless, double delta) {
-		boolean print = true;
-		int shortestIndex, longestIndex;
-
-		double expectedNNPages = 1.0; // [0,0] page is always sharp
-
-		List<Integer> bi = new ArrayList<Integer>(); // bad guys
-		List<Integer> gi = new ArrayList<Integer>(); // good guys
-
-		if (myPages != null)
-			hopeful.add(myPages.get(0));
-
-		shortestIndex = 1;
-		longestIndex = changes.size() - 1;
-		for (int i = 1; i < changes.size(); i++) {
-			if (isHopelessLinearApx(i, 2 * shortestIndex)) {
-				// System.out.println(changes.get(i) + " is hopeless");
-				// We've got a hopeless page
-				expectedNNPages += probSharp(changes.get(i), 2 * longestIndex,
-						delta);
-				longestIndex--;
-				if (myPages != null)
-					hopeless.add(myPages.get(i));
-				if (print == true) {
-					System.out.println(changes.get(i) + " is hopeless");
-					bi.add(i);
-				}
-			} else {
-				// System.out.println(changes.get(i) + " is ok");
-				expectedNNPages += probSharp(changes.get(i), 2 * shortestIndex,
-						delta);
-				shortestIndex++;
-				if (myPages != null)
-					hopeful.add(myPages.get(i));
-				if (print == true) {
-					System.out.println(changes.get(i) + " is hopeful");
-					gi.add(i);
-				}
-			}
-		}
-
-		if (print == true) {
-			System.out.println("hopeful indexes: " + gi);
-			System.out.println("hopeless indexes: " + bi);
-		}
-		return expectedNNPages
-				+ probSharp(changes.get(changes.size() - 1), 2 * shortestIndex,
-						delta);
-	}
-
-	double probSharp(double changeRate, double length, double delta) {
-		return Math.exp(-changeRate * length * delta);
+	double probSharp(double changeRate, double length, double delta,
+			double priority) {
+		return priority * Math.exp(-changeRate * length * delta);
 	}
 
 	public static double expectedNNSharp(List<Double> changes,

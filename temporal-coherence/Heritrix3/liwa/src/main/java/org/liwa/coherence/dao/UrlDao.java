@@ -11,7 +11,9 @@ import org.liwa.coherence.db.Queries;
 
 public class UrlDao {
 	private static final String URLS_SEQ = "urls_seq";
-	
+
+	private static Object monitor = new Object();
+
 	private ConnectionPool connectionPool;
 
 	private Queries queries;
@@ -31,15 +33,18 @@ public class UrlDao {
 	public void setConnectionPool(ConnectionPool connectionPool) {
 		this.connectionPool = connectionPool;
 	}
-	
+
 	public long getUrlId(String url) throws SQLException {
-		long id = this.getExistingUrlId(url);
-		if (id == -1) {
-			id = this.insertUrl(url);
+		long id = -1;
+		synchronized (monitor) {
+			id = this.getExistingUrlId(url);
+			if (id == -1) {
+				id = this.insertUrl(url);
+			}
 		}
 		return id;
 	}
-	
+
 	public long getExistingUrlId(String url) throws SQLException {
 		long id = -1;
 		Connection c = connectionPool.getConnection();
@@ -58,7 +63,7 @@ public class UrlDao {
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return id;
 	}
@@ -67,22 +72,26 @@ public class UrlDao {
 		long id = this.getNextValue(URLS_SEQ);
 		Connection c = connectionPool.getConnection();
 		try {
-			PreparedStatement ps = c.prepareStatement(queries.getInsertUrlQuery());
+			PreparedStatement ps = c.prepareStatement(queries
+					.getInsertUrlQuery());
 			ps.setLong(1, id);
 			ps.setString(2, url);
 			ps.executeUpdate();
 			ps.close();
+			c.commit();
 			c.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println(url);
 			e.printStackTrace();
 			c.close();
-			throw e;
-			
+			System.exit(-1);
+			// throw e;
+
 		}
 		return id;
 	}
-	
+
 	private long getNextValue(String sequence) throws SQLException {
 		Connection c = connectionPool.getConnection();
 		long next = 0;
@@ -96,12 +105,12 @@ public class UrlDao {
 			r.close();
 			s.close();
 			c.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return next;
 	}

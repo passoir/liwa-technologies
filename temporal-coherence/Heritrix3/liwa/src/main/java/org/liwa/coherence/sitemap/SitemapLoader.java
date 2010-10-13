@@ -331,6 +331,11 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				if (lastMod != null && lastMod.length() > 0) {
 					url.setLastModified(DateParser.parseW3CDateTime(lastMod));
 				}
+				
+				if (priority != null && priority.length() > 0) {
+					url.setPriority(Double.parseDouble(priority));
+				}
+				
 				// System.out.println(url);
 				publshedUrls.add(url);
 

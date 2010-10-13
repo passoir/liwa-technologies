@@ -12,6 +12,7 @@ import org.liwa.coherence.db.Queries;
 public class SiteDao {
 
 	private static final String SITES_SEQ = "sites_seq";
+	private static Object monitor = new Object();
 	
 	private ConnectionPool connectionPool;
 
@@ -70,7 +71,10 @@ public class SiteDao {
 	
 
 	private long insertSite(String domain) throws SQLException {
-		long id = this.getNextValue(SITES_SEQ);
+		long id = -1;
+		synchronized(monitor){
+		  id = this.getNextValue(SITES_SEQ);
+		}
 		Connection c = connectionPool.getConnection();
 		try {
 			PreparedStatement ps = c.prepareStatement(queries.getInsertSiteQueries());
