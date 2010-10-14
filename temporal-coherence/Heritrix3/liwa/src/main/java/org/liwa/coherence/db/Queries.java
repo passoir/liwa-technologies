@@ -18,8 +18,14 @@ public class Queries {
 
 	private static final String INSERT_PAGE = "insert into t_pages (page_id, crawl_id,"
 			+ " url_id, url, site_id, etag, page_size, page_type, parent_page_id, visited_timestamp, "
-			+ "content, checksum, last_modified, vs_page_id, status_code, download_time) "
-			+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ "content, checksum, last_modified, vs_page_id, status_code, download_time, priority) "
+			+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)";
+
+	private static final String INSERT_COMPACT_PAGE = 
+		"insert into t_pages (page_id, crawl_id,"
+		+ " url_id, url, site_id, visited_timestamp, "
+		+ " checksum, status_code,  priority) "
+		+ "values(?,?,?,?,?,?,?,?,?)";
 
 	private static final String GET_PAGE_ID_QUERY = "select page_id from t_pages "
 			+ "where crawl_id = ? and url = ?";
@@ -90,6 +96,10 @@ public class Queries {
 	}
 	public String getInsertPageQuery() {
 		return INSERT_PAGE;
+	}
+	
+	public String getInsertCompactPageQuery() {
+		return INSERT_COMPACT_PAGE;
 	}
 
 	public String getPageIdByUrlQuery() {
