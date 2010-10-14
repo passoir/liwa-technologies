@@ -23,6 +23,17 @@ public class Page {
 	private long vsPageId;
 	private int statusCode;
 	private long downloadTime;
+	private double priority;
+	
+	
+
+	public double getPriority() {
+		return priority;
+	}
+
+	public void setPriority(double priority) {
+		this.priority = priority;
+	}
 
 	public long getDownloadTime() {
 		return downloadTime;

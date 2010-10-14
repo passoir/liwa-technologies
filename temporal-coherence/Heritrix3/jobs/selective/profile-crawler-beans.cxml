@@ -76,7 +76,7 @@
 	      class="org.liwa.coherence.db.ConnectionPool">
 		<property name="dataSourceName" value="Coherence Data Source" />
 		<property name="serverName" value="infao5802" />
-		<property name="databaseName" value="liwa_coherence" />
+		<property name="databaseName" value="liwa_coherence1" />
 		<property name="user" value="ddenev" />
 		<property name="password" value="liwa" />
 		<property name="maxConnections" value="200" />
@@ -652,6 +652,11 @@
 		<property name="urlDao">
 			<ref bean="urlDao" />
 		</property>
+		<property name="datasetProvider">
+			<ref bean="datasetProvider"/>
+		</property>
+		<property name="compactStoring" value="true"/>
+		<property name="defaultPriority" value="1.0"/>
 	</bean>
 
 	<bean id="linkDao" class="org.liwa.coherence.dao.LinkDao">

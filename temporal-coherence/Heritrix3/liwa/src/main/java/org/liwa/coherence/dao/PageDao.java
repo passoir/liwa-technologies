@@ -25,6 +25,8 @@ import org.archive.net.UURI;
 import org.liwa.coherence.db.ConnectionPool;
 import org.liwa.coherence.db.Queries;
 import org.liwa.coherence.pojo.Page;
+import org.liwa.coherence.schedule.DatasetProvider;
+import org.liwa.coherence.schedule.SchedulablePage;
 
 public class PageDao {
 
@@ -35,6 +37,11 @@ public class PageDao {
 
 	private ConnectionPool connectionPool;
 
+	private boolean compactStoring = false;
+
+	private DatasetProvider datasetProvider;
+	private double defaultPriority = 1.0;
+
 	private Queries queries;
 
 	private LinkDao linkDao;
@@ -42,6 +49,32 @@ public class PageDao {
 	private SiteDao siteDao;
 
 	private UrlDao urlDao;
+	
+	
+
+	public double getDefaultPriority() {
+		return defaultPriority;
+	}
+
+	public void setDefaultPriority(double defaultPriority) {
+		this.defaultPriority = defaultPriority;
+	}
+
+	public DatasetProvider getDatasetProvider() {
+		return datasetProvider;
+	}
+
+	public void setDatasetProvider(DatasetProvider datasetProvider) {
+		this.datasetProvider = datasetProvider;
+	}
+
+	public boolean isCompactStoring() {
+		return compactStoring;
+	}
+
+	public void setCompactStoring(boolean compactStoring) {
+		this.compactStoring = compactStoring;
+	}
 
 	public Queries getQueries() {
 		return queries;
@@ -84,8 +117,65 @@ public class PageDao {
 	}
 
 	public void insertPage(long crawlId, CrawlURI uri) throws SQLException {
+		if (isCompactStoring()) {
+			insertCompact(crawlId, uri);
+		} else {
+			insertFull(crawlId, uri);
+		}
+
+	}
+
+	private Page getCompactPage(long crawlId, CrawlURI uri) throws SQLException{
+		Page page = new Page();
+		page.setCrawlId(crawlId);
+		page.setUrl(uri.getUURI().toString());
+		page.setUrlId(this.urlDao.getUrlId(uri.getUURI().toString()));
+		page.setSiteId(this.siteDao.getSiteIdForUrl(uri.getUURI().toString()));
+		page.setChecksum(uri.getContentDigestSchemeString());
+		page.setPriority(getPriority(uri.getUURI().toString()));
+		page.setVisitedTimestamp(new Timestamp(System.currentTimeMillis()));
+		HttpMethod method = uri.getHttpMethod();
+		if (method != null) {
+			page.setStatusCode(method.getStatusCode());
+		}
+		return page;
+	}
+	
+	private long insertCompact(long crawlId, CrawlURI uri)  throws SQLException{
+		Page page = getCompactPage(crawlId, uri);
+		
+		long id = this.getNextValue(PAGES_SEQ);
+		Connection c = connectionPool.getConnection();
+		try {
+			page.setId(id);
+			PreparedStatement ps = c.prepareStatement(queries
+					.getInsertCompactPageQuery());
+			ps.setLong(1, page.getId());
+			ps.setLong(2, page.getCrawlId());
+			ps.setLong(3, page.getUrlId());
+			ps.setString(4, page.getUrl());
+			ps.setLong(5, page.getSiteId());
+			ps.setTimestamp(6, page.getVisitedTimestamp());
+			ps.setString(7, page.getChecksum());
+			ps.setInt(8, page.getStatusCode());
+			ps.setDouble(9, page.getPriority());
+			ps.executeUpdate();
+			ps.close();
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			c.close();
+			throw e;
+
+		}
+		return id;
+	}
+
+	private void insertFull(long crawlId, CrawlURI uri) throws SQLException {
 		Page prototype = getPagePrototype(uri.getUURI().toString());
 		fillPagePrototype(crawlId, uri, prototype);
+		prototype.setPriority(getPriority(uri.getURI()));
 		doInsertPage(prototype);
 		if (prototype.getStatusCode() != HttpStatus.SC_NOT_MODIFIED) {
 			insertLinks(prototype, uri.getOutLinks());
@@ -94,7 +184,16 @@ public class PageDao {
 				this.addOutLinks(uri, prototype);
 			}
 		}
-
+	}
+	
+	private double getPriority(String url){
+		if(datasetProvider != null){
+			SchedulablePage page = datasetProvider.getDataset().getPage(url);
+			if(page != null){
+				return page.getPriority();
+			}
+		}
+		return defaultPriority;
 	}
 
 	public List<String> getRevisitPages(long crawlId) throws SQLException {
@@ -236,6 +335,7 @@ public class PageDao {
 			} else {
 				ps.setNull(16, Types.NUMERIC);
 			}
+			ps.setDouble(17, page.getPriority());
 			ps.executeUpdate();
 			ps.close();
 			c.close();
@@ -250,13 +350,14 @@ public class PageDao {
 
 	}
 
-	private void fillPagePrototype(long crawlId, CrawlURI uri,
-			Page prototype) throws SQLException {
+	private void fillPagePrototype(long crawlId, CrawlURI uri, Page prototype)
+			throws SQLException {
 		if (prototype.getVsPageId() == -1) {
 			this.fillUknownPage(crawlId, uri, prototype);
 		} else {
 			this.fillKnownPage(crawlId, uri, prototype);
 		}
+		
 	}
 
 	private void fillKnownPage(long crawlId, CrawlURI uri, Page page)
