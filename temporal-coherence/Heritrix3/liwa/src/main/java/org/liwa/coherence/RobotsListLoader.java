@@ -47,8 +47,7 @@ public class RobotsListLoader {
 					new URL(robotTxt).openStream()));
 			String s = bf.readLine();
 			while (s != null) {
-				if(s.startsWith("Sitemap: ")||
-						s.startsWith("sitemap: ")){
+				if (s.startsWith("Sitemap: ") || s.startsWith("sitemap: ")) {
 					list.add(s.substring("Sitemap: ".length()));
 				}
 				s = bf.readLine();
@@ -56,15 +55,21 @@ public class RobotsListLoader {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Exception at " + robotTxt);
+			System.out.println("Going on with the next sitemap");
+
 		}
 		return list;
 	}
-	
+
 	public Map<String, List<String>> getSitemaps() {
 		List<String> robots = readRobotList();
 		Map<String, List<String>> sitemaps = new HashMap<String, List<String>>();
-		for(String r: robots){
-			sitemaps.put(r, readSitemaps(r));
+		for (String r : robots) {
+			List<String> detectedSitemaps = readSitemaps(r);
+			if (detectedSitemaps.size() > 0) {
+				sitemaps.put(r, readSitemaps(r));
+			}
 		}
 		return sitemaps;
 	}
