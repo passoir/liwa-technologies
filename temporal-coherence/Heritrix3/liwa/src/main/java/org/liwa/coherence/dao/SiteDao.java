@@ -12,8 +12,9 @@ import org.liwa.coherence.db.Queries;
 public class SiteDao {
 
 	private static final String SITES_SEQ = "sites_seq";
+
 	private static Object monitor = new Object();
-	
+
 	private ConnectionPool connectionPool;
 
 	private Queries queries;
@@ -33,10 +34,10 @@ public class SiteDao {
 	public void setConnectionPool(ConnectionPool connectionPool) {
 		this.connectionPool = connectionPool;
 	}
-	
+
 	public long getSiteIdForUrl(String url) throws SQLException {
 		String domain = this.getDomain(url);
-		if(domain == null || domain.length() == 0){
+		if (domain == null || domain.length() == 0) {
 			return -1;
 		}
 		long id = this.getSiteId(domain);
@@ -45,7 +46,7 @@ public class SiteDao {
 		}
 		return id;
 	}
-	
+
 	private long getSiteId(String domain) throws SQLException {
 		Connection c = connectionPool.getConnection();
 		long id = -1;
@@ -64,31 +65,31 @@ public class SiteDao {
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return id;
 	}
-	
 
 	private long insertSite(String domain) throws SQLException {
 		long id = -1;
-		synchronized(monitor){
-		  id = this.getNextValue(SITES_SEQ);
-		}
-		Connection c = connectionPool.getConnection();
-		try {
-			PreparedStatement ps = c.prepareStatement(queries.getInsertSiteQueries());
-			ps.setLong(1, id);
-			ps.setString(2, domain);
-			ps.executeUpdate();
-			ps.close();
-			c.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			c.close();
-			throw e;
-			
+		synchronized (monitor) {
+			id = this.getNextValue(SITES_SEQ);
+			Connection c = connectionPool.getConnection();
+			try {
+				PreparedStatement ps = c.prepareStatement(queries
+						.getInsertSiteQueries());
+				ps.setLong(1, id);
+				ps.setString(2, domain);
+				ps.executeUpdate();
+				ps.close();
+				c.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				c.close();
+				throw e;
+
+			}
 		}
 		return id;
 	}
@@ -108,7 +109,6 @@ public class SiteDao {
 		return domain;
 	}
 
-
 	private long getNextValue(String sequence) throws SQLException {
 		Connection c = connectionPool.getConnection();
 		long next = 0;
@@ -116,7 +116,7 @@ public class SiteDao {
 			Statement s = c.createStatement();
 			ResultSet r = s.executeQuery(queries.getSequenceStart() + " "
 					+ sequence + " " + queries.getSequenceEnd());
-			
+
 			if (r.next()) {
 				next = r.getLong(1);
 			}
@@ -128,7 +128,7 @@ public class SiteDao {
 			e.printStackTrace();
 			c.close();
 			throw e;
-			
+
 		}
 		return next;
 	}
