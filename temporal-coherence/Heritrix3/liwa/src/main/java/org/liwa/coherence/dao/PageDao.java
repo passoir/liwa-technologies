@@ -1,6 +1,7 @@
 package org.liwa.coherence.dao;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +28,7 @@ import org.liwa.coherence.db.Queries;
 import org.liwa.coherence.pojo.Page;
 import org.liwa.coherence.schedule.DatasetProvider;
 import org.liwa.coherence.schedule.SchedulablePage;
+import org.liwa.coherence.shingling.Signature;
 
 public class PageDao {
 
@@ -40,6 +42,7 @@ public class PageDao {
 	private boolean compactStoring = false;
 
 	private DatasetProvider datasetProvider;
+
 	private double defaultPriority = 1.0;
 
 	private Queries queries;
@@ -49,8 +52,6 @@ public class PageDao {
 	private SiteDao siteDao;
 
 	private UrlDao urlDao;
-	
-	
 
 	public double getDefaultPriority() {
 		return defaultPriority;
@@ -125,7 +126,7 @@ public class PageDao {
 
 	}
 
-	private Page getCompactPage(long crawlId, CrawlURI uri) throws SQLException{
+	private Page getCompactPage(long crawlId, CrawlURI uri) throws SQLException {
 		Page page = new Page();
 		page.setCrawlId(crawlId);
 		page.setUrl(uri.getUURI().toString());
@@ -138,12 +139,25 @@ public class PageDao {
 		if (method != null) {
 			page.setStatusCode(method.getStatusCode());
 		}
+
+		if (uri.getContentType().indexOf("text") != -1) {
+			try {
+				InputStreamReader reader = new InputStreamReader(uri.getRecorder()
+						.getReplayInputStream());
+				Signature signature = new Signature(reader, 10, 10, 3);
+				page.setSignatures(signature.getSignature());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		return page;
 	}
-	
-	private long insertCompact(long crawlId, CrawlURI uri)  throws SQLException{
+
+	private long insertCompact(long crawlId, CrawlURI uri) throws SQLException {
 		Page page = getCompactPage(crawlId, uri);
-		
+
 		long id = this.getNextValue(PAGES_SEQ);
 		Connection c = connectionPool.getConnection();
 		try {
@@ -159,6 +173,9 @@ public class PageDao {
 			ps.setString(7, page.getChecksum());
 			ps.setInt(8, page.getStatusCode());
 			ps.setDouble(9, page.getPriority());
+			for(int i = 0; i < 10; i++){
+				ps.setInt(10+i, page.getSignatures()[i]);
+			}
 			ps.executeUpdate();
 			ps.close();
 			c.close();
@@ -185,11 +202,11 @@ public class PageDao {
 			}
 		}
 	}
-	
-	private double getPriority(String url){
-		if(datasetProvider != null){
+
+	private double getPriority(String url) {
+		if (datasetProvider != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(url);
-			if(page != null){
+			if (page != null) {
 				return page.getPriority();
 			}
 		}
@@ -357,7 +374,7 @@ public class PageDao {
 		} else {
 			this.fillKnownPage(crawlId, uri, prototype);
 		}
-		
+
 	}
 
 	private void fillKnownPage(long crawlId, CrawlURI uri, Page page)

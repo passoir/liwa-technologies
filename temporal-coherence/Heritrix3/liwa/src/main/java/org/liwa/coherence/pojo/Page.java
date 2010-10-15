@@ -24,8 +24,17 @@ public class Page {
 	private int statusCode;
 	private long downloadTime;
 	private double priority;
+	private int[] signatures = new int[10];
 	
 	
+
+	public int[] getSignatures() {
+		return signatures;
+	}
+
+	public void setSignatures(int[] signatures) {
+		this.signatures = signatures;
+	}
 
 	public double getPriority() {
 		return priority;

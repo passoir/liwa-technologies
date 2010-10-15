@@ -20,6 +20,7 @@ public class ParallelJobs implements ProcessorListener {
 	private boolean finished = false;
 
 	private int jobFinished = 0;
+	private long lastDownload = 0;
 
 	public boolean isFilled() {
 		return controllers.size() == JOB_COUNT;
@@ -52,6 +53,10 @@ public class ParallelJobs implements ProcessorListener {
 	public void urlProcessed() {
 		if (!finished) {
 			synchronized (this) {
+//				long now = System.currentTimeMillis();
+//				long difference = 1000-(now-lastDownload);
+//				difference = Math.max(0, difference);
+//				lastDownload = now;
 				if (calls == JOB_COUNT - 1) {
 					calls = 0;
 					this.notifyAll();
@@ -59,6 +64,7 @@ public class ParallelJobs implements ProcessorListener {
 					calls++;
 					try {
 						this.wait();
+						this.notifyAll();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
