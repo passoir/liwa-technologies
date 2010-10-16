@@ -72,10 +72,10 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
 					.get(robotsTxt));
 			startThresholdJob(configuration, domain, sitemapList, pj);
-			startSelectiveJob(configuration, domain, sitemapList, pj);
 			startHottestJob(configuration, domain, sitemapList, pj);
 			startBreadthFirstJob(configuration, domain, sitemapList, pj);
 			startHighestPriorityJob(configuration, domain, sitemapList, pj);
+			startSelectiveJob(configuration, domain, sitemapList, pj);
 		}
 	}
 
@@ -127,11 +127,12 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					"sitemaps");
 			CrawlListener cl = (CrawlListener) job.getJobContext().getBean(
 					"crawlListener");
-			cl.addJobListener(this);
+			
 			sl.setSitemaps(sitemaps);
 			ChangeRateProvider changeRateProvider = (ChangeRateProvider) job
 					.getJobContext().getBean("changeRateProvider");
 			pj.addCrawlController(job.getCrawlController());
+			cl.addJobListener(this);
 			changeRateProvider.setSitemaps(sl);
 			changeRateProvider.afterSitemapSet();
 			AbstractSchedule schedule = (AbstractSchedule) job.getJobContext()

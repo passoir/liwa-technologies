@@ -26,7 +26,7 @@ public class Queries {
 		+ " url_id, url, site_id, visited_timestamp, "
 		+ " checksum, status_code,  priority, sig0,sig1,sig2,sig3,sig4,sig5,sig6," +
 				"sig7,sig8,sig9) "
-		+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	private static final String GET_PAGE_ID_QUERY = "select page_id from t_pages "
 			+ "where crawl_id = ? and url = ?";

@@ -17,6 +17,7 @@ public class Html2Text extends HTMLEditorKit.ParserCallback {
  }
 
  public void handleText(char[] text, int pos) {
+	
    s.append(text);
  }
 
