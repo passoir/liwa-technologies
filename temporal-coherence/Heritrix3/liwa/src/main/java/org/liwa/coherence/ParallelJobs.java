@@ -20,6 +20,7 @@ public class ParallelJobs implements ProcessorListener {
 	private boolean finished = false;
 
 	private int jobFinished = 0;
+
 	private long lastDownload = 0;
 
 	public boolean isFilled() {
@@ -34,7 +35,7 @@ public class ParallelJobs implements ProcessorListener {
 	public synchronized void jobFinished(CrawlController cc) {
 		finished = true;
 		jobFinished++;
-			notifyAll();
+		notifyAll();
 	}
 
 	public synchronized boolean areJobsDone() {
@@ -53,10 +54,10 @@ public class ParallelJobs implements ProcessorListener {
 	public void urlProcessed() {
 		if (!finished) {
 			synchronized (this) {
-//				long now = System.currentTimeMillis();
-//				long difference = 1000-(now-lastDownload);
-//				difference = Math.max(0, difference);
-//				lastDownload = now;
+				// long now = System.currentTimeMillis();
+				// long difference = 1000-(now-lastDownload);
+				// difference = Math.max(0, difference);
+				// lastDownload = now;
 				if (calls == JOB_COUNT - 1) {
 					calls = 0;
 					this.notifyAll();
@@ -86,18 +87,18 @@ public class ParallelJobs implements ProcessorListener {
 					ready.set(i, true);
 				}
 			}
-			if (isFilled()) {
-				boolean allReady = true;
-				for (int i = 0; i < ready.size() && allReady; i++) {
-					allReady &= ready.get(i);
-				}
-				if (allReady) {
-					for (CrawlController c : controllers) {
-						c.requestCrawlResume();
-					}
+			boolean allReady = true;
+			for (int i = 0; i < ready.size() && allReady; i++) {
+				allReady &= ready.get(i);
+			}
+			if (allReady && isFilled()) {
+				for (CrawlController c : controllers) {
+					c.requestCrawlResume();
 				}
 				started = true;
 			}
+			
+
 		}
 	}
 

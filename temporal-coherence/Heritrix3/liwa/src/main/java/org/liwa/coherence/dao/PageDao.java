@@ -142,16 +142,28 @@ public class PageDao {
 
 		if (uri.getContentType().indexOf("text") != -1) {
 			try {
-				InputStreamReader reader = new InputStreamReader(uri.getRecorder()
-						.getReplayInputStream());
-				Signature signature = new Signature(reader, 10, 10, 3);
+				InputStreamReader reader = new InputStreamReader(uri
+						.getRecorder().getReplayInputStream());
+				int b = reader.read();
+				StringBuffer buffer = new StringBuffer();
+				boolean start = false;
+				while (b != -1) {
+					start |= (char) b == '<';
+					if (start) {
+						buffer.append((char) b);
+					}
+					b = reader.read();
+				}
+		//		System.out.println(buffer);
+				Signature signature = new Signature(buffer.toString(), 10, 10,
+						3);
 				page.setSignatures(signature.getSignature());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		return page;
 	}
 
@@ -173,8 +185,8 @@ public class PageDao {
 			ps.setString(7, page.getChecksum());
 			ps.setInt(8, page.getStatusCode());
 			ps.setDouble(9, page.getPriority());
-			for(int i = 0; i < 10; i++){
-				ps.setInt(10+i, page.getSignatures()[i]);
+			for (int i = 0; i < 10; i++) {
+				ps.setInt(10 + i, page.getSignatures()[i]);
 			}
 			ps.executeUpdate();
 			ps.close();

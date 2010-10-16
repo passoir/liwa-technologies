@@ -75,7 +75,7 @@
 	<bean id="connectionPool"
 	      class="org.liwa.coherence.db.ConnectionPool">
 		<property name="dataSourceName" value="Coherence Data Source" />
-		<property name="serverName" value="infao5802" />
+		<property name="serverName" value="localhost" />
 		<property name="databaseName" value="liwa_coherence1" />
 		<property name="user" value="ddenev" />
 		<property name="password" value="liwa" />

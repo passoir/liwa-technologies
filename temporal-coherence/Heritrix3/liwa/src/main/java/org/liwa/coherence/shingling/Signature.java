@@ -51,7 +51,7 @@ public class Signature {
 		Html2Text parser = new Html2Text();
 		parser.parse(reader);
 		doc = parser.getText();
-		System.out.println(doc);
+	//	System.out.println(doc);
 		reader.close();
 		
 		signature = new int[_sigSize];
@@ -74,7 +74,7 @@ public class Signature {
 				shingle.add(st.nextToken());
 			}
 
-			System.out.println(shingle);
+			//System.out.println(shingle);
 
 			updateSignature(shingle);
 
