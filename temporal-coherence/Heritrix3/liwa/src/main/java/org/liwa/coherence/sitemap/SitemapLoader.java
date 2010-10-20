@@ -347,7 +347,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				}
 
 				// System.out.println(url);
-				if (getDomain(location).equalsIgnoreCase(host)) {
+				if (changeFreq.trim().length() > 0
+						&& getDomain(location).equalsIgnoreCase(host)) {
 					publshedUrls.add(url);
 				}
 
@@ -391,7 +392,6 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			SAXParser saxParser = factory.newSAXParser();
 			SitemapHandler handler = new SitemapHandler();
 			handler.host = getDomain(sitemapUrl);
-			System.out.println(handler.host);
 			saxParser.parse(inputSource, handler);
 			if (handler.publishedUrls != null) {
 				Sitemap s = new Sitemap(sitemapUrl, null);

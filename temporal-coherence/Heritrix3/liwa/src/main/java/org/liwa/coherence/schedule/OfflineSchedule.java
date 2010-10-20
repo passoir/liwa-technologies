@@ -87,7 +87,6 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 			revisits.add(reversedRevisits.get(positions.get(i)).getUrl());
 			reversedRevisits.get(positions.get(i)).setRevisit(i);
 		}
-		System.out.println(visits.get(1));
 	}
 
 	protected void finish() {

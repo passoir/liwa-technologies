@@ -46,7 +46,8 @@ CREATE SEQUENCE page_id_seq
 
 CREATE TABLE t_crawls (
 crawl_id integer,
-title varchar
+title varchar,
+recrawled_id integer
 );
 
 CREATE TABLE t_sites (

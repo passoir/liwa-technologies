@@ -225,7 +225,8 @@ public class PageDao {
 	}
 
 	private double getPriority(String url) {
-		if (datasetProvider.getDataset().getPages() != null) {
+		if (datasetProvider != null &&
+				datasetProvider.getDataset().getPages() != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(url);
 			if (page != null) {
 				return page.getPriority();
@@ -235,7 +236,8 @@ public class PageDao {
 	}
 
 	private String getFrequency(String url) {
-		if (datasetProvider.getDataset() != null) {
+		if (datasetProvider != null &&
+				datasetProvider.getDataset() != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(url);
 			if (page != null) {
 				return page.getFrequency();
@@ -245,7 +247,8 @@ public class PageDao {
 	}
 
 	private double getExpectedCoherence(String url) {
-		if (datasetProvider.getDataset() != null) {
+		if (datasetProvider != null &&
+				datasetProvider.getDataset() != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(url);
 			if (page != null) {
 				return page.getExpectedCoherence();
@@ -255,7 +258,8 @@ public class PageDao {
 	}
 	
 	private double getChangeRate(String url) {
-		if (datasetProvider.getDataset() != null) {
+		if (datasetProvider != null &&
+				datasetProvider.getDataset() != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(url);
 			if (page != null) {
 				return page.getChangeRate();
