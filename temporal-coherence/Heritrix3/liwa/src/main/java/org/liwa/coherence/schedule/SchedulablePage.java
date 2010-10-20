@@ -6,7 +6,55 @@ public class SchedulablePage {
 	private String url;
 	private double changeRate;
 	private double priority;
+	private String frequency;
+	private int visit;
+	private int revisit;
+	private double delta;
 	
+	public SchedulablePage() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public SchedulablePage(SchedulablePage p){
+		url = p.url;
+		changeRate = p.changeRate;
+		priority = p.priority;
+		frequency = p.frequency;
+		visit = p.visit;
+		revisit = p.revisit;
+		delta = p.delta;
+	}
+	
+	public double getDelta() {
+		return delta;
+	}
+	public void setDelta(double delta) {
+		this.delta = delta;
+	}
+	public int getRevisit() {
+		return revisit;
+	}
+	public void setRevisit(int revisit) {
+		this.revisit = revisit;
+	}
+	public int getVisit() {
+		return visit;
+	}
+	public void setVisit(int visit) {
+		this.visit = visit;
+	}
+	public double getExpectedCoherence() {
+		double expCoherence =  Math.exp(-changeRate*(revisit+visit)*delta);
+		System.out.println(url + " " + visit + " " + revisit + " " + delta + " "+
+				expCoherence);
+		return expCoherence;
+	}
+	public String getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
 	public double getPriority() {
 		return priority;
 	}

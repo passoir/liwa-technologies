@@ -16,6 +16,8 @@ public class SitemapDatasetAdapter implements DatasetProvider {
 
 	private double politenessDelay;
 
+	private Dataset d;
+
 	public double getPolitenessDelay() {
 		return politenessDelay;
 	}
@@ -41,15 +43,19 @@ public class SitemapDatasetAdapter implements DatasetProvider {
 	}
 
 	public Dataset getDataset() {
-		Dataset d = new Dataset();
-		for (PublishedUrl url : sitemaps.getPublishedUrls()) {
-			SchedulablePage page = new SchedulablePage();
-			page.setChangeRate(changeRateProvider.getChangeRate(url
-					.getLocation()));
-			page.setUrl(url.getLocation());
-			page.setPriority(url.getPriority());
-			d.addPage(page);
+		if (d == null) {
+			d = new Dataset();
+			for (PublishedUrl url : sitemaps.getPublishedUrls()) {
+				SchedulablePage page = new SchedulablePage();
+				page.setChangeRate(changeRateProvider.getChangeRate(url
+						.getLocation()));
+				page.setUrl(url.getLocation());
+				page.setPriority(url.getPriority());
+				page.setFrequency(url.getChangeRate());
+				page.setDelta(getPolitenessDelay());
+				d.addPage(page);
 
+			}
 		}
 		return d;
 	}

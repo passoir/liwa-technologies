@@ -9,6 +9,13 @@ CREATE SEQUENCE links_seq
  START 1
  CACHE 1;
 
+CREATE SEQUENCE pages_seq
+ INCREMENT 1
+ MINVALUE 1
+ MAXVALUE 9223372036854775807
+ START 1
+ CACHE 1;
+
 CREATE SEQUENCE crawls_seq
  INCREMENT 1
  MINVALUE 1
@@ -73,6 +80,10 @@ last_modified timestamp,
 vs_page_id integer,
 status_code integer,
 download_time integer,
+priority double precision,
+frequency varchar(40),
+expected_coherence double precision,
+change_rate double precision,
 sig0 bigint,
 sig1 bigint,
 sig2 bigint,

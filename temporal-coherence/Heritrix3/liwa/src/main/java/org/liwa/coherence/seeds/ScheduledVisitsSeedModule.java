@@ -40,7 +40,8 @@ public class ScheduledVisitsSeedModule extends SeedModule {
 
 	@Override
 	public void announceSeeds() {
-		for(String uri: schedule.getVisits()){
+		for(int i = 0; i < schedule.getVisits().size(); i++){
+			String uri = schedule.getVisits().get(i);
 			try {
 	            UURI uuri = UURIFactory.getInstance(uri);
 	            CrawlURI curi = new CrawlURI(uuri);
