@@ -40,9 +40,12 @@ public class SiteDao {
 		if (domain == null || domain.length() == 0) {
 			return -1;
 		}
-		long id = this.getSiteId(domain);
-		if (id == -1) {
-			id = this.insertSite(domain);
+		long id = -1;
+		synchronized (monitor) {
+			id = this.getSiteId(domain);
+			if (id == -1) {
+				id = this.insertSite(domain);
+			}
 		}
 		return id;
 	}
@@ -71,25 +74,21 @@ public class SiteDao {
 	}
 
 	private long insertSite(String domain) throws SQLException {
-		long id = -1;
-		synchronized (monitor) {
-			id = this.getNextValue(SITES_SEQ);
-			Connection c = connectionPool.getConnection();
-			try {
-				PreparedStatement ps = c.prepareStatement(queries
-						.getInsertSiteQueries());
-				ps.setLong(1, id);
-				ps.setString(2, domain);
-				ps.executeUpdate();
-				ps.close();
-				c.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				c.close();
-				throw e;
-
-			}
+		long id = this.getNextValue(SITES_SEQ);
+		Connection c = connectionPool.getConnection();
+		try {
+			PreparedStatement ps = c.prepareStatement(queries
+					.getInsertSiteQueries());
+			ps.setLong(1, id);
+			ps.setString(2, domain);
+			ps.executeUpdate();
+			ps.close();
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			c.close();
+			throw e;
 		}
 		return id;
 	}

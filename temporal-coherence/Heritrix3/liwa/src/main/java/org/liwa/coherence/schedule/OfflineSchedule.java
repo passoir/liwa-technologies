@@ -72,20 +72,22 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 		Collections.sort(positions);
 		for (int i = 0; i < positions.size(); i++) {
 			visits.add(visitMap.get(positions.get(i)).getUrl());
+			visitMap.get(positions.get(i)).setVisit(size - i - 1);
 		}
 
-		Map<Integer, String> reversedRevisits = new HashMap<Integer, String>();
+		Map<Integer, SchedulablePage> reversedRevisits = new HashMap<Integer, SchedulablePage>();
 		for (SchedulablePage p : revisitMap.keySet()) {
-			reversedRevisits.put(revisitMap.get(p), p.getUrl());
+			reversedRevisits.put(revisitMap.get(p), p);
 		}
 
 		positions.clear();
 		positions.addAll(reversedRevisits.keySet());
 		Collections.sort(positions);
 		for (int i = 0; i < positions.size(); i++) {
-			revisits.add(reversedRevisits.get(positions.get(i)));
+			revisits.add(reversedRevisits.get(positions.get(i)).getUrl());
+			reversedRevisits.get(positions.get(i)).setRevisit(i);
 		}
-
+		System.out.println(visits.get(1));
 	}
 
 	protected void finish() {
@@ -109,7 +111,7 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 		if (pages.size() > 0) {
 			visitMap.put(0, pages.get(0));
 			revisitMap.put(pages.get(0), 0);
-		}else{
+		} else {
 			System.out.println("SCHEDULE: no pages found");
 		}
 	}

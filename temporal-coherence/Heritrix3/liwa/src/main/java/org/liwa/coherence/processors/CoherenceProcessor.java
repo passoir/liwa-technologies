@@ -1,5 +1,8 @@
 package org.liwa.coherence.processors;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +20,10 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 
 	private static final long serialVersionUID = -1366129749686865803L;
 
+	private long lastDownload = 0;
+
 	private CoherenceMetadata metadata;
-	
+
 	private List<ProcessorListener> listeners = new ArrayList<ProcessorListener>();
 
 	private PageDao pageDao;
@@ -34,8 +39,8 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 	public CoherenceMetadata getMetadata() {
 		return metadata;
 	}
-	
-	public void addProcessorListener(ProcessorListener processorListener){
+
+	public void addProcessorListener(ProcessorListener processorListener) {
 		listeners.add(processorListener);
 	}
 
@@ -46,12 +51,25 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 
 	@Override
 	protected void innerProcess(CrawlURI uri) throws InterruptedException {
+//		if (lastDownload != 0
+//				&& this.metadata.getJobName().contains("selective")) {
+//			try {
+//				getWriter().write(metadata.getJobName() + " "
+//						+ (System.currentTimeMillis() - lastDownload)+"\n");
+//				getWriter().flush();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//		}
+		lastDownload = System.currentTimeMillis();
 		try {
 			pageDao.insertPage(this.metadata.getCrawlId(), uri);
-			for(ProcessorListener l: listeners){
+			for (ProcessorListener l : listeners) {
 				l.urlProcessed();
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -62,4 +80,16 @@ public class CoherenceProcessor extends Processor implements Lifecycle,
 		return !uri.isPrerequisite() && uri.isSuccess();
 	}
 
+	private static FileWriter getWriter(){
+		try {
+			if(writer == null){
+				writer = new FileWriter(new File("time.log"));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return writer;
+	}
+	private static FileWriter writer;
 }

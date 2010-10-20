@@ -25,7 +25,6 @@ public class SelectiveSchedule extends OfflineSchedule {
 		List<SchedulablePage> hopeless = new ArrayList<SchedulablePage>();
 		expected = autoPsi.xi(hopeful, hopeless, timeMapper.getDelta());
 
-
 		for (int i = 0; i < hopeful.size(); i++) {
 			int index = -i;
 			visitMap.put(index, hopeful.get(i));
@@ -40,5 +39,4 @@ public class SelectiveSchedule extends OfflineSchedule {
 		}
 		super.setVisitRevisit();
 	}
-
 }

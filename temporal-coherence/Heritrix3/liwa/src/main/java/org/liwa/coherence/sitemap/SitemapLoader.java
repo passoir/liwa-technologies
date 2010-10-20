@@ -3,6 +3,7 @@ package org.liwa.coherence.sitemap;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -65,8 +66,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		}
 	}
 
-	
-	public void setSitemaps(List<Sitemap> sitemaps){
+	public void setSitemaps(List<Sitemap> sitemaps) {
 		this.sitemapList = new ArrayList<Sitemap>();
 		this.sitemapList.addAll(sitemaps);
 		this.sitemapsInitialized = true;
@@ -142,6 +142,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 	}
 
 	private static class SitemapHandler extends DefaultHandler {
+		String host;
+
 		UrlHandler urlHandler = new UrlHandler();
 
 		SitemapSetHandler sitemapSetHandler = new SitemapSetHandler();
@@ -181,8 +183,10 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			if (defaultHandler == null) {
 				if (qName == "urlset") {
 					defaultHandler = urlHandler;
+					urlHandler.host = host;
 				} else {
 					defaultHandler = sitemapSetHandler;
+					sitemapSetHandler.host = host;
 				}
 			}
 			defaultHandler.startElement(uri, localName, qName, attributes);
@@ -200,6 +204,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		static final int LASTMOD_STATE = 4;
 
 		int localState = NONE_STATE;
+
+		String host;
 
 		String location = "";
 
@@ -237,7 +243,9 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				throws SAXException {
 			localState = NONE_STATE;
 			if (qName.equals("sitemap")) {
-				sitemaps.add(location);
+				if (getDomain(location).equalsIgnoreCase(host)) {
+					sitemaps.add(location);
+				}
 				location = "";
 			}
 			super.endElement(uri, localName, qName);
@@ -267,6 +275,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		String lastMod = "";
 
 		String priority = "";
+
+		String host;
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
@@ -331,13 +341,15 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				if (lastMod != null && lastMod.length() > 0) {
 					url.setLastModified(DateParser.parseW3CDateTime(lastMod));
 				}
-				
+
 				if (priority != null && priority.length() > 0) {
 					url.setPriority(Double.parseDouble(priority));
 				}
-				
+
 				// System.out.println(url);
-				publshedUrls.add(url);
+				if (getDomain(location).equalsIgnoreCase(host)) {
+					publshedUrls.add(url);
+				}
 
 				location = "";
 				changeFreq = "";
@@ -378,6 +390,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			SitemapHandler handler = new SitemapHandler();
+			handler.host = getDomain(sitemapUrl);
+			System.out.println(handler.host);
 			saxParser.parse(inputSource, handler);
 			if (handler.publishedUrls != null) {
 				Sitemap s = new Sitemap(sitemapUrl, null);
@@ -412,5 +426,16 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 
 	public void afterPropertiesSet() throws Exception {
 		// initSitemaps();
+	}
+
+	private static String getDomain(String url) {
+		try {
+			URL urlObject = new URL(url);
+			return urlObject.getHost();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

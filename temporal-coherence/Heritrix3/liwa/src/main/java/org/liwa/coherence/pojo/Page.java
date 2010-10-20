@@ -24,9 +24,37 @@ public class Page {
 	private int statusCode;
 	private long downloadTime;
 	private double priority;
+	private String frequency;
+	private double changeRate;
+	private double expectedCoherence;
 	private int[] signatures = new int[10];
 	
 	
+	
+
+	public double getChangeRate() {
+		return changeRate;
+	}
+
+	public void setChangeRate(double changeRate) {
+		this.changeRate = changeRate;
+	}
+
+	public double getExpectedCoherence() {
+		return expectedCoherence;
+	}
+
+	public void setExpectedCoherence(double expectedCoherence) {
+		this.expectedCoherence = expectedCoherence;
+	}
+
+	public String getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
 
 	public int[] getSignatures() {
 		return signatures;

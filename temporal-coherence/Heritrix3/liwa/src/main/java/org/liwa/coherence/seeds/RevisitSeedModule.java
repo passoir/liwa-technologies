@@ -41,7 +41,8 @@ public class RevisitSeedModule extends SeedModule {
 
 	@Override
 	public void announceSeeds() {
-		for(String uri: revisits){
+		for(int i = 0; i < revisits.size(); i++){
+			String uri = revisits.get(i);
 			try {
 	            UURI uuri = UURIFactory.getInstance(uri);
 	            CrawlURI curi = new CrawlURI(uuri);

@@ -24,6 +24,9 @@ public class PublishedUrl {
 		this.priority = priority;
 	}
 	
+	
+	
+	
 	public String getChangeRate() {
 		return changeRate;
 	}
