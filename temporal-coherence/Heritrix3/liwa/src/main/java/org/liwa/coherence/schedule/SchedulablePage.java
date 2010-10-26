@@ -129,7 +129,11 @@ public class SchedulablePage {
 	public static class PriorityReverseComparator implements
 			Comparator<SchedulablePage> {
 		public int compare(SchedulablePage o1, SchedulablePage o2) {
-			return (int) Math.signum(-o1.priority + o2.priority);
+			int d = (int) Math.signum(-o1.priority + o2.priority);
+			if(d == 0){
+				return (int) Math.signum(-o1.changeRate + o2.changeRate);
+			}
+			return d;
 		}
 	}
 
