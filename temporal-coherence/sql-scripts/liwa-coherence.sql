@@ -1,6 +1,6 @@
---DROP database ninet;
-create database liva_coherence;
-\c liva_coherence;
+DROP database liwa_coherence;
+create database liwa_coherence;
+\c liwa_coherence;
 
 CREATE SEQUENCE links_seq
  INCREMENT 1
