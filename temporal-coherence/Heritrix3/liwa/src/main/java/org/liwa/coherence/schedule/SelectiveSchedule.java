@@ -12,8 +12,8 @@ public class SelectiveSchedule extends OfflineSchedule {
 	public void setDatasetProvider(DatasetProvider datasetProvider) {
 		// TODO Auto-generated method stub
 		super.setDatasetProvider(datasetProvider);
-//		Collections.sort(this.pages,
-//				SchedulablePage.CHANGE_RATE_PRIORITY_COMPARATOR);
+		Collections.sort(this.pages,
+				SchedulablePage.PRIORITY_COMPARATOR);
 		autoPsi = new Selective(pages);
 	}
 
