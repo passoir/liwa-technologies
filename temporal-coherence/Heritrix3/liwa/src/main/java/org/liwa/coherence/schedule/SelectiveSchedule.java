@@ -1,6 +1,7 @@
 package org.liwa.coherence.schedule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SelectiveSchedule extends OfflineSchedule {
@@ -11,7 +12,9 @@ public class SelectiveSchedule extends OfflineSchedule {
 	public void setDatasetProvider(DatasetProvider datasetProvider) {
 		// TODO Auto-generated method stub
 		super.setDatasetProvider(datasetProvider);
-		autoPsi = new Selective(datasetProvider.getDataset().getPages());
+//		Collections.sort(this.pages,
+//				SchedulablePage.CHANGE_RATE_PRIORITY_COMPARATOR);
+		autoPsi = new Selective(pages);
 	}
 
 	@Override
@@ -23,7 +26,7 @@ public class SelectiveSchedule extends OfflineSchedule {
 	public void runSchedule() {
 		List<SchedulablePage> hopeful = new ArrayList<SchedulablePage>();
 		List<SchedulablePage> hopeless = new ArrayList<SchedulablePage>();
-		expected = autoPsi.xi(hopeful, hopeless, timeMapper.getDelta());
+		expected = autoPsi.selective(hopeful, hopeless, timeMapper.getDelta());
 
 		for (int i = 0; i < hopeful.size(); i++) {
 			int index = -i;

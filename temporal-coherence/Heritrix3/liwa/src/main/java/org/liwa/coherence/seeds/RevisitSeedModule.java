@@ -41,7 +41,7 @@ public class RevisitSeedModule extends SeedModule {
 
 	@Override
 	public void announceSeeds() {
-		for(int i = 0; i < revisits.size(); i++){
+		for(int i = 1; i < revisits.size(); i++){
 			String uri = revisits.get(i);
 			try {
 	            UURI uuri = UURIFactory.getInstance(uri);

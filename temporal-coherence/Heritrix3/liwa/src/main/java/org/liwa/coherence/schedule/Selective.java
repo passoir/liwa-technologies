@@ -10,22 +10,17 @@ public class Selective {
 
 	List<Double> changes = new ArrayList<Double>();
 
-	List<Integer> schedule = new ArrayList<Integer>();
+	List<Double> weights = new ArrayList<Double>();
 
 	List<SchedulablePage> myPages = null;
 
-	public Selective(List<Double> changes, List<Integer> schedule) {
-		this.changes = changes;
-		this.schedule = schedule;
+	protected Selective() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public Selective(int size) {
-		// for faster computation
-
-		this.size = generateChanges1x2(this.changes, size);
-		System.out.println(changes);
-		generateTriangleIntervals(schedule, size);
-
+	public Selective(List<Double> changes, List<Double> weights) {
+		this.changes = changes;
+		this.weights = weights;
 	}
 
 	public Selective(List<SchedulablePage> pages) {
@@ -34,40 +29,9 @@ public class Selective {
 		for (i = 0; i < pages.size(); i++) {
 			SchedulablePage p = pages.get(i);
 			changes.add(p.getChangeRate());
-			schedule.add(2 * i);
+			weights.add(p.getPriority());
 		}
 		myPages = pages;
-	}
-
-	/**
-	 * e^x = 1 + x approximation of isHopeless
-	 * 
-	 * @param from
-	 * @param to
-	 * @param shortestInterval
-	 * @return
-	 */
-	boolean isHopelessLinearApx(int from, long shortestInterval) {
-		int i, j;
-
-		double noDead = 0.0;
-		for (i = from, j = 0; i < changes.size(); i++, j++) {
-			noDead += changes.get(i) * (shortestInterval + 2 * j);
-		}
-
-		long longestInterval = shortestInterval + 2 * j - 2;
-
-		double dead = 0.0;
-		for (i = from, j = 0; i < changes.size() - 1; i++, j++) {
-			dead += changes.get(i + 1) * (shortestInterval + 2 * j);
-		}
-		dead += changes.get(from) * longestInterval;
-
-		System.out.println("isHopelessApx: " + noDead + " " + dead);
-		if (noDead >= dead)
-			return false;
-		else
-			return true;
 	}
 
 	/*
@@ -78,7 +42,7 @@ public class Selective {
 
 		double noDead = 0.0;
 		for (i = from, j = 0; i < changes.size(); i++, j++) {
-			noDead += probSharp(myPages.get(i).getPriority(), changes.get(i),
+			noDead += probSharp(weights.get(i), changes.get(i),
 					shortestInterval + 2 * j, delta);
 		}
 
@@ -86,12 +50,11 @@ public class Selective {
 
 		double dead = 0.0;
 		for (i = from, j = 0; i < changes.size() - 1; i++, j++) {
-			dead += probSharp(myPages.get(i+1).getPriority(),
-					changes.get(i + 1), shortestInterval + 2 * j,
-					delta);
+			dead += probSharp(weights.get(i + 1), changes.get(i + 1),
+					shortestInterval + 2 * j, delta);
 		}
-		dead += probSharp(myPages.get(from).getPriority(),
-				changes.get(from), longestInterval, delta);
+		dead += probSharp(weights.get(from), changes.get(from),
+				longestInterval, delta);
 
 		// System.out.println("ishopeless: " + noDead + " " + dead);
 		if (noDead - dead >= 0)
@@ -109,18 +72,21 @@ public class Selective {
 	 *            should be empty; method puts hopeless pages into the list
 	 * @return
 	 */
-	public double xi(List<SchedulablePage> hopeful,
+	public double selective(List<SchedulablePage> hopeful,
 			List<SchedulablePage> hopeless, double delta) {
 		boolean print = false;
 		int shortestIndex, longestIndex;
 
-		double expectedNNPages = 1.0; // [0,0] page is always sharp
+		double expectedNNPages = weights.get(0); // [0,0] page is always
+		// sharp
 
 		List<Integer> bi = new ArrayList<Integer>(); // bad guys
 		List<Integer> gi = new ArrayList<Integer>(); // good guys
 
 		if (myPages != null)
 			hopeful.add(myPages.get(0));
+		
+		gi.add(0);
 
 		shortestIndex = 1;
 		longestIndex = changes.size() - 1;
@@ -128,270 +94,92 @@ public class Selective {
 			if (isHopeless(i, 2 * shortestIndex, delta)) {
 				// System.out.println(changes.get(i) + " is hopeless");
 				// We've got a hopeless page
-				expectedNNPages += probSharp(myPages.get(i).getPriority(),
-						changes.get(i), 2 * longestIndex, delta);
+				expectedNNPages += probSharp(weights.get(i), changes.get(i),
+						2 * longestIndex, delta);
 				longestIndex--;
+				bi.add(i);
 				if (myPages != null)
 					hopeless.add(myPages.get(i));
 				if (print == true) {
 					System.out.println(changes.get(i) + " is hopeless");
-					bi.add(i);
+					
 				}
 			} else {
 				// System.out.println(changes.get(i) + " is ok");
-				expectedNNPages += probSharp(myPages.get(i).getPriority(),
-						changes.get(i), 2 * shortestIndex, delta);
+				expectedNNPages += probSharp(weights.get(i), changes.get(i),
+						2 * shortestIndex, delta);
 				shortestIndex++;
+				gi.add(i);
 				if (myPages != null)
 					hopeful.add(myPages.get(i));
 				if (print == true) {
 					System.out.println(changes.get(i) + " is hopeful");
-					gi.add(i);
 				}
 			}
 		}
 
+		List<Double> c = new ArrayList<Double>();
+		List<Double> w = new ArrayList<Double>();
+		for(int i = 0; i < gi.size(); i++){
+			c.add(changes.get(gi.get(i)));
+			w.add(weights.get(gi.get(i)));
+		}
+		for(int i = bi.size()-1; i >= 0; i--){
+			c.add(changes.get(bi.get(i)));
+			w.add(weights.get(bi.get(i)));
+		}
+		changes = c;
+		weights = w;
 		if (print == true) {
 			System.out.println("hopeful indexes: " + gi);
 			System.out.println("hopeless indexes: " + bi);
 		}
-		return expectedNNPages
-				+ probSharp(myPages.get(myPages.size() - 1).getPriority(),
-						changes.get(changes.size() - 1), 2 * shortestIndex,
-						delta);
+		return expectedNNPages;
 	}
 
-	double probSharp(double changeRate, double length, double delta,
-			double priority) {
+	double probSharp(double priority, double changeRate, double length,
+			double delta) {
 		return priority * Math.exp(-changeRate * length * delta);
 	}
 
 	public static double expectedNNSharp(List<Double> changes,
-			List<Integer> schedule) {
+			List<Double> weights, List<Integer> schedule) {
 		double res = 0.0;
 
 		for (int i = 0; i < changes.size(); i++) {
-			res += Math.exp(-changes.get(i) * schedule.get(i));
+			res += weights.get(i) * Math.exp(-changes.get(i) * schedule.get(i));
 		}
 
 		return res;
 
 	}
 
-	// from http://www.freewebz.com/permute/01example.html
-	public double bestPlanFromAllPermutations() {
-		boolean print = false;
-		List<Double> bestOrder = new ArrayList<Double>();
-		for (int i = 0; i < size; i++) {
-			bestOrder.add(changes.get(i));
-		}
-
-		double prevNNSharp = 0.0;
-		double NNSharp = 0.0;
-		for (int i = 0; i < changes.size(); i++) {
-			prevNNSharp += Math.exp(-schedule.get(i) * changes.get(i));
-		}
-		double bestNNSharp = prevNNSharp;
-
-		int p[] = new int[size + 1];
-		int i, j; // Upper Index i; Lower Index j
-		for (i = 0; i < size; i++) {
-			p[i] = i;
-		}
-		p[size] = size; // p[N] > 0 controls iteration and the index boundary
-		// for i
-		i = 1; // setup first swap points to be 1 and 0 respectively (i & j)
-		while (i < size) {
-			p[i]--; // decrease index "weight" for i by one
-			j = i % 2 * p[i]; // IF i is odd then j = p[i] otherwise j = 0
-
-			int from = i;
-			int to = j;
-			NNSharp = prevNNSharp
-					- Math.exp(-schedule.get(from) * changes.get(from))
-					- Math.exp(-schedule.get(to) * changes.get(to))
-					+ Math.exp(-schedule.get(to) * changes.get(from))
-					+ Math.exp(-schedule.get(from) * changes.get(to));
-			swapChangeRates(changes, from, to);
-			prevNNSharp = NNSharp;
-
-			if (print == true) {
-				System.out.println(changes + " " + NNSharp + ", best: "
-						+ bestNNSharp);
-			}
-
-			// keeping the better schedule
-			if (NNSharp > bestNNSharp) {
-				for (j = 0; j < schedule.size(); j++) {
-					bestOrder.set(j, changes.get(j));
-				}
-				bestNNSharp = NNSharp;
-			}
-
-			i = 1; // reset index i to 1 (assumed)
-			while (p[i] == 0) {
-				p[i] = i; // reset p[i] zero value
-				i++; // set new index value for i (increase by one)
-			} // while(!p[i])
-		} // while(i < N)
-
-		System.out.println(bestOrder);
-		System.out.println(expectedNNSharp(bestOrder, schedule));
-		return bestNNSharp;
-	}
-
-	public static int generateChanges2BigRestTheSame(List<Double> changes,
-			int size) {
-		double bigChangeRate = 1.5;
-		changes.add(bigChangeRate);
-		changes.add(bigChangeRate);
-		changes.add(bigChangeRate);
-
-		double theRest = 0.01;
-		for (int i = 0; i < size - 3; i++) {
-			changes.add(theRest);
-		}
-
-		return changes.size();
-	}
-
-	public static int generateChangesSome(List<Double> changes, int size) {
-		double bigChangeRate = 1.0;
-		changes.add(bigChangeRate);
-		changes.add(bigChangeRate);
-
-		double first = 0.5;
-		double last = 0.1;
-		double step = (first - last) / (size / 2);
-		double changeRate = first;
-
-		System.out.println(step);
-
-		for (int i = 0; i < size / 2 - 2; i++) {
-			changes.add(changeRate);
-			changeRate -= step;
-		}
-
-		first = 0.5 / 10;
-		last = 0.1 / 10;
-		step = (first - last) / (size / 2);
-		changeRate = first;
-		for (int i = size / 2 - 2; i < size; i++) {
-			changes.add(changeRate);
-			changeRate -= step;
-		}
-
-		DecimalFormat d = new DecimalFormat("##.####");
-		for (int i = 0; i < changes.size(); i++)
-			System.out.print(d.format(changes.get(i)) + ' ');
-		System.out.println();
-
-		return changes.size();
-	}
-
-	public static int generateChanges2BigLinearDecreaseTheRest(
-			List<Double> changes, int size) {
-		double bigChangeRate = 1.0;
-		changes.add(bigChangeRate);
-		changes.add(bigChangeRate);
-
-		double first = 0.5;
-		double last = 0.1;
-		double step = (first - last) / (size - 3);
-		double changeRate = first;
-
-		for (int i = 0; i < size - 2; i++) {
-			changes.add(changeRate);
-			changeRate -= step;
-		}
-
-		return changes.size();
-	}
-
-	public static int generateChanges1(List<Double> changes, int size) {
-
-		for (int i = 0; i < size; i++) {
-			changes.add(0.1);
-		}
-
-		return changes.size();
-	}
-
-	public static int generateTheSameChanges(List<Double> changes,
-			double changeRate, int size) {
-		for (int i = 0; i < size; i++) {
-			changes.add(changeRate);
-		}
-
-		return changes.size();
-	}
-
-	public static int generateChanges1x2(List<Double> changes, int size) {
-		// double bigChangeRate = 0.7;
-		changes.add(0.74);
-		changes.add(0.73);
-		changes.add(0.72);
-
-		double first = 0.71;
-		for (int i = 1; i < size; i++) {
-			changes.add(1.0 * Math.round(first / i / i / i * 1000) / 1000);
-		}
-
-		return changes.size();
-	}
-
-	public static int generateTriangleIntervals(List<Integer> schedule, int size) {
-		// initializing the schedule
-		for (int i = 0; i < size; i++) {
-			schedule.add(2 * i);
-		}
-
-		return schedule.size();
-	}
-
-	private void swapChangeRates(List<Double> schedule, int i, int j) {
+	private void swapChangeRates(List<Double> schedule, List<Double> weights,
+			int i, int j) {
 		double temp = schedule.get(i);
 		schedule.set(i, schedule.get(j));
 		schedule.set(j, temp);
+
+		temp = weights.get(i);
+		weights.set(i, weights.get(j));
+		weights.set(j, temp);
 	}
 
-	public void pushingDownwards() {
+	public double exhaustive() {
 		boolean print = false;
-		List<Double> bestOrder = new ArrayList<Double>();
-
-		for (int i = 0; i < size; i++) {
-			bestOrder.add(changes.get(i));
-		}
-
-		// Computing the E##sharp
+		double delta = 1;
+		size = changes.size();
 		double NNSharp = 0.0;
-		for (int i = 0; i < changes.size(); i++) {
-			NNSharp += Math.exp(-schedule.get(i) * changes.get(i));
-		}
 		double bestNNSharp = NNSharp;
-
-		if (print == true) {
-			DecimalFormat d = new DecimalFormat("##.####");
-			for (int k = 0; k < changes.size(); k++)
-				System.out.print(d.format(changes.get(k)) + ' ');
-			System.out.println(" " + NNSharp + "("
-					+ expectedNNSharp(changes, schedule) + ", best: "
-					+ bestNNSharp);
-		}
-
-		// Changing things pair wise
-		int from, to;
-
-		for (int i = 1; i < changes.size() - 1; i++) {
-			from = i;
-			to = i + 1;
-
-			NNSharp = NNSharp
-					- Math.exp(-schedule.get(from) * changes.get(from))
-					- Math.exp(-schedule.get(to) * changes.get(to))
-					+ Math.exp(-schedule.get(to) * changes.get(from))
-					+ Math.exp(-schedule.get(from) * changes.get(to));
-			swapChangeRates(changes, from, to);
+		for (int j = 0; j < changes.size(); j++) {
+			// Computing the E##sharp
+			boolean swap = false;
+			NNSharp = 0.0;
+			for (int i = 0; i < changes.size(); i++) {
+				NNSharp += probSharp(weights.get(i), changes.get(i), 2 * i,
+						delta);
+			}
+			bestNNSharp = NNSharp;
 
 			if (print == true) {
 				DecimalFormat d = new DecimalFormat("##.####");
@@ -400,19 +188,59 @@ public class Selective {
 				System.out.println(" " + NNSharp + ", best: " + bestNNSharp);
 			}
 
-			// keeping the better schedule
-			if (NNSharp > bestNNSharp) {
-				for (int j = 0; j < schedule.size(); j++) {
-					bestOrder.set(j, changes.get(j));
+			// Changing things pair wise
+			int from, to;
+
+			for (int i = 1; i < changes.size() - 1; i++) {
+				from = i;
+				to = i + 1;
+
+				NNSharp = NNSharp
+						- probSharp(weights.get(from), changes.get(from),
+								2 * from, delta)
+						- probSharp(weights.get(to), changes.get(to), 2 * to,
+								delta)
+						+ probSharp(weights.get(from), changes.get(from),
+								2 * to, delta)
+						+ probSharp(weights.get(to), changes.get(to), 2 * from,
+								delta);
+				swapChangeRates(changes, weights, from, to);
+
+				if (print == true) {
+					DecimalFormat d = new DecimalFormat("##.##############");
+					for (int k = 0; k < changes.size(); k++)
+						System.out.print(d.format(changes.get(k)) + ' ');
+
 				}
-				bestNNSharp = NNSharp;
+				// System.out.println("current: " + NNSharp + ", best: " +
+				// bestNNSharp);
+
+				// keeping the better schedule
+				if (NNSharp > bestNNSharp) {
+					bestNNSharp = NNSharp;
+					swap = true;
+				} else {
+					swapChangeRates(changes, weights, from, to);
+					break;
+				}
+			}
+			if(swap){
+				j--;
 			}
 		}
-
-		System.out.print("best: ");
-		DecimalFormat d = new DecimalFormat("##.####");
-		for (int k = 0; k < bestOrder.size(); k++)
-			System.out.print(d.format(bestOrder.get(k)) + ' ');
-		System.out.println(" " + NNSharp + ", best: " + bestNNSharp);
+		// System.out.print("current: ");
+		// DecimalFormat d = new DecimalFormat("##.##############");
+		// for (int k = 0; k < bestOrder.size(); k++)
+		// System.out.print(d.format(bestOrder.get(k)) + ' ');
+		// System.out.println(" " + NNSharp + ", best: " + bestNNSharp);
+		return bestNNSharp;
+	}
+	
+	public List<Double> getChangeRates(){
+		return changes;
+	}
+	
+	public List<Double> getWeights(){
+		return weights;
 	}
 }
