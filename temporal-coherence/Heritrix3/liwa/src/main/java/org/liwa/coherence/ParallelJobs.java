@@ -7,7 +7,7 @@ import org.archive.crawler.framework.CrawlController;
 import org.liwa.coherence.processors.ProcessorListener;
 
 public class ParallelJobs implements ProcessorListener {
-	private static final int JOB_COUNT = 5;
+	private static final int JOB_COUNT = 4;
 
 	private List<CrawlController> controllers = new ArrayList<CrawlController>();
 

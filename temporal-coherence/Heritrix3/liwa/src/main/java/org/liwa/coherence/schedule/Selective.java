@@ -19,8 +19,10 @@ public class Selective {
 	}
 
 	public Selective(List<Double> changes, List<Double> weights) {
-		this.changes = changes;
-		this.weights = weights;
+		for(int i = 0; i < changes.size(); i++){
+			this.changes.add(changes.get(i));
+			this.weights.add(weights.get(i));
+		}
 	}
 
 	public Selective(List<SchedulablePage> pages) {

@@ -71,7 +71,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					+ "://".length(), robotsTxt.indexOf("robots") - 1);
 			List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
 					.get(robotsTxt));
-			startThresholdJob(configuration, domain, sitemapList, pj);
+//			startThresholdJob(configuration, domain, sitemapList, pj);
 			startHottestJob(configuration, domain, sitemapList, pj);
 			startBreadthFirstJob(configuration, domain, sitemapList, pj);
 			startHighestPriorityJob(configuration, domain, sitemapList, pj);

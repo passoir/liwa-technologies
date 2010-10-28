@@ -28,14 +28,13 @@
 		<property name="selective" value="selective" />
 		<property name="hottest" value="hottest" />
 		<property name="breadthFirst" value="breadth-first" />
-		<property name="threshold" value="threshold" />
 		<property name="highestPriority" value="highest-priority" />
 		<property name="runs" value="1" />
 	</bean>
 
 	<bean id="robotsListLoader"
 		class="org.liwa.coherence.RobotsListLoader">
-		<property name="robotsFile" value="robots/robotlist" />
+		<property name="robotsFile" value="seeds/robotlist" />
 	</bean>
 
 </beans>

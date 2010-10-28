@@ -291,7 +291,7 @@ public class DataGenerator {
 
 	public static List<Double> generateLinear(int size) {
 		List<Double> list = new ArrayList<Double>();
-		double start = 0.9;
+		double start = 0.9;		
 		double step = 0.1;
 		for (int i = 0; i < size; i++) {
 			list.add(start);
@@ -303,4 +303,14 @@ public class DataGenerator {
 		return list;
 	}
 
+	public static List<Double> generateLinear(double start, double end, int size) {
+		List<Double> list = new ArrayList<Double>();
+		double step = (end-start)/size;
+		double s = end;
+		for (int i = 0; i < size; i++) {
+			list.add(s);
+			s -= step;
+		}
+		return list;
+	}
 }
