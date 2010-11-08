@@ -262,7 +262,7 @@ public class CrawlerLoggerModule
 
     private void setupLogFile(Logger logger, String filename, Formatter f,
             boolean shouldManifest) throws IOException, SecurityException {
-        logger.setLevel(Level.INFO); // set all standard loggers to INFO
+        logger.setLevel(Level.OFF); // set all standard loggers to INFO
         GenerationFileHandler fh = GenerationFileHandler.makeNew(filename, false,
             shouldManifest);
         fh.setFormatter(f);

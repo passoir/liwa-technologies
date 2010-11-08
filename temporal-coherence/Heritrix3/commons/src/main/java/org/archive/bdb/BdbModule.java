@@ -186,7 +186,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
      * according to JE FAQ
      * http://www.oracle.com/technology/products/berkeley-db/faq/je_faq.html#33
      */
-    int expectedConcurrency = 25;
+    int expectedConcurrency = 2;
     public int getExpectedConcurrency() {
         return expectedConcurrency;
     }
@@ -249,10 +249,13 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         EnvironmentConfig config = new EnvironmentConfig();
         config.setAllowCreate(create);
         config.setLockTimeout(75, TimeUnit.MINUTES); // set to max
-        if(cachePercent>0) {
-            config.setCachePercent(cachePercent);
-        }
-        config.setSharedCache(sharedCache);
+//        if(cachePercent>0) {
+//            config.setCachePercent(cachePercent);
+//        }
+//        
+//        config.setSharedCache(sharedCache);
+        config.setCacheSize(98304);
+
         
         // we take the advice literally from...
         // http://www.oracle.com/technology/products/berkeley-db/faq/je_faq.html#33
@@ -260,14 +263,20 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         while(!BigInteger.valueOf(nLockTables).isProbablePrime(Integer.MAX_VALUE)) {
             nLockTables--;
         }
+        if(nLockTables < 0){
+            nLockTables = 1;
+        }
         config.setConfigParam("je.lock.nLockTables", Long.toString(nLockTables));
         
         // triple this value to 6K because stats show many faults
-        config.setConfigParam("je.log.faultReadSize", "6144");
+        config.setConfigParam("je.log.faultReadSize", "1024");
         f.mkdirs();
         
         // to support checkpoints, prevent BDB's cleaner from deleting log files
         config.setConfigParam("je.cleaner.expunge", "false");
+        
+        config.setConfigParam("je.log.numBuffers", "2");
+        config.setConfigParam("je.log.bufferSize", "1024");
 
         this.bdbEnvironment = new EnhancedEnvironment(f, config);
         

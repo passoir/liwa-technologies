@@ -8,10 +8,30 @@ public class Configuration {
 	private String breadthFirst;
 	private String highestPriority;
 	
+	private boolean deleteOldJobs=true;
+	
+	private int parallelSites = 5;
 	private int runs;
 	
 	
 	
+	
+	public int getParallelSites() {
+		return parallelSites;
+	}
+
+	public void setParallelSites(int parallelSites) {
+		this.parallelSites = parallelSites;
+	}
+
+	public boolean isDeleteOldJobs() {
+		return deleteOldJobs;
+	}
+
+	public void setDeleteOldJobs(boolean deleteOldJobs) {
+		this.deleteOldJobs = deleteOldJobs;
+	}
+
 	public String getHighestPriority() {
 		return highestPriority;
 	}
