@@ -145,7 +145,7 @@ public class PageDao {
 		if (method != null) {
 			page.setStatusCode(method.getStatusCode());
 		}
-
+/*
 		if (uri.getContentType().indexOf("text") != -1) {
 			try {
 				InputStreamReader reader = new InputStreamReader(uri
@@ -169,7 +169,7 @@ public class PageDao {
 				e.printStackTrace();
 			}
 		}
-
+*/
 		return page;
 	}
 

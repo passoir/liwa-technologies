@@ -19,7 +19,7 @@ public class Selective {
 	}
 
 	public Selective(List<Double> changes, List<Double> weights) {
-		for(int i = 0; i < changes.size(); i++){
+		for (int i = 0; i < changes.size(); i++) {
 			this.changes.add(changes.get(i));
 			this.weights.add(weights.get(i));
 		}
@@ -85,56 +85,59 @@ public class Selective {
 		List<Integer> bi = new ArrayList<Integer>(); // bad guys
 		List<Integer> gi = new ArrayList<Integer>(); // good guys
 
-		if (myPages != null)
-			hopeful.add(myPages.get(0));
-		
-		gi.add(0);
+		if (changes.size() > 0) {
+			if (myPages != null) {
+				hopeful.add(myPages.get(0));
+			}
 
-		shortestIndex = 1;
-		longestIndex = changes.size() - 1;
-		for (int i = 1; i < changes.size(); i++) {
-			if (isHopeless(i, 2 * shortestIndex, delta)) {
-				// System.out.println(changes.get(i) + " is hopeless");
-				// We've got a hopeless page
-				expectedNNPages += probSharp(weights.get(i), changes.get(i),
-						2 * longestIndex, delta);
-				longestIndex--;
-				bi.add(i);
-				if (myPages != null)
-					hopeless.add(myPages.get(i));
-				if (print == true) {
-					System.out.println(changes.get(i) + " is hopeless");
-					
-				}
-			} else {
-				// System.out.println(changes.get(i) + " is ok");
-				expectedNNPages += probSharp(weights.get(i), changes.get(i),
-						2 * shortestIndex, delta);
-				shortestIndex++;
-				gi.add(i);
-				if (myPages != null)
-					hopeful.add(myPages.get(i));
-				if (print == true) {
-					System.out.println(changes.get(i) + " is hopeful");
+			gi.add(0);
+
+			shortestIndex = 1;
+			longestIndex = changes.size() - 1;
+			for (int i = 1; i < changes.size(); i++) {
+				if (isHopeless(i, 2 * shortestIndex, delta)) {
+					// System.out.println(changes.get(i) + " is hopeless");
+					// We've got a hopeless page
+					expectedNNPages += probSharp(weights.get(i),
+							changes.get(i), 2 * longestIndex, delta);
+					longestIndex--;
+					bi.add(i);
+					if (myPages != null)
+						hopeless.add(myPages.get(i));
+					if (print == true) {
+						System.out.println(changes.get(i) + " is hopeless");
+
+					}
+				} else {
+					// System.out.println(changes.get(i) + " is ok");
+					expectedNNPages += probSharp(weights.get(i),
+							changes.get(i), 2 * shortestIndex, delta);
+					shortestIndex++;
+					gi.add(i);
+					if (myPages != null)
+						hopeful.add(myPages.get(i));
+					if (print == true) {
+						System.out.println(changes.get(i) + " is hopeful");
+					}
 				}
 			}
-		}
 
-		List<Double> c = new ArrayList<Double>();
-		List<Double> w = new ArrayList<Double>();
-		for(int i = 0; i < gi.size(); i++){
-			c.add(changes.get(gi.get(i)));
-			w.add(weights.get(gi.get(i)));
-		}
-		for(int i = bi.size()-1; i >= 0; i--){
-			c.add(changes.get(bi.get(i)));
-			w.add(weights.get(bi.get(i)));
-		}
-		changes = c;
-		weights = w;
-		if (print == true) {
-			System.out.println("hopeful indexes: " + gi);
-			System.out.println("hopeless indexes: " + bi);
+			List<Double> c = new ArrayList<Double>();
+			List<Double> w = new ArrayList<Double>();
+			for (int i = 0; i < gi.size(); i++) {
+				c.add(changes.get(gi.get(i)));
+				w.add(weights.get(gi.get(i)));
+			}
+			for (int i = bi.size() - 1; i >= 0; i--) {
+				c.add(changes.get(bi.get(i)));
+				w.add(weights.get(bi.get(i)));
+			}
+			changes = c;
+			weights = w;
+			if (print == true) {
+				System.out.println("hopeful indexes: " + gi);
+				System.out.println("hopeless indexes: " + bi);
+			}
 		}
 		return expectedNNPages;
 	}
@@ -226,7 +229,7 @@ public class Selective {
 					break;
 				}
 			}
-			if(swap){
+			if (swap) {
 				j--;
 			}
 		}
@@ -237,12 +240,12 @@ public class Selective {
 		// System.out.println(" " + NNSharp + ", best: " + bestNNSharp);
 		return bestNNSharp;
 	}
-	
-	public List<Double> getChangeRates(){
+
+	public List<Double> getChangeRates() {
 		return changes;
 	}
-	
-	public List<Double> getWeights(){
+
+	public List<Double> getWeights() {
 		return weights;
 	}
 }

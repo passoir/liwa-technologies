@@ -32,12 +32,17 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private PathSharingContext ac;
 
 	private List<ParallelJobs> pjs;
+	
+	private List<String> robotTxtList;
 
 	private Configuration configuration;
 
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
+	private Map<String, List<String>> sitemaps;
 
 	private int run = 0;
+	
+	private int jobCursor = 0;
 
 	public CoherenceController(File cxml, Engine engine) {
 		this.pjs = new ArrayList<ParallelJobs>();
@@ -59,24 +64,55 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	}
 
 	public void startCoherenceJobs() {
-		Map<String, List<String>> sitemaps = configuration
-				.getRobotsListLoader().getSitemaps();
+		sitemaps = configuration.getRobotsListLoader().getSitemaps();
+		robotTxtList = new ArrayList<String>();
+		robotTxtList.addAll(sitemaps.keySet());
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-
-		for (String robotsTxt : sitemaps.keySet()) {
-			ParallelJobs pj = new ParallelJobs();
-			pjs.add(pj);
-			String domain = robotsTxt.substring(robotsTxt.indexOf("://")
-					+ "://".length(), robotsTxt.indexOf("robots") - 1);
-			List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
-					.get(robotsTxt));
-//			startThresholdJob(configuration, domain, sitemapList, pj);
-			startHottestJob(configuration, domain, sitemapList, pj);
-			startBreadthFirstJob(configuration, domain, sitemapList, pj);
-			startHighestPriorityJob(configuration, domain, sitemapList, pj);
-			startSelectiveJob(configuration, domain, sitemapList, pj);
+		for (jobCursor = 0; jobCursor < configuration.getParallelSites(); jobCursor++) {
+			startJob(robotTxtList.get(jobCursor));
 		}
+	}
+
+	private void startJob(String robotTxt){
+		ParallelJobs pj = new ParallelJobs();
+		String robotsTxt = robotTxtList.get(jobCursor);
+		pjs.add(pj);
+		String domain = robotsTxt.substring(robotsTxt.indexOf("://")
+				+ "://".length(), robotsTxt.indexOf("robots") - 1);
+		List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
+				.get(robotsTxt));
+		// startThresholdJob(configuration, domain, sitemapList, pj);
+		startHottestJob(configuration, domain, sitemapList, pj);
+		startBreadthFirstJob(configuration, domain, sitemapList, pj);
+		startHighestPriorityJob(configuration, domain, sitemapList, pj);
+		startSelectiveJob(configuration, domain, sitemapList, pj);
+	}
+	
+	public void deleteOldJobs() {
+		if (configuration.isDeleteOldJobs()) {
+			Map<String, CrawlJob> jobs = engine.getJobConfigs();
+			for (String key : jobs.keySet()) {
+				if (isOldJob(key)) {
+					try {
+						engine.deleteJob(jobs.get(key));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		System.runFinalization();
+		System.gc();
+	}
+
+	private boolean isOldJob(String jobName) {
+		return jobName.contains(configuration.getBreadthFirst() + "-")
+				|| jobName.contains(configuration.getHighestPriority() + "-")
+				|| jobName.contains(configuration.getHottest() + "-")
+				|| jobName.contains(configuration.getSelective() + "-")
+				|| jobName.contains(configuration.getThreshold() + "-");
 	}
 
 	private CrawlController startSelectiveJob(Configuration configuration,
@@ -127,7 +163,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					"sitemaps");
 			CrawlListener cl = (CrawlListener) job.getJobContext().getBean(
 					"crawlListener");
-			
+
 			sl.setSitemaps(sitemaps);
 			ChangeRateProvider changeRateProvider = (ChangeRateProvider) job
 					.getJobContext().getBean("changeRateProvider");
@@ -167,18 +203,48 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	}
 
 	public void jobFinished(CrawlController cc) {
-		for (int i = 0; i < pjs.size(); i++) {
+		boolean visitDone = false;
+		for (int i = 0; i < pjs.size() && !visitDone; i++) {
 			ParallelJobs pj = pjs.get(i);
 			if (pj.hasController(cc)) {
 				pj.jobFinished(cc);
+				visitDone = true;
 			}
 		}
-		for (ParallelJobs pj : revisitMap.values()) {
-			if (pj.hasController(cc)) {
-				pj.jobFinished(cc);
+		if (!visitDone) {
+			ParallelJobs pjVisit = null;
+			ParallelJobs pjRevisit = null;
+			for (ParallelJobs pjV : revisitMap.keySet()) {
+				ParallelJobs pj = revisitMap.get(pjV);
+				if (pj.hasController(cc)) {
+					pj.jobFinished(cc);
+					if (pj.areJobsDone()) {
+						pjVisit = pjV;
+						pjRevisit = pj;
+						break;
+					}
+				}
 			}
+			if(pjVisit != null && pjRevisit != null){
+				pjs.remove(pjVisit);
+				revisitMap.remove(pjVisit);
+				if(jobCursor < robotTxtList.size()){
+					jobCursor++;
+					startJob(robotTxtList.get(jobCursor-1));
+				}
+			}
+		}
+		CrawlJob cj = engine.getJob(cc.getMetadata().getJobName());
+		cj.teardown();
+		try {
+			engine.deleteJob(cj);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		checkIfRunning();
+		System.runFinalization();
+		System.gc();
 	}
 
 	private void checkIfRunning() {

@@ -21,8 +21,6 @@ public class ParallelJobs implements ProcessorListener {
 
 	private int jobFinished = 0;
 
-	private long lastDownload = 0;
-
 	public boolean isFilled() {
 		return controllers.size() == JOB_COUNT;
 	}
@@ -35,6 +33,7 @@ public class ParallelJobs implements ProcessorListener {
 	public synchronized void jobFinished(CrawlController cc) {
 		finished = true;
 		jobFinished++;
+		controllers.remove(cc);
 		notifyAll();
 	}
 

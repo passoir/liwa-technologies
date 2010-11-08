@@ -30,6 +30,7 @@
 		<property name="breadthFirst" value="breadth-first" />
 		<property name="highestPriority" value="highest-priority" />
 		<property name="runs" value="1" />
+		<property name="deleteOldJobs" value="true" />
 	</bean>
 
 	<bean id="robotsListLoader"

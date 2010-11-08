@@ -299,17 +299,14 @@
 				<ref bean="fetchDns" />
 				<!-- ...fetch if HTTP URI... -->
 				<ref bean="fetchHttp" />
-				<!-- ...extract oulinks from HTTP headers... -->
-				<ref bean="extractorHttp" />
 				<!-- ...extract oulinks from HTML content... -->
-				<ref bean="extractorHtml" />
+				<!-- <ref bean="extractorHtml" />  -->
 				<!-- ...extract oulinks from CSS content... -->
-				<ref bean="extractorCss" />
+				<!-- <ref bean="extractorCss" /> -->
 				<!-- ...extract oulinks from Javascript content... -->
-				<ref bean="extractorJs" />
+				<!-- <ref bean="extractorJs" /> -->
 				<!-- ...extract oulinks from Flash content... -->
-				<ref bean="extractorSwf" />
-			</list>
+				<!-- <ref bean="extractorSwf" />  -->			</list>
 		</property>
 	</bean>
 

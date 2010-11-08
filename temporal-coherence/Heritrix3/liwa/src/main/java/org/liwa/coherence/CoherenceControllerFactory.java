@@ -19,6 +19,7 @@ public class CoherenceControllerFactory {
 						.getEngine());
 		launcher = new RevisitLauncher(heritrix);
 		launcher.setCoherenceController(coherenceController);
+		coherenceController.deleteOldJobs();
 		coherenceController.startCoherenceJobs();
 	}
 
