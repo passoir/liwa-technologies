@@ -40,6 +40,8 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
 
 	private Map<String, List<String>> sitemaps;
+	
+	private List<CrawlJob> jobsToDelete;
 
 	private int run = 0;
 
@@ -49,6 +51,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		this.pjs = new ArrayList<ParallelJobs>();
 		this.revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
 		this.engine = engine;
+		this.jobsToDelete = new ArrayList<CrawlJob>();
 		ac = new PathSharingContext(new String[] { "file:"
 				+ cxml.getAbsolutePath() }, false, null);
 		// ac = new PathSharingContext(new String[]
@@ -228,22 +231,25 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			}
 			if (pjVisit != null && pjRevisit != null) {
 				synchronized (this) {
+					try {
+						while(!jobsToDelete.isEmpty()){
+							engine.deleteJob(jobsToDelete.remove(0));
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
 					if (jobCursor < robotTxtList.size()) {
 						jobCursor++;
 						startJob(robotTxtList.get(jobCursor - 1));
 					}
+					CrawlJob cj = engine.getJob(cc.getMetadata().getJobName());
+					cj.teardown();
+					jobsToDelete.add(cj);
 				}
 			}
-		}
-		CrawlJob cj = engine.getJob(cc.getMetadata().getJobName());
-		cj.teardown();
-		try {
-			engine.deleteJob(cj);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		checkIfRunning();
 		System.runFinalization();
