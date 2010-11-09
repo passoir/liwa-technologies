@@ -14,7 +14,7 @@ public class Configuration {
 	private int runs;
 	
 	
-	
+	/*comment*/
 	
 	public int getParallelSites() {
 		return parallelSites;
