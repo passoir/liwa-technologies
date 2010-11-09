@@ -32,16 +32,17 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private PathSharingContext ac;
 
 	private List<ParallelJobs> pjs;
-	
+
 	private List<String> robotTxtList;
 
 	private Configuration configuration;
 
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
+
 	private Map<String, List<String>> sitemaps;
 
 	private int run = 0;
-	
+
 	private int jobCursor = 0;
 
 	public CoherenceController(File cxml, Engine engine) {
@@ -74,7 +75,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		}
 	}
 
-	private void startJob(String robotTxt){
+	private void startJob(String robotTxt) {
 		ParallelJobs pj = new ParallelJobs();
 		String robotsTxt = robotTxtList.get(jobCursor);
 		pjs.add(pj);
@@ -88,7 +89,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		startHighestPriorityJob(configuration, domain, sitemapList, pj);
 		startSelectiveJob(configuration, domain, sitemapList, pj);
 	}
-	
+
 	public void deleteOldJobs() {
 		if (configuration.isDeleteOldJobs()) {
 			Map<String, CrawlJob> jobs = engine.getJobConfigs();
@@ -225,12 +226,14 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					}
 				}
 			}
-			if(pjVisit != null && pjRevisit != null){
-				pjs.remove(pjVisit);
-				revisitMap.remove(pjVisit);
-				if(jobCursor < robotTxtList.size()){
-					jobCursor++;
-					startJob(robotTxtList.get(jobCursor-1));
+			if (pjVisit != null && pjRevisit != null) {
+				synchronized (this) {
+					pjs.remove(pjVisit);
+					revisitMap.remove(pjVisit);
+					if (jobCursor < robotTxtList.size()) {
+						jobCursor++;
+						startJob(robotTxtList.get(jobCursor - 1));
+					}
 				}
 			}
 		}
