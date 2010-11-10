@@ -231,14 +231,14 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			}
 			if (pjVisit != null && pjRevisit != null) {
 				synchronized (this) {
-					try {
-						while(!jobsToDelete.isEmpty()){
-							engine.deleteJob(jobsToDelete.remove(0));
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//						while(!jobsToDelete.isEmpty()){
+//							engine.deleteJob(jobsToDelete.remove(0));
+//						}
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
 					if (jobCursor < robotTxtList.size()) {
@@ -247,7 +247,13 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					}
 					CrawlJob cj = engine.getJob(cc.getMetadata().getJobName());
 					cj.teardown();
-					jobsToDelete.add(cj);
+					try {
+						engine.deleteJob(cj);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//jobsToDelete.add(cj);
 				}
 			}
 		}
