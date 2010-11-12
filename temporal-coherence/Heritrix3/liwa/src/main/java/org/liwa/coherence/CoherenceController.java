@@ -40,7 +40,7 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
 
 	private Map<String, List<String>> sitemaps;
-	
+
 	private List<CrawlJob> jobsToDelete;
 
 	private int run = 0;
@@ -73,7 +73,8 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		robotTxtList.addAll(sitemaps.keySet());
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-		for (jobCursor = 0; jobCursor < configuration.getParallelSites(); jobCursor++) {
+		for (jobCursor = 0; jobCursor < robotTxtList.size()
+				&& jobCursor < configuration.getParallelSites(); jobCursor++) {
 			startJob(robotTxtList.get(jobCursor));
 		}
 	}
@@ -231,32 +232,31 @@ public class CoherenceController implements ApplicationListener, JobListener {
 			}
 			if (pjVisit != null && pjRevisit != null) {
 				synchronized (this) {
-//					try {
-//						while(!jobsToDelete.isEmpty()){
-//							engine.deleteJob(jobsToDelete.remove(0));
-//						}
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
+					// try {
+					// while(!jobsToDelete.isEmpty()){
+					// engine.deleteJob(jobsToDelete.remove(0));
+					// }
+					// } catch (IOException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+					// }
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
 					if (jobCursor < robotTxtList.size()) {
 						jobCursor++;
 						startJob(robotTxtList.get(jobCursor - 1));
 					}
-					CrawlJob cj = engine.getJob(cc.getMetadata().getJobName());
-					cj.teardown();
-					try {
-						engine.deleteJob(cj);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					//jobsToDelete.add(cj);
+					// jobsToDelete.add(cj);
 				}
 			}
 		}
+		String jobName = cc.getMetadata().getJobName();
+		CrawlJob cj = engine.getJob(jobName);
+		cj.teardown();
+		if (cj.getJobContext() != null) {
+			cj.getJobContext().close();
+		}
+		engine.getJobConfigs().remove(jobName);
 		checkIfRunning();
 		System.runFinalization();
 		System.gc();

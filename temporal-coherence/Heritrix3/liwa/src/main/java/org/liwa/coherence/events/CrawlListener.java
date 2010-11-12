@@ -78,6 +78,9 @@ public class CrawlListener implements ApplicationListener,
 		for(JobListener l: listeners){
 			l.jobFinished(cc);
 		}
+		appCntxt = null;
+		crawlDao = null;
+		listeners.clear();
 	}
 
 	private void startRecrawl(CrawlController oldCrawl) {
