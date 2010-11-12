@@ -145,7 +145,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
 
 
         public void setDeferredWrite(boolean b) {
-            this.deferredWrite = true; 
+            this.deferredWrite = false; 
         }
     }
     
@@ -574,6 +574,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
     }
     
     public void close() {
+        System.out.println("closing from close method");
         close2();
         if(shutdownHook!=null) {
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
@@ -604,6 +605,8 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
 
         try {
             this.bdbEnvironment.sync();
+            System.out.println("bdb closing........................");
+           
             this.bdbEnvironment.close();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error closing environment.", e);
@@ -626,6 +629,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         }
         
         public void run() {
+            System.out.println("closing from shutdown hook...");
             this.bdb.close2();
         }
     }

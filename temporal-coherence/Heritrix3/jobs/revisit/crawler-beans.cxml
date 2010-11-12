@@ -384,7 +384,7 @@
 
 	<!-- FRONTIER: Record of all URIs discovered and queued-for-collection -->
 	<bean id="frontier"
-		class="org.archive.crawler.frontier.BdbFrontier">
+		class="org.liwa.coherence.frontier.LiwaFrontier">
 		<!-- <property name="holdQueues" value="true" /> -->
 		<!-- <property name="queueTotalBudget" value="-1" /> -->
 		<!-- <property name="balanceReplenishAmount" value="3000" /> -->
