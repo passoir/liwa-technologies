@@ -51,7 +51,7 @@
 				frontier.retryDelaySeconds=1
 				
 				# properties of the politeness delay in the schedules, in seconds
-				datasetProvider.politenessDelay = 0.4
+				datasetProvider.politenessDelay=0.4
 				
 				##..more?..##
 			</value>
@@ -149,6 +149,9 @@
 	<bean id="seeds" class="org.liwa.coherence.seeds.ScheduledVisitsSeedModule">
 		<property name="schedule">
 			<ref bean="schedule"/>
+		</property>
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
 		</property>
 		<!-- <property name='sourceTagSeeds' value='false'/> -->
 	</bean>
@@ -661,11 +664,24 @@
 		<property name="urlDao">
 			<ref bean="urlDao" />
 		</property>
-		<property name="datasetProvider">
-			<ref bean="datasetProvider"/>
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
 		</property>
-		<property name="compactStoring" value="true"/>
-		<property name="defaultPriority" value="0.1"/>
+		<property name="datasetProvider">
+			<ref bean="datasetProvider" />
+		</property>
+		<property name="compactStoring" value="true" />
+		<property name="defaultPriority" value="0.1" />
+	</bean>
+
+	<bean id="publishedUrlDao"
+		class="org.liwa.coherence.dao.PublishedUrlDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
 	</bean>
 
 	<bean id="linkDao" class="org.liwa.coherence.dao.LinkDao">

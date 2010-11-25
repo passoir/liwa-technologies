@@ -604,9 +604,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         }
 
         try {
-            this.bdbEnvironment.sync();
-            System.out.println("bdb closing........................");
-           
+            this.bdbEnvironment.sync();           
             this.bdbEnvironment.close();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error closing environment.", e);

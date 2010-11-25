@@ -30,8 +30,11 @@ public class RobotsListLoader {
 					new FileInputStream(f)));
 			String s = bf.readLine();
 			while (s != null) {
+				if( !s.trim().startsWith("#")){
 				list.add(s);
+				}
 				s = bf.readLine();
+				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

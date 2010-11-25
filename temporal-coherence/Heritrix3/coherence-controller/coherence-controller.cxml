@@ -38,5 +38,41 @@
 		class="org.liwa.coherence.RobotsListLoader">
 		<property name="robotsFile" value="seeds/robotlist" />
 	</bean>
+	
+	
+	<bean id="publishedUrlDao" class="org.liwa.coherence.dao.PublishedUrlDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+	
+	<bean id="robotsFileDao" class="org.liwa.coherence.dao.RobotFileDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+	
+	<!-- DB specific queries -->
+	<bean id="queries" class="org.liwa.coherence.db.Queries">
+		<property name="queriesLocation" value="queries.properties" />
+	</bean>
+	
+	<!-- Database Connection -->
+	<bean id="connectionPool"
+		class="org.liwa.coherence.db.ConnectionPool">
+		<property name="dataSourceName" value="Coherence Data Source" />
+		<property name="serverName" value="infao5802" />
+		<property name="databaseName" value="liwa_coherence_test" />
+		<property name="user" value="ddenev" />
+		<property name="password" value="liwa" />
+		<property name="maxConnections" value="150" />
+		<property name="dataSourceClass" value="org.postgresql.ds.PGPoolingDataSource"/> 
+	</bean>
 
 </beans>

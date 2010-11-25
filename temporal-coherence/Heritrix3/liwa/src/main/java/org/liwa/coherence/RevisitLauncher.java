@@ -23,7 +23,7 @@ public class RevisitLauncher {
 	}
 
 	public synchronized void launchRevisit(CrawlController crawlController,
-			List<String> revisits) {
+			List<Integer> revisits) {
 		System.out.println("Revisit requested for "
 				+ crawlController.getMetadata().getJobName());
 		CrawlJob crawlJob = heritrix.getEngine().getJob(

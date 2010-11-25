@@ -1,7 +1,5 @@
 package org.liwa.coherence.sitemap;
 
-import java.sql.Timestamp;
-
 import org.liwa.coherence.schedule.ChangeRateProvider;
 import org.liwa.coherence.schedule.Dataset;
 import org.liwa.coherence.schedule.DatasetProvider;
@@ -45,13 +43,13 @@ public class SitemapDatasetAdapter implements DatasetProvider {
 	public Dataset getDataset() {
 		if (d == null) {
 			d = new Dataset();
-			for (PublishedUrl url : sitemaps.getPublishedUrls()) {
+			for (CompressedUrl url : sitemaps.getCompressedUrls()) {
 				SchedulablePage page = new SchedulablePage();
-				page.setChangeRate(changeRateProvider.getChangeRate(url
-						.getLocation()));
-				page.setUrl(url.getLocation());
+				page.setChangeRate(changeRateProvider
+						.provideChangeRate(url.getId()));
+				page.setPublishedUrlId(url.getId());
 				page.setPriority(url.getPriority());
-				page.setFrequency(url.getChangeRate());
+				page.setChangeRate(url.getChangeRate());
 				page.setDelta(getPolitenessDelay());
 				d.addPage(page);
 
@@ -63,6 +61,6 @@ public class SitemapDatasetAdapter implements DatasetProvider {
 	public TimestampMapper getTimestampMapper() {
 		return new TimestampMapper(
 				((double) System.currentTimeMillis()) / 1000, sitemaps
-						.getPublishedUrls().size(), politenessDelay);
+						.getCompressedUrls().size(), politenessDelay);
 	}
 }

@@ -5,6 +5,6 @@ import java.util.List;
 public interface Schedule {
 
 	void runSchedule();
-	List<String> getVisits();
-	List<String> getRevisits();
+	List<Integer> getVisits();
+	List<Integer> getRevisits();
 }

@@ -33,11 +33,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.sun.syndication.io.impl.DateParser;
-
 public class SitemapLoader extends DefaultHandler implements InitializingBean {
-
-	private List<Sitemap> sitemapList = new ArrayList<Sitemap>();
 
 	private List<String> sitemapUrls = null;
 
@@ -47,6 +43,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 	 * Text from which to extract seeds
 	 */
 	protected ReadSource textSource = null;
+
+	private List<CompressedUrl> compressedUrls = new ArrayList<CompressedUrl>();
 
 	public ReadSource getTextSource() {
 		return textSource;
@@ -66,9 +64,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		}
 	}
 
-	public void setSitemaps(List<Sitemap> sitemaps) {
-		this.sitemapList = new ArrayList<Sitemap>();
-		this.sitemapList.addAll(sitemaps);
+	public void setCompressedUrls(List<CompressedUrl> urls) {
+		compressedUrls.addAll(urls);
 		this.sitemapsInitialized = true;
 	}
 
@@ -87,9 +84,6 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 	public void initSitemaps() {
 		if (!sitemapsInitialized) {
 			initializeSitemapUrls();
-			for (String sitemap : sitemapUrls) {
-				sitemapList.addAll(SitemapLoader.loadSitemap(sitemap));
-			}
 			sitemapsInitialized = true;
 		}
 	}
@@ -123,51 +117,37 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		sitemapUrls.add(s);
 	}
 
-	public List<Sitemap> getSitemaps() {
-		if (!sitemapsInitialized) {
-			initSitemaps();
-		}
-		return sitemapList;
+	public List<CompressedUrl> getCompressedUrls() {
+		return compressedUrls;
 	}
 
-	public List<PublishedUrl> getPublishedUrls() {
-		List<PublishedUrl> publishedUrls = new ArrayList<PublishedUrl>();
-		if (!sitemapsInitialized) {
-			initSitemaps();
-		}
-		for (Sitemap s : sitemapList) {
-			publishedUrls.addAll(s.getUrlList());
-		}
-		return publishedUrls;
-	}
-
-	private static class SitemapHandler extends DefaultHandler {
+	private static class GeneralSitemapHandler extends DefaultHandler {
 		String host;
+		
+		SitemapHandler callback;
 
-		UrlHandler urlHandler = new UrlHandler();
+		UrlHandler urlHandler;
 
-		SitemapSetHandler sitemapSetHandler = new SitemapSetHandler();
+		SitemapSetHandler sitemapSetHandler;
 
 		DefaultHandler defaultHandler;
 
-		List<PublishedUrl> publishedUrls;
-
 		List<String> sitemaps;
+
+		List<CompressedUrl> compressedUrls;
+		
+		public GeneralSitemapHandler(SitemapHandler callback, List<CompressedUrl> compressedUrls) {
+			this.callback = callback;
+			urlHandler = new UrlHandler(callback);
+			sitemapSetHandler = new SitemapSetHandler();
+			this.compressedUrls = compressedUrls;
+		}
 
 		@Override
 		public void characters(char[] ch, int start, int length)
 				throws SAXException {
 			// TODO Auto-generated method stub
 			defaultHandler.characters(ch, start, length);
-		}
-
-		@Override
-		public void endDocument() throws SAXException {
-			if (defaultHandler == urlHandler) {
-				publishedUrls = urlHandler.publshedUrls;
-			} else if (defaultHandler == sitemapSetHandler) {
-				sitemaps = sitemapSetHandler.sitemaps;
-			}
 		}
 
 		@Override
@@ -184,12 +164,20 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				if (qName == "urlset") {
 					defaultHandler = urlHandler;
 					urlHandler.host = host;
+					urlHandler.compressedUrls = compressedUrls;
 				} else {
 					defaultHandler = sitemapSetHandler;
 					sitemapSetHandler.host = host;
 				}
 			}
 			defaultHandler.startElement(uri, localName, qName, attributes);
+		}
+
+		@Override
+		public void endDocument() throws SAXException {
+			if (defaultHandler == sitemapSetHandler) {
+				sitemaps = sitemapSetHandler.sitemaps;
+			}
 		}
 	}
 
@@ -217,7 +205,6 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			} else {
 				localState = NONE_STATE;
 			}
-
 			super.startElement(uri, localName, qName, attributes);
 		}
 
@@ -254,7 +241,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 
 	private static class UrlHandler extends DefaultHandler {
 
-		List<PublishedUrl> publshedUrls = new ArrayList<PublishedUrl>();
+		List<CompressedUrl> compressedUrls = null;
 
 		static final int NONE_STATE = 1;
 
@@ -277,6 +264,12 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		String priority = "";
 
 		String host;
+		
+		SitemapHandler callback;
+		
+		public UrlHandler(SitemapHandler callback) {
+			this.callback = callback;
+		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
@@ -329,29 +322,34 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				throws SAXException {
 			localState = NONE_STATE;
 			if (qName.equals("url")) {
-				PublishedUrl url = new PublishedUrl(location, null);
+				CompressedUrl url = new CompressedUrl();
+
 				if (changeFreq.trim().length() > 0) {
-					url.setChangeRate(changeFreq);
+				//	System.out.println(changeFreq);
+					url.setChangeRate(SitemapChangeRateProvider.CHANGE_RATE_MAP
+							.get(changeFreq.trim()));
+					
 				} else {
-					url.setChangeRate(ChangeRate.NEVER);
+					url.setChangeRate(SitemapChangeRateProvider.YEARLY);
 				}
 				// if (priority.trim().length() > 0) {
 				// url.setPriority(priority);
 				// }
-				if (lastMod != null && lastMod.length() > 0) {
-					url.setLastModified(DateParser.parseW3CDateTime(lastMod));
-				}
-
+				double dPriority = -1;
 				if (priority != null && priority.length() > 0) {
-					url.setPriority(Double.parseDouble(priority));
+					dPriority = Double.parseDouble(priority);
 				}
-
+				url.setPriority(dPriority);
 				// System.out.println(url);
 				if (changeFreq.trim().length() > 0
 						&& getDomain(location).equalsIgnoreCase(host)) {
-					publshedUrls.add(url);
+					compressedUrls.add(url);
 				}
-
+				
+				int id = callback.saveUrl(location, changeFreq, dPriority, 
+						null);
+				url.setId(id);
+				
 				location = "";
 				changeFreq = "";
 				priority = "";
@@ -361,24 +359,24 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		}
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		loadSitemap("http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/sections_00000.xml.gz");
-	}
-
-	public static List<Sitemap> loadSitemaps(List<String> sitemapUrls) {
-		List<Sitemap> sitemaps = new ArrayList<Sitemap>();
+	public static List<CompressedUrl> loadCompressedUrls(
+			List<String> sitemapUrls, SitemapHandler callback) {
+		List<CompressedUrl> urls = new ArrayList<CompressedUrl>();
 		for (String url : sitemapUrls) {
-			sitemaps.addAll(loadSitemap(url));
+			loadSitemap(url, callback, urls);
 		}
-		return sitemaps;
+		return urls;
 	}
 
-	public static List<Sitemap> loadSitemap(String sitemapUrl) {
-		List<Sitemap> array = new ArrayList<Sitemap>();
-
+	private static void loadCompressedUrls(
+			List<String> sitemapUrls, SitemapHandler callback,  List<CompressedUrl> urls) {
+		for (String url : sitemapUrls) {
+			loadSitemap(url, callback, urls);
+		}
+	}
+	
+	private static void loadSitemap(String sitemapUrl,
+			SitemapHandler callback,  List<CompressedUrl> urls) {
 		try {
 			URL url = new URL(sitemapUrl);
 
@@ -390,21 +388,16 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			inputSource = new InputSource(urlStream);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			SitemapHandler handler = new SitemapHandler();
+			GeneralSitemapHandler handler = new GeneralSitemapHandler(callback, urls);
 			handler.host = getDomain(sitemapUrl);
 			saxParser.parse(inputSource, handler);
-			if (handler.publishedUrls != null) {
-				Sitemap s = new Sitemap(sitemapUrl, null);
-				s.setUrlList(handler.publishedUrls);
-				array.add(s);
-			} else if (handler.sitemaps != null) {
-				array.addAll(loadSitemaps(handler.sitemaps));
+			if (handler.sitemaps != null) {
+				loadCompressedUrls(handler.sitemaps, callback, urls);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return array;
 	}
 
 	public static String xmlToString(Node node) {
