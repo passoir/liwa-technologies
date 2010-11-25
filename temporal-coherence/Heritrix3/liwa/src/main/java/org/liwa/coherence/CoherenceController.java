@@ -2,6 +2,7 @@ package org.liwa.coherence;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,8 @@ import org.archive.crawler.framework.CrawlController;
 import org.archive.crawler.framework.CrawlJob;
 import org.archive.crawler.framework.Engine;
 import org.archive.spring.PathSharingContext;
+import org.liwa.coherence.dao.PublishedUrlDao;
+import org.liwa.coherence.dao.RobotFileDao;
 import org.liwa.coherence.events.CrawlListener;
 import org.liwa.coherence.events.JobListener;
 import org.liwa.coherence.metadata.CoherenceMetadata;
@@ -20,12 +23,14 @@ import org.liwa.coherence.processors.CoherenceProcessor;
 import org.liwa.coherence.schedule.AbstractSchedule;
 import org.liwa.coherence.schedule.ChangeRateProvider;
 import org.liwa.coherence.schedule.DatasetProvider;
-import org.liwa.coherence.sitemap.Sitemap;
+import org.liwa.coherence.sitemap.CompressedUrl;
+import org.liwa.coherence.sitemap.SitemapHandler;
 import org.liwa.coherence.sitemap.SitemapLoader;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
-public class CoherenceController implements ApplicationListener, JobListener {
+public class CoherenceController implements ApplicationListener, JobListener,
+		SitemapHandler {
 
 	private Engine engine;
 
@@ -42,6 +47,9 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	private Map<String, List<String>> sitemaps;
 
 	private List<CrawlJob> jobsToDelete;
+	
+	private PublishedUrlDao publishedUrlDao;
+	private RobotFileDao robotsDao;
 
 	private int run = 0;
 
@@ -60,11 +68,30 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		ac.refresh();
 		ac.validate();
 		configuration = (Configuration) ac.getBean("coherenceConfiguration");
+		robotsDao = (RobotFileDao) ac.getBean("robotsFileDao");
+		publishedUrlDao = (PublishedUrlDao) ac.getBean("publishedUrlDao");
 	}
 
 	public void onApplicationEvent(ApplicationEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	
+	public PublishedUrlDao getPublishedUrlDao() {
+		return publishedUrlDao;
+	}
+
+	public void setPublishedUrlDao(PublishedUrlDao publishedUrlDao) {
+		this.publishedUrlDao = publishedUrlDao;
+	}
+
+	public RobotFileDao getRobotsDao() {
+		return robotsDao;
+	}
+
+	public void setRobotsDao(RobotFileDao robotsDao) {
+		this.robotsDao = robotsDao;
 	}
 
 	public void startCoherenceJobs() {
@@ -85,13 +112,15 @@ public class CoherenceController implements ApplicationListener, JobListener {
 		pjs.add(pj);
 		String domain = robotsTxt.substring(robotsTxt.indexOf("://")
 				+ "://".length(), robotsTxt.indexOf("robots") - 1);
-		List<Sitemap> sitemapList = SitemapLoader.loadSitemaps(sitemaps
-				.get(robotsTxt));
+		int robotFileId = this.insertRobotFile(robotTxt);
+		publishedUrlDao.setRobotFileId(robotFileId);
+		List<CompressedUrl> urlList = SitemapLoader.loadCompressedUrls(sitemaps
+				.get(robotsTxt), this);
 		// startThresholdJob(configuration, domain, sitemapList, pj);
-		startHottestJob(configuration, domain, sitemapList, pj);
-		startBreadthFirstJob(configuration, domain, sitemapList, pj);
-		startHighestPriorityJob(configuration, domain, sitemapList, pj);
-		startSelectiveJob(configuration, domain, sitemapList, pj);
+		startHottestJob(configuration, domain, urlList, robotFileId, pj);
+		startBreadthFirstJob(configuration, domain, urlList, robotFileId, pj);
+		startHighestPriorityJob(configuration, domain, urlList, robotFileId, pj);
+		startSelectiveJob(configuration, domain, urlList, robotFileId, pj);
 	}
 
 	public void deleteOldJobs() {
@@ -121,38 +150,35 @@ public class CoherenceController implements ApplicationListener, JobListener {
 	}
 
 	private CrawlController startSelectiveJob(Configuration configuration,
-			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
+			String domain, List<CompressedUrl> sitemaps, int robotFileId,
+			ParallelJobs pj) {
 		String name = configuration.getSelective();
-		return startJob(name, domain, sitemaps, pj);
+		return startJob(name, domain, sitemaps, robotFileId, pj);
 	}
 
 	private CrawlController startHighestPriorityJob(
-			Configuration configuration, String domain, List<Sitemap> sitemaps,
-			ParallelJobs pj) {
+			Configuration configuration, String domain,
+			List<CompressedUrl> sitemaps, int robotFileId, ParallelJobs pj) {
 		String name = configuration.getHighestPriority();
-		return startJob(name, domain, sitemaps, pj);
-	}
-
-	private CrawlController startThresholdJob(Configuration configuration,
-			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
-		String name = configuration.getThreshold();
-		return startJob(name, domain, sitemaps, pj);
+		return startJob(name, domain, sitemaps, robotFileId, pj);
 	}
 
 	private CrawlController startHottestJob(Configuration configuration,
-			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
+			String domain, List<CompressedUrl> sitemaps, int robotFileId,
+			ParallelJobs pj) {
 		String name = configuration.getHottest();
-		return startJob(name, domain, sitemaps, pj);
+		return startJob(name, domain, sitemaps, robotFileId, pj);
 	}
 
 	private CrawlController startBreadthFirstJob(Configuration configuration,
-			String domain, List<Sitemap> sitemaps, ParallelJobs pj) {
+			String domain, List<CompressedUrl> sitemaps, int robotFileId,
+			ParallelJobs pj) {
 		String name = configuration.getBreadthFirst();
-		return startJob(name, domain, sitemaps, pj);
+		return startJob(name, domain, sitemaps, robotFileId, pj);
 	}
 
 	private CrawlController startJob(String jobName, String domain,
-			List<Sitemap> sitemaps, ParallelJobs pj) {
+			List<CompressedUrl> urls, int robotFileId, ParallelJobs pj) {
 		CrawlJob cj = engine.getJob(jobName);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-hhmm");
 		String newName = jobName + "-" + domain + "-" + sdf.format(new Date());
@@ -168,8 +194,11 @@ public class CoherenceController implements ApplicationListener, JobListener {
 					"sitemaps");
 			CrawlListener cl = (CrawlListener) job.getJobContext().getBean(
 					"crawlListener");
+			PublishedUrlDao otherDao = (PublishedUrlDao) job.getJobContext()
+					.getBean("publishedUrlDao");
 
-			sl.setSitemaps(sitemaps);
+			otherDao.setRobotFileId(robotFileId);
+			sl.setCompressedUrls(urls);
 			ChangeRateProvider changeRateProvider = (ChangeRateProvider) job
 					.getJobContext().getBean("changeRateProvider");
 			pj.addCrawlController(job.getCrawlController());
@@ -297,6 +326,30 @@ public class CoherenceController implements ApplicationListener, JobListener {
 
 			}
 		}
+	}
+
+	public int insertRobotFile(String url) {
+		int id = -1;
+		try {
+			id = robotsDao.insertCrawledRobotFile(url);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	public int saveUrl(String url, String frequency, double priority,
+			Date lastModified) {
+		int id = -1;
+		try {
+			id = publishedUrlDao.insertPublishedUrl(url, frequency, priority, lastModified);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return id;
+
 	}
 
 }

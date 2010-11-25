@@ -21,7 +21,7 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 
 	public static final double YEARLY = 3.2511444E-8;
 
-	private static final Map<String, Double> CHANGE_RATE_MAP = new HashMap<String, Double>();
+	public static final Map<String, Double> CHANGE_RATE_MAP = new HashMap<String, Double>();
 	static {
 		CHANGE_RATE_MAP.put(ChangeRate.ALWAYS, ALWAYS);
 		CHANGE_RATE_MAP.put(ChangeRate.HOURLY, HOURLY);
@@ -29,11 +29,12 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 		CHANGE_RATE_MAP.put(ChangeRate.WEEKLY, WEEKLY);
 		CHANGE_RATE_MAP.put(ChangeRate.MONTHLY, MONTHLY);
 		CHANGE_RATE_MAP.put(ChangeRate.YEARLY, YEARLY);
+		CHANGE_RATE_MAP.put(ChangeRate.NEVER, Double.MIN_NORMAL);
 	}
 
 	private SitemapLoader sitemaps;
 
-	private Map<String, String> urlChangeRateMap = new HashMap<String, String>();
+	private Map<Integer, Double> urlChangeRateMap = new HashMap<Integer, Double>();
 
 	public SitemapLoader getSitemaps() {
 		return sitemaps;
@@ -43,15 +44,11 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 		this.sitemaps = sitemaps;
 	}
 
-	public double getChangeRate(String url) {
-		String changeRateKey = urlChangeRateMap.get(url);
-		Double changeRate = YEARLY;
+	public double provideChangeRate(int id) {
+		Double changeRate = urlChangeRateMap.get(id);
 		// System.out.println(changeRateKey);
-		if (changeRateKey != null) {
-			changeRate = CHANGE_RATE_MAP.get(changeRateKey);
-			if (changeRate == null) {
-				changeRate = YEARLY;
-			}
+		if (changeRate == null) {
+			changeRate = YEARLY;
 		}
 		return changeRate;
 	}
@@ -62,15 +59,8 @@ public class SitemapChangeRateProvider implements ChangeRateProvider,
 	}
 
 	public void afterSitemapSet(){
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (PublishedUrl url : sitemaps.getPublishedUrls()) {
-				urlChangeRateMap.put(url.getLocation(), url.getChangeRate());
-				Integer integer = map.get(url.getChangeRate());
-				if (integer == null) {
-					map.put(url.getChangeRate(), 1);
-				} else {
-					map.put(url.getChangeRate(), integer + 1);
-				}
+		for (CompressedUrl url : sitemaps.getCompressedUrls()) {
+				urlChangeRateMap.put(url.getId(), url.getChangeRate());
 		}
 		//System.out.println(map);
 		// System.out.println(urlChangeRateMap);

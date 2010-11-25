@@ -7,13 +7,13 @@ public abstract class AbstractSchedule implements Schedule {
 
 	protected DatasetProvider datasetProvider;
 
-	protected List<String> visits;
+	protected List<Integer> visits;
 
-	protected List<String> revisits;
+	protected List<Integer> revisits;
 
 	public AbstractSchedule() {
-		visits = new ArrayList<String>();
-		revisits = new ArrayList<String>();
+		visits = new ArrayList<Integer>();
+		revisits = new ArrayList<Integer>();
 	}
 
 	public DatasetProvider getDatasetProvider() {
@@ -24,12 +24,12 @@ public abstract class AbstractSchedule implements Schedule {
 		this.datasetProvider = datasetProvider;
 	}
 
-	public List<String> getRevisits() {
+	public List<Integer> getRevisits() {
 		// TODO Auto-generated method stub
 		return revisits;
 	}
 
-	public List<String> getVisits() {
+	public List<Integer> getVisits() {
 		// TODO Auto-generated method stub
 		return visits;
 	}

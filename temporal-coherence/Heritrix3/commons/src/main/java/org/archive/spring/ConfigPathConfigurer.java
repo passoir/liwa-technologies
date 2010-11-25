@@ -106,24 +106,31 @@ implements
     protected Object fixupPaths(Object bean, String beanName) {
         BeanWrapperImpl wrapper = new BeanWrapperImpl(bean);
         for(PropertyDescriptor d : wrapper.getPropertyDescriptors()) {
-            if(d.getPropertyType().isAssignableFrom(ConfigPath.class)
-                || d.getPropertyType().isAssignableFrom(ConfigFile.class)) {
-                Object value = wrapper.getPropertyValue(d.getName());
-                if(ConfigPath.class.isInstance(value)) {
-                    ConfigPath cp = (ConfigPath) value;
-                    if(cp==null) {
-                        continue;
-                    }
-                    if(cp.getBase()==null && cp != path) {
-                        cp.setBase(path);
-                    }
-                    String beanPath = beanName+"."+d.getName();
-                    if(StringUtils.isEmpty(cp.getName())) {
-                        cp.setName(beanPath);
-                    }
-                    remember(beanPath, cp);
-                }
-            }
+            try {
+				if(d.getPropertyType().isAssignableFrom(ConfigPath.class)
+				    || d.getPropertyType().isAssignableFrom(ConfigFile.class)) {
+				    Object value = wrapper.getPropertyValue(d.getName());
+				    if(ConfigPath.class.isInstance(value)) {
+				        ConfigPath cp = (ConfigPath) value;
+				        if(cp==null) {
+				            continue;
+				        }
+				        if(cp.getBase()==null && cp != path) {
+				            cp.setBase(path);
+				        }
+				        String beanPath = beanName+"."+d.getName();
+				        if(StringUtils.isEmpty(cp.getName())) {
+				            cp.setName(beanPath);
+				        }
+				        remember(beanPath, cp);
+				    }
+				}
+			} catch (java.lang.NullPointerException e) {
+				// TODO Auto-generated catch block
+				System.out.println(d);
+				System.out.println(d.getPropertyType());
+				
+			}
         }
         if(bean instanceof PathFixupListener) {
             ((PathFixupListener)bean).pathsFixedUp();

@@ -35,24 +35,25 @@
 		class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
 		<property name="properties">
 			<value>
-				# This Properties map is specified in the Java 'propertylist' text format #
-				# http://java.sun.com/javase/6/docs/api/java/util/Properties.html#load%28java.io.Reader%29 #
+				# This Properties map is specified in the Java 'propertylist' text format # 
+				# http://java.sun.com/javase/6/docs/api/java/util/Properties.html#load%28java.io.Reader%29
+				#
 
-				metadata.operatorContactUrl=http://www.mpi-inf.mpg.de/departments/d5/
+    			metadata.operatorContactUrl=http://www.mpi-inf.mpg.de/departments/d5/
 				metadata.jobName=breadth-first
 				metadata.description=Basic crawl starting with useful defaults
-				
+
 				# properties pf the politeness policy in miliseconds
 				disposition.delayFactor=1
 				disposition.minDelayMs=1000
 				disposition.respectCrawlDelayUpToSeconds=1
-				disposition.maxDelayMs=1000
+				disposition.maxDelayMs=1000 
 				frontier.snoozeLongMs=1
 				frontier.retryDelaySeconds=1
-				
-				# properties of the politeness delay in the schedules, in seconds
+
+				# properties of the politeness delay in the schedules,in seconds 
 				datasetProvider.politenessDelay = 0.4
-				
+
 				##..more?..##
 			</value>
 		</property>
@@ -64,8 +65,8 @@
 		class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
 		<property name="properties">
 			<props>
-			<!-- 
-				<prop key="seeds.textSource.value">
+				<!-- 
+					<prop key="seeds.textSource.value">
 					# URLS HERE 
 					#http://www.mpi-inf.mpg.de/
 					#http://www.mpi-inf.mpg.de/departments/d1/index.html
@@ -77,19 +78,19 @@
 					http://www.cnn.com/sitemap_news.xml
 					http://www.cnn.com/sitemap_specials.xml
 					http://www.cnn.com/sitemap_week.xml
-				
-				</prop>
-		                <prop key="sitemaps.textSource.value">
-				    http://www.dw-world.de/sitemap_00.xml
+					
+					</prop>
+					<prop key="sitemaps.textSource.value">
+					http://www.dw-world.de/sitemap_00.xml
 					http://www.dw-world.de/sitemap_s.xml
 					http://www.dw-world.de/sitemap_rubriken.xml
 					http://www.dw-world.de/sitemap_01.xml
+					</prop>
+					
+				-->
+				<prop key="sitemaps.textSource.value">
+					http://fr.euronews.net/sitemaps/sitemap-fr.xml
 				</prop>
-
-			 -->
-			<prop key="sitemaps.textSource.value">
-				http://fr.euronews.net/sitemaps/sitemap-fr.xml
-			</prop>
 			</props>
 		</property>
 	</bean>
@@ -113,7 +114,8 @@
 	</bean>
 
 	<!--  SITEMAPS -->
-	<bean id="sitemaps" class="org.liwa.coherence.sitemap.SitemapLoader">
+	<bean id="sitemaps"
+		class="org.liwa.coherence.sitemap.SitemapLoader">
 		<property name="textSource">
 			<bean class="org.archive.spring.ConfigString">
 				<property name="value">
@@ -123,34 +125,41 @@
 		</property>
 		<!-- <property name='sourceTagSeeds' value='false'/> -->
 	</bean>
-	
-	
+
+
 	<!-- CHANGE RATES -->
-	<bean id="changeRateProvider" class="org.liwa.coherence.sitemap.SitemapChangeRateProvider">
+	<bean id="changeRateProvider"
+		class="org.liwa.coherence.sitemap.SitemapChangeRateProvider">
 	</bean>
-	
+
 	<!-- DATASET -->
-	<bean id="datasetProvider" class="org.liwa.coherence.sitemap.SitemapDatasetAdapter">
+	<bean id="datasetProvider"
+		class="org.liwa.coherence.sitemap.SitemapDatasetAdapter">
 		<property name="sitemaps">
-			<ref bean="sitemaps"/>
+			<ref bean="sitemaps" />
 		</property>
 		<property name="changeRateProvider">
-			<ref bean="changeRateProvider"/>
+			<ref bean="changeRateProvider" />
 		</property>
-		<property name="politenessDelay" value=""/>
+		<property name="politenessDelay" value="" />
 	</bean>
-	
+
 	<!-- SCHEDULE -->
-	<bean id="schedule" class="org.liwa.coherence.schedule.BreadthFirstOfflineSchedule">
+	<bean id="schedule"
+		class="org.liwa.coherence.schedule.BreadthFirstOfflineSchedule">
 	</bean>
-	
+
 	<!-- SEEDS: crawl starting points 
 		ConfigString allows simple, inline specification of a moderate
 		number of seeds; see below comment for example of using an
 		arbitrarily-large external file. -->
-	<bean id="seeds" class="org.liwa.coherence.seeds.ScheduledVisitsSeedModule">
+	<bean id="seeds"
+		class="org.liwa.coherence.seeds.ScheduledVisitsSeedModule">
 		<property name="schedule">
-			<ref bean="schedule"/>
+			<ref bean="schedule" />
+		</property>
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
 		</property>
 		<!-- <property name='sourceTagSeeds' value='false'/> -->
 	</bean>
@@ -380,7 +389,7 @@
 	<bean id="coherenceProcessor"
 		class="org.liwa.coherence.processors.CoherenceProcessor">
 		<property name="pageDao">
-			<ref bean="pageDao"/>
+			<ref bean="pageDao" />
 		</property>
 	</bean>
 	<!-- DISPOSITION CHAIN -->
@@ -415,7 +424,7 @@
 		<property name="delayFactor" value="0.001" />
 		<property name="minDelayMs" value="10" />
 		<property name="respectCrawlDelayUpToSeconds" value="10" />
-	    <property name="maxDelayMs" value="10" />
+		<property name="maxDelayMs" value="10" />
 		<!-- <property name="maxPerHostBandwidthUsageKbSec" value="0" /> -->
 
 	</bean>
@@ -540,12 +549,13 @@
 	-->
 
 	<!-- URI PRECEDENCE POLICY -->
-	<bean id="uriPrecedencePolicy" class="org.archive.crawler.frontier.precedence.CostUriPrecedencePolicy"/> 
+	<bean id="uriPrecedencePolicy"
+		class="org.archive.crawler.frontier.precedence.CostUriPrecedencePolicy" />
 	<!-- <bean id="uriPrecedencePolicy"
 		class="org.liwa.coherence.precedence.LifoPrecedencePolicy">
 		<property name="maxPrecedence" value="6" />
-	</bean>
-	 -->
+		</bean>
+	-->
 
 	<!-- COST ASSIGNMENT POLICY -->
 	<!--
@@ -663,12 +673,26 @@
 		<property name="urlDao">
 			<ref bean="urlDao" />
 		</property>
-		<property name="datasetProvider">
-			<ref bean="datasetProvider"/>
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
 		</property>
-		<property name="compactStoring" value="true"/>
-		<property name="defaultPriority" value="0.1"/>
+		<property name="datasetProvider">
+			<ref bean="datasetProvider" />
+		</property>
+		<property name="compactStoring" value="true" />
+		<property name="defaultPriority" value="0.1" />
 	</bean>
+
+	<bean id="publishedUrlDao"
+		class="org.liwa.coherence.dao.PublishedUrlDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+
 
 	<bean id="linkDao" class="org.liwa.coherence.dao.LinkDao">
 		<property name="connectionPool">
@@ -711,6 +735,7 @@
 		<property name="user" value="ddenev" />
 		<property name="password" value="liwa" />
 		<property name="maxConnections" value="150" />
-		<property name="dataSourceClass" value="org.postgresql.ds.PGPoolingDataSource"/> 
+		<property name="dataSourceClass"
+			value="org.postgresql.ds.PGPoolingDataSource" />
 	</bean>
 </beans>

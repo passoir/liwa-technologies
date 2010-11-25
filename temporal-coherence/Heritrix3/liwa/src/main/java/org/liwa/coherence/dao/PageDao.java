@@ -1,7 +1,6 @@
 package org.liwa.coherence.dao;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,10 +25,9 @@ import org.archive.net.UURI;
 import org.liwa.coherence.db.ConnectionPool;
 import org.liwa.coherence.db.Queries;
 import org.liwa.coherence.pojo.Page;
-import org.liwa.coherence.schedule.Dataset;
 import org.liwa.coherence.schedule.DatasetProvider;
 import org.liwa.coherence.schedule.SchedulablePage;
-import org.liwa.coherence.shingling.Signature;
+import org.liwa.coherence.sitemap.CompressedUrl;
 
 public class PageDao {
 
@@ -53,6 +51,16 @@ public class PageDao {
 	private SiteDao siteDao;
 
 	private UrlDao urlDao;
+
+	private PublishedUrlDao publishedUrlDao;
+
+	public PublishedUrlDao getPublishedUrlDao() {
+		return publishedUrlDao;
+	}
+
+	public void setPublishedUrlDao(PublishedUrlDao publishedUrlDao) {
+		this.publishedUrlDao = publishedUrlDao;
+	}
 
 	public double getDefaultPriority() {
 		return defaultPriority;
@@ -134,42 +142,31 @@ public class PageDao {
 		page.setUrlId(this.urlDao.getUrlId(uri.getUURI().toString()));
 		page.setSiteId(this.siteDao.getSiteIdForUrl(uri.getUURI().toString()));
 		page.setChecksum(uri.getContentDigestSchemeString());
-		page.setPriority(getPriority(uri.getUURI().toString()));
-		page.setFrequency(getFrequency(uri.getUURI().toString()));
+		CompressedUrl compressedUrl = publishedUrlDao.getCompressedUrl(uri
+				.getUURI().toString());
+		page.setPriority(compressedUrl.getPriority());
+		page.setFrequency(compressedUrl.getChangeRate() + "");
 		page
 				.setExpectedCoherence(getExpectedCoherence(uri.getUURI()
 						.toString()));
-		page.setChangeRate(getChangeRate(uri.getUURI().toString()));
+		page.setChangeRate(compressedUrl.getChangeRate());
 		page.setVisitedTimestamp(new Timestamp(System.currentTimeMillis()));
 		HttpMethod method = uri.getHttpMethod();
 		if (method != null) {
 			page.setStatusCode(method.getStatusCode());
 		}
-/*
-		if (uri.getContentType().indexOf("text") != -1) {
-			try {
-				InputStreamReader reader = new InputStreamReader(uri
-						.getRecorder().getReplayInputStream());
-				int b = reader.read();
-				StringBuffer buffer = new StringBuffer();
-				boolean start = false;
-				while (b != -1) {
-					start |= (char) b == '<';
-					if (start) {
-						buffer.append((char) b);
-					}
-					b = reader.read();
-				}
-				// System.out.println(buffer);
-				Signature signature = new Signature(buffer.toString(), 10, 10,
-						3);
-				page.setSignatures(signature.getSignature());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-*/
+		/*
+		 * if (uri.getContentType().indexOf("text") != -1) { try {
+		 * InputStreamReader reader = new InputStreamReader(uri
+		 * .getRecorder().getReplayInputStream()); int b = reader.read();
+		 * StringBuffer buffer = new StringBuffer(); boolean start = false;
+		 * while (b != -1) { start |= (char) b == '<'; if (start) {
+		 * buffer.append((char) b); } b = reader.read(); } //
+		 * System.out.println(buffer); Signature signature = new
+		 * Signature(buffer.toString(), 10, 10, 3);
+		 * page.setSignatures(signature.getSignature()); } catch (IOException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); } }
+		 */
 		return page;
 	}
 
@@ -213,7 +210,9 @@ public class PageDao {
 	private void insertFull(long crawlId, CrawlURI uri) throws SQLException {
 		Page prototype = getPagePrototype(uri.getUURI().toString());
 		fillPagePrototype(crawlId, uri, prototype);
-		prototype.setPriority(getPriority(uri.getURI()));
+		CompressedUrl compressedUrl = publishedUrlDao.getCompressedUrl(uri
+				.getURI());
+		prototype.setPriority(compressedUrl.getPriority());
 		doInsertPage(prototype);
 		if (prototype.getStatusCode() != HttpStatus.SC_NOT_MODIFIED) {
 			insertLinks(prototype, uri.getOutLinks());
@@ -224,50 +223,16 @@ public class PageDao {
 		}
 	}
 
-	private double getPriority(String url) {
-		if (datasetProvider != null &&
-				datasetProvider.getDataset().getPages() != null) {
-			SchedulablePage page = datasetProvider.getDataset().getPage(url);
-			if (page != null) {
-				return page.getPriority();
-			}
-		}
-		return defaultPriority;
-	}
-
-	private String getFrequency(String url) {
-		if (datasetProvider != null &&
-				datasetProvider.getDataset() != null) {
-			SchedulablePage page = datasetProvider.getDataset().getPage(url);
-			if (page != null) {
-				return page.getFrequency();
-			}
-		}
-		return "";
-	}
-
-	private double getExpectedCoherence(String url) {
-		if (datasetProvider != null &&
-				datasetProvider.getDataset() != null) {
-			SchedulablePage page = datasetProvider.getDataset().getPage(url);
+	private double getExpectedCoherence(String url) throws SQLException{
+		if (datasetProvider != null && datasetProvider.getDataset() != null) {
+			SchedulablePage page = datasetProvider.getDataset().getPage(
+					publishedUrlDao.getUrlId(url));
 			if (page != null) {
 				return page.getExpectedCoherence();
 			}
 		}
 		return 0;
 	}
-	
-	private double getChangeRate(String url) {
-		if (datasetProvider != null &&
-				datasetProvider.getDataset() != null) {
-			SchedulablePage page = datasetProvider.getDataset().getPage(url);
-			if (page != null) {
-				return page.getChangeRate();
-			}
-		}
-		return 0;
-	}
-	
 
 	public List<String> getRevisitPages(long crawlId) throws SQLException {
 		Connection c = connectionPool.getConnection();

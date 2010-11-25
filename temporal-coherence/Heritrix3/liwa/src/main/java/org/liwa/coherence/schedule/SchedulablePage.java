@@ -3,7 +3,7 @@ package org.liwa.coherence.schedule;
 import java.util.Comparator;
 
 public class SchedulablePage {
-	private String url;
+	private int publishedUrlId;
 
 	private double changeRate;
 
@@ -22,7 +22,7 @@ public class SchedulablePage {
 	}
 
 	public SchedulablePage(SchedulablePage p) {
-		url = p.url;
+		publishedUrlId = p.publishedUrlId;
 		changeRate = p.changeRate;
 		priority = p.priority;
 		frequency = p.frequency;
@@ -57,7 +57,7 @@ public class SchedulablePage {
 
 	public double getExpectedCoherence() {
 		double expCoherence = Math.exp(-changeRate * (revisit + visit) * delta);
-		System.out.println(url + " " + visit + " " + revisit + " " + delta
+		System.out.println(publishedUrlId + " " + visit + " " + revisit + " " + delta
 				+ " " + expCoherence);
 		return expCoherence;
 	}
@@ -86,12 +86,12 @@ public class SchedulablePage {
 		this.changeRate = changeRate;
 	}
 
-	public String getUrl() {
-		return url;
+	public int getPublishedUrlId() {
+		return publishedUrlId;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setPublishedUrlId(int publishedUrlId) {
+		this.publishedUrlId = publishedUrlId;
 	}
 
 	public long getIntLength(double tau) {

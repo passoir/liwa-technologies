@@ -13,6 +13,9 @@ public class Queries {
 	private static final String INSERT_CRAWL = "insert into t_crawls"
 			+ " (crawl_id, title) values(?,?)";
 	
+	private static final String INSERT_ROBOT_FILE = "insert into t_robot_files"
+		+ " (robot_file_id, robot_url, visited_timestamp) values(?,?,?)";
+	
 	private static final String INSERT_RECRAWL = "insert into t_crawls"
 		+ " (crawl_id, title, recrawled_id) values(?,?,?)";
 
@@ -53,11 +56,26 @@ public class Queries {
 	private static final String URL_INSERT_QUERY = "insert into t_urls "
 			+ " (url_id, url) values(?, ?)";
 
+	private static final String PUBLISHED_URL_INSERT_QUERY = 
+		"insert into t_published_urls (published_url_id, url, " +
+			"robot_file_id, frequency, priority, last_modified) " +
+			"values(?, ?, ?, ?, ?, ?)";
+	
 	private static final String SITE_SELECT_QUERY = "select site_id from t_sites "
 			+ "where site = ?";
 
 	private static final String SITE_INSERT_QUERY = "insert into t_sites "
 			+ " (site_id, site) values(?, ?)";
+	
+	private static final String GET_PUBLISHED_URL = "select url from t_published_urls " +
+			"where published_url_id = ?";
+	
+	private static final String GET_PUBLISHED_URL_ID = "select published_url_id from " +
+			"t_published_urls where robot_file_id = ? and url = ?";
+	
+	private static final String GET_COMPRESSED_URL_QUERY = "select published_url_id, " +
+			"frequency, priority from t_published_urls where robot_file_id = ? " +
+			"and url = ?";
 
 	private String queriesLocation;
 
@@ -94,11 +112,27 @@ public class Queries {
 		return INSERT_CRAWL;
 	}
 	
+	public String getInsertRobotFileQuery() {
+		return INSERT_ROBOT_FILE;
+	}
+	
 	public String getInsertRecrawlQuery() {
 		return INSERT_RECRAWL;
 	}
 	public String getInsertPageQuery() {
 		return INSERT_PAGE;
+	}
+	
+	public String getPublishedUrlByIdQuery(){
+		return GET_PUBLISHED_URL;
+	}
+	
+	public String getPublishedUrlIdQuery(){
+		return GET_PUBLISHED_URL_ID;
+	}
+	
+	public String getCompressedUrlQuery(){
+		return GET_COMPRESSED_URL_QUERY;
 	}
 	
 	public String getInsertCompactPageQuery() {
@@ -128,6 +162,10 @@ public class Queries {
 
 	public String getInsertUrlQuery() {
 		return URL_INSERT_QUERY;
+	}
+	
+	public String getInsertPublishedUrlQuery() {
+		return PUBLISHED_URL_INSERT_QUERY;
 	}
 	
 	public String getSiteQueries(){

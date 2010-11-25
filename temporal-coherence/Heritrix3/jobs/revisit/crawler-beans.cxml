@@ -88,6 +88,9 @@
 		arbitrarily-large external file. -->
 	<bean id="seeds" class="org.liwa.coherence.seeds.RevisitSeedModule">
 		<!-- <property name='sourceTagSeeds' value='false'/> -->
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
+		</property>
 	</bean>
 
 	<!-- SEEDS ALTERNATE APPROACH: specifying external seeds.txt file
@@ -596,6 +599,9 @@
 		<property name="urlDao">
 			<ref bean="urlDao" />
 		</property>
+		<property name="publishedUrlDao">
+			<ref bean="publishedUrlDao" />
+		</property>
 		<property name="compactStoring" value="true"/>
 		<property name="defaultPriority" value="0.1"/>
 	</bean>
@@ -619,6 +625,16 @@
 	</bean>
 
 	<bean id="urlDao" class="org.liwa.coherence.dao.UrlDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+	
+	<bean id="publishedUrlDao"
+		class="org.liwa.coherence.dao.PublishedUrlDao">
 		<property name="connectionPool">
 			<ref bean="connectionPool" />
 		</property>

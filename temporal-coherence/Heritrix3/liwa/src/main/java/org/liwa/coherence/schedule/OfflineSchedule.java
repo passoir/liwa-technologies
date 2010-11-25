@@ -71,7 +71,7 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 		positions.addAll(visitMap.keySet());
 		Collections.sort(positions);
 		for (int i = 0; i < positions.size(); i++) {
-			visits.add(visitMap.get(positions.get(i)).getUrl());
+			visits.add(visitMap.get(positions.get(i)).getPublishedUrlId());
 			visitMap.get(positions.get(i)).setVisit(size - i - 1);
 		}
 
@@ -84,7 +84,7 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 		positions.addAll(reversedRevisits.keySet());
 		Collections.sort(positions);
 		for (int i = 0; i < positions.size(); i++) {
-			revisits.add(reversedRevisits.get(positions.get(i)).getUrl());
+			revisits.add(reversedRevisits.get(positions.get(i)).getPublishedUrlId());
 			reversedRevisits.get(positions.get(i)).setRevisit(i);
 		}
 	}
