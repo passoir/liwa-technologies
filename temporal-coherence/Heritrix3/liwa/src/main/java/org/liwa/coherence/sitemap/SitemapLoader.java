@@ -123,7 +123,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 
 	private static class GeneralSitemapHandler extends DefaultHandler {
 		String host;
-		
+
 		SitemapHandler callback;
 
 		UrlHandler urlHandler;
@@ -135,8 +135,9 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		List<String> sitemaps;
 
 		List<CompressedUrl> compressedUrls;
-		
-		public GeneralSitemapHandler(SitemapHandler callback, List<CompressedUrl> compressedUrls) {
+
+		public GeneralSitemapHandler(SitemapHandler callback,
+				List<CompressedUrl> compressedUrls) {
 			this.callback = callback;
 			urlHandler = new UrlHandler(callback);
 			sitemapSetHandler = new SitemapSetHandler();
@@ -264,9 +265,9 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		String priority = "";
 
 		String host;
-		
+
 		SitemapHandler callback;
-		
+
 		public UrlHandler(SitemapHandler callback) {
 			this.callback = callback;
 		}
@@ -325,10 +326,10 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 				CompressedUrl url = new CompressedUrl();
 
 				if (changeFreq.trim().length() > 0) {
-				//	System.out.println(changeFreq);
+					// System.out.println(changeFreq);
 					url.setChangeRate(SitemapChangeRateProvider.CHANGE_RATE_MAP
 							.get(changeFreq.trim()));
-					
+
 				} else {
 					url.setChangeRate(SitemapChangeRateProvider.YEARLY);
 				}
@@ -340,16 +341,16 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 					dPriority = Double.parseDouble(priority);
 				}
 				url.setPriority(dPriority);
-				// System.out.println(url);
 				if (changeFreq.trim().length() > 0
 						&& getDomain(location).equalsIgnoreCase(host)) {
-					compressedUrls.add(url);
+					int id = callback.saveUrl(location, changeFreq, dPriority,
+							null);
+					if (id > 0) {
+						compressedUrls.add(url);
+						url.setId(id);
+					}
 				}
-				
-				int id = callback.saveUrl(location, changeFreq, dPriority, 
-						null);
-				url.setId(id);
-				
+
 				location = "";
 				changeFreq = "";
 				priority = "";
@@ -368,15 +369,15 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 		return urls;
 	}
 
-	private static void loadCompressedUrls(
-			List<String> sitemapUrls, SitemapHandler callback,  List<CompressedUrl> urls) {
+	private static void loadCompressedUrls(List<String> sitemapUrls,
+			SitemapHandler callback, List<CompressedUrl> urls) {
 		for (String url : sitemapUrls) {
 			loadSitemap(url, callback, urls);
 		}
 	}
-	
-	private static void loadSitemap(String sitemapUrl,
-			SitemapHandler callback,  List<CompressedUrl> urls) {
+
+	private static void loadSitemap(String sitemapUrl, SitemapHandler callback,
+			List<CompressedUrl> urls) {
 		try {
 			URL url = new URL(sitemapUrl);
 
@@ -388,7 +389,8 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			inputSource = new InputSource(urlStream);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			GeneralSitemapHandler handler = new GeneralSitemapHandler(callback, urls);
+			GeneralSitemapHandler handler = new GeneralSitemapHandler(callback,
+					urls);
 			handler.host = getDomain(sitemapUrl);
 			saxParser.parse(inputSource, handler);
 			if (handler.sitemaps != null) {

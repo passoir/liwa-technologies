@@ -133,35 +133,40 @@ public class PublishedUrlDao {
 
 	public int insertPublishedUrl(String url, String frequency,
 			double priority, Date lastModified) throws SQLException {
-		long id = this.getNextValue(PUBLISHED_URLS_SEQ);
-		Connection c = connectionPool.getConnection();
-		try {
-			PreparedStatement ps = c.prepareStatement(queries
-					.getInsertPublishedUrlQuery());
-			ps.setLong(1, id);
-			ps.setString(2, url);
-			ps.setInt(3, robotFileId);
-			ps.setString(4, frequency);
-			ps.setDouble(5, priority);
-			if (lastModified == null) {
-				ps.setNull(6, Types.TIMESTAMP);
-			} else {
-				ps.setTimestamp(6, new Timestamp(lastModified.getTime()));
-			}
-			ps.executeUpdate();
-			ps.close();
-			c.commit();
-			c.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			//System.out.println(url);
-			// e.printStackTrace();
-			c.close();
-			// System.exit(-1);
-			throw e;
+		long id = getUrlId(url);
+		if (id == -1) {
+			id = this.getNextValue(PUBLISHED_URLS_SEQ);
+			Connection c = connectionPool.getConnection();
+			try {
+				PreparedStatement ps = c.prepareStatement(queries
+						.getInsertPublishedUrlQuery());
+				ps.setLong(1, id);
+				ps.setString(2, url);
+				ps.setInt(3, robotFileId);
+				ps.setString(4, frequency);
+				ps.setDouble(5, priority);
+				if (lastModified == null) {
+					ps.setNull(6, Types.TIMESTAMP);
+				} else {
+					ps.setTimestamp(6, new Timestamp(lastModified.getTime()));
+				}
+				ps.executeUpdate();
+				ps.close();
+				c.commit();
+				c.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				// System.out.println(url);
+				// e.printStackTrace();
+				c.close();
+				// System.exit(-1);
+				throw e;
 
+			}
+		}else{
+			return -1;
 		}
-		return (int)id;
+		return (int) id;
 	}
 
 	private long getNextValue(String sequence) throws SQLException {
