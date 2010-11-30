@@ -74,7 +74,7 @@ public abstract class OfflineSchedule extends AbstractSchedule {
 			visits.add(visitMap.get(positions.get(i)).getPublishedUrlId());
 			visitMap.get(positions.get(i)).setVisit(size - i - 1);
 		}
-
+		
 		Map<Integer, SchedulablePage> reversedRevisits = new HashMap<Integer, SchedulablePage>();
 		for (SchedulablePage p : revisitMap.keySet()) {
 			reversedRevisits.put(revisitMap.get(p), p);
