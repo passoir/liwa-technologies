@@ -44,11 +44,26 @@ CREATE SEQUENCE page_id_seq
  START 1
  CACHE 1;
 
+CREATE SEQUENCE published_urls_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 65306398
+  CACHE 1;
+  
+CREATE SEQUENCE robot_file_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 45
+  CACHE 1;
+
 CREATE TABLE t_crawls (
 crawl_id integer,
 title varchar,
 recrawled_id integer
 );
+
 
 CREATE TABLE t_sites (
 site_id integer,
@@ -110,3 +125,34 @@ link_type char(1),
 checksum varchar(40),
 visited_timestamp timestamp
 ); 
+
+CREATE TABLE t_robot_files
+(
+  robot_file_id integer NOT NULL,
+  robot_url character varying,
+  visited_timestamp timestamp without time zone,
+  CONSTRAINT robot_file_key PRIMARY KEY (robot_file_id)
+)
+WITH (OIDS=FALSE);
+
+CREATE TABLE t_published_urls
+(
+  published_url_id integer NOT NULL,
+  url character varying,
+  robot_file_id integer,
+  frequency character varying,
+  priority double precision,
+  last_modified timestamp without time zone,
+  CONSTRAINT published_urls_key PRIMARY KEY (published_url_id),
+  CONSTRAINT robot_file_key FOREIGN KEY (robot_file_id)
+      REFERENCES t_robot_files (robot_file_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE
+)
+WITH (OIDS=FALSE);
+
+CREATE INDEX robots_file_index
+  ON t_published_urls
+  USING btree
+  (robot_file_id, url, published_url_id, frequency, priority);
+  
+  
