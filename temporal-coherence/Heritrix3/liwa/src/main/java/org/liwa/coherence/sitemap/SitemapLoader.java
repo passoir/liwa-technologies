@@ -325,12 +325,14 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			if (qName.equals("url")) {
 				CompressedUrl url = new CompressedUrl();
 
-				if (changeFreq.trim().length() > 0) {
+				if (changeFreq.trim().length() > 0 && SitemapChangeRateProvider.CHANGE_RATE_MAP
+						.get(changeFreq.trim()) != null) {
 					// System.out.println(changeFreq);
 					url.setChangeRate(SitemapChangeRateProvider.CHANGE_RATE_MAP
 							.get(changeFreq.trim()));
 
 				} else {
+					System.out.println("invalid change rate: " + changeFreq.trim());
 					url.setChangeRate(SitemapChangeRateProvider.YEARLY);
 				}
 				// if (priority.trim().length() > 0) {
@@ -396,6 +398,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 			if (handler.sitemaps != null) {
 				loadCompressedUrls(handler.sitemaps, callback, urls);
 			}
+			urlStream.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
