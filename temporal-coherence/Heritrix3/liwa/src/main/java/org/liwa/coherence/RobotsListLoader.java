@@ -46,6 +46,7 @@ public class RobotsListLoader {
 	private List<String> readSitemaps(String robotTxt) {
 		List<String> list = new ArrayList<String>();
 		try {
+			System.out.println("reading robots.txt file:" + robotTxt);
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					new URL(robotTxt).openStream()));
 			String s = bf.readLine();
@@ -67,6 +68,7 @@ public class RobotsListLoader {
 
 	public Map<String, List<String>> getSitemaps() {
 		List<String> robots = readRobotList();
+		System.out.println("Robotlist read.");
 		Map<String, List<String>> sitemaps = new HashMap<String, List<String>>();
 		for (String r : robots) {
 			List<String> detectedSitemaps = readSitemaps(r);
@@ -74,6 +76,7 @@ public class RobotsListLoader {
 				sitemaps.put(r, readSitemaps(r));
 			}
 		}
+		System.out.println("All robots.txt files read.");
 		return sitemaps;
 	}
 }
