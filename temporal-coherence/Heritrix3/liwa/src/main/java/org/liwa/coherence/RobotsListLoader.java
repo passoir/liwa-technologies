@@ -31,7 +31,7 @@ public class RobotsListLoader {
 			String s = bf.readLine();
 			while (s != null) {
 				if( !s.trim().startsWith("#")){
-				list.add(s);
+			    	list.add(s);
 				}
 				s = bf.readLine();
 				
@@ -74,7 +74,7 @@ public class RobotsListLoader {
 		for (String r : robots) {
 			List<String> detectedSitemaps = readSitemaps(r);
 			if (detectedSitemaps.size() > 0) {
-				sitemaps.put(r, readSitemaps(r));
+				sitemaps.put(r, detectedSitemaps);
 			}
 		}
 		System.out.println("All robots.txt files read.");
