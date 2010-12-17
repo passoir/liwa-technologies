@@ -16,6 +16,8 @@ public class Configuration {
 	
 	/*comment*/
 	
+	
+	
 	public int getParallelSites() {
 		return parallelSites;
 	}
@@ -86,7 +88,6 @@ public class Configuration {
 
 	public void setThreshold(String threshold) {
 		this.threshold = threshold;
-	}	
-	
+	}
 	
 }
