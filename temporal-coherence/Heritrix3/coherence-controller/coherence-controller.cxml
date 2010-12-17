@@ -37,7 +37,7 @@
 	<bean id="robotsListLoader"
 		class="org.liwa.coherence.RobotsListLoader">
 		<property name="robotsFile" value="seeds/robotlist-20" />
-		<property name="maxSites" value="200" />
+		<property name="maxSites" value="20" />
 		<property name="startSite" value="0" />
 	</bean>
 
