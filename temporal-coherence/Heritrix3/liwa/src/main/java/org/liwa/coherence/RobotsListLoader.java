@@ -14,6 +14,26 @@ import java.util.Map;
 public class RobotsListLoader {
 	private String robotsFile;
 
+	private int maxSites = 200;
+
+	private int startSite = 0;
+
+	public int getMaxSites() {
+		return maxSites;
+	}
+
+	public void setMaxSites(int maxSites) {
+		this.maxSites = maxSites;
+	}
+
+	public int getStartSite() {
+		return startSite;
+	}
+
+	public void setStartSite(int startSite) {
+		this.startSite = startSite;
+	}
+
 	public String getRobotsFile() {
 		return robotsFile;
 	}
@@ -25,16 +45,21 @@ public class RobotsListLoader {
 	private List<String> readRobotList() {
 		List<String> list = new ArrayList<String>();
 		File f = new File(robotsFile);
+		int count = 0;
+		int endSite = startSite + maxSites;
 		try {
 			BufferedReader bf = new BufferedReader(new InputStreamReader(
 					new FileInputStream(f)));
 			String s = bf.readLine();
-			while (s != null) {
-				if( !s.trim().startsWith("#")){
-			    	list.add(s);
+
+			while (s != null && count < maxSites) {
+				if (!s.trim().startsWith("#")) {
+					if (startSite + count < endSite) {
+						list.add(s);
+						count++;
+					}
 				}
 				s = bf.readLine();
-				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -42,7 +67,7 @@ public class RobotsListLoader {
 		}
 		return list;
 	}
-	
+
 	private List<String> readSitemaps(String robotTxt) {
 		List<String> list = new ArrayList<String>();
 		try {
