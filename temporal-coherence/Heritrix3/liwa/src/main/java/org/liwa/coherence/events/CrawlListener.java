@@ -72,7 +72,7 @@ public class CrawlListener implements ApplicationListener,
 	protected void crawlFinished(CrawlController cc) {
 		if (cc.getMetadata() instanceof CoherenceMetadata) {
 			if (!((CoherenceMetadata) cc.getMetadata()).isRecrawling()) {
-				startRecrawl(cc);
+					startRecrawl(cc);
 			}
 		}
 		for(JobListener l: listeners){
