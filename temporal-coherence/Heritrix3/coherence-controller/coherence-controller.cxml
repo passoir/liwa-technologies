@@ -6,7 +6,7 @@
 	
 	Commented-out beans and properties are provided as an example; values
 	shown in comments reflect the actual defaults which are in effect
-	without specification. (To change from the default behavior, 
+	without specificationtest. (To change from the default behavior, 
 	uncomment AND alter the shown values.)   
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
