@@ -301,6 +301,9 @@ public class CoherenceController implements ApplicationListener, JobListener,
 				run++;
 				if (run < configuration.getRuns()) {
 					startCoherenceJobs();
+				}else{
+					System.out.println("all jobs are done");
+					System.exit(0);
 				}
 			}
 		}

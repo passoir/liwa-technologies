@@ -43,6 +43,14 @@ public class RobotsListLoader {
 	}
 
 	private List<String> readRobotList() {
+		String startProp = System.getProperty("robots.start");
+		String countProp = System.getProperty("robots.count");
+		if(startProp != null && startProp.trim().length() > 0){
+			startSite = Integer.parseInt(startProp);
+		}
+		if(countProp != null && startProp.trim().length() > 0){
+			maxSites = Integer.parseInt(countProp);
+		}
 		List<String> list = new ArrayList<String>();
 		File f = new File(robotsFile);
 		int count = 0;
@@ -52,12 +60,13 @@ public class RobotsListLoader {
 					new FileInputStream(f)));
 			String s = bf.readLine();
 
-			while (s != null && count < maxSites) {
+			while (s != null && count < endSite) {
+				System.out.println(s);
 				if (!s.trim().startsWith("#")) {
-					if (startSite + count < endSite) {
+					if (count >= startSite && count < endSite) {
 						list.add(s);
-						count++;
 					}
+					count++;
 				}
 				s = bf.readLine();
 			}
