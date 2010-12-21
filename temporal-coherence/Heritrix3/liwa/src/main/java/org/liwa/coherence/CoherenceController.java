@@ -270,9 +270,9 @@ public class CoherenceController implements ApplicationListener, JobListener,
 					// }
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
+					jobCursor++;
 					if (jobCursor < robotTxtList.size()) {
-						jobCursor++;
-						startJob(robotTxtList.get(jobCursor - 1));
+						startJob(robotTxtList.get(jobCursor));
 					}
 					// jobsToDelete.add(cj);
 				}
