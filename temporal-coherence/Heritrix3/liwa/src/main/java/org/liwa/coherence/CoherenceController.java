@@ -96,6 +96,10 @@ public class CoherenceController implements ApplicationListener, JobListener,
 
 	public void startCoherenceJobs() {
 		sitemaps = configuration.getRobotsListLoader().getSitemaps();
+		if(sitemaps.size()==0){
+			System.out.println("no sitemaps");
+			System.exit(0);
+		}
 		robotTxtList = new ArrayList<String>();
 		robotTxtList.addAll(sitemaps.keySet());
 		pjs = new ArrayList<ParallelJobs>();
