@@ -75,7 +75,7 @@ public class Engine {
         // TODO: try a more delicate cleanup; eg: if appCtx exists?
         for(String jobName: jobConfigs.keySet().toArray(new String[0])) {
             CrawlJob cj = jobConfigs.get(jobName);
-            if(!cj.getJobDir().exists()) {
+            if(cj != null && !cj.getJobDir().exists()) {
                 jobConfigs.remove(jobName); 
             }
         }
