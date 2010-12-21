@@ -52,7 +52,7 @@ public class RevisitLauncher {
 			seeds.setRevisits(revisits);
 			this.coherenceController.revisitPending(crawlController, revisitJob);
 			revisitJob.launch();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
