@@ -106,13 +106,12 @@ public class CoherenceController implements ApplicationListener, JobListener,
 		}
 	}
 
-	private void startJob(String robotTxt) {
+	private void startJob(String robotsTxt) {
 		ParallelJobs pj = new ParallelJobs();
-		String robotsTxt = robotTxtList.get(jobCursor);
 		pjs.add(pj);
 		String domain = robotsTxt.substring(robotsTxt.indexOf("://")
 				+ "://".length(), robotsTxt.indexOf("robots") - 1);
-		int robotFileId = this.insertRobotFile(robotTxt);
+		int robotFileId = this.insertRobotFile(robotsTxt);
 		publishedUrlDao.setRobotFileId(robotFileId);
 		List<CompressedUrl> urlList = SitemapLoader.loadCompressedUrls(sitemaps
 				.get(robotsTxt), this);
