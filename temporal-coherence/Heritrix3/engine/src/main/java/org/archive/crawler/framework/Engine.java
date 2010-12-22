@@ -84,6 +84,8 @@ public class Engine {
 				}
 			} catch (NullPointerException e) {
 				// TODO Auto-generated catch block
+				System.out.println(jobConfigs);
+				System.out.println(jobConfigs.keySet());
 				e.printStackTrace();
 			}
 		}
