@@ -84,9 +84,7 @@ public class Engine {
 				}
 			} catch (NullPointerException e) {
 				// TODO Auto-generated catch block
-				System.out.println(jobConfigs);
-				System.out.println(jobConfigs.keySet());
-				e.printStackTrace();
+					e.printStackTrace();
 			}
 		}
 
@@ -256,8 +254,7 @@ public class Engine {
 	}
 
 	public CrawlJob getJob(String shortName) {
-		System.out.println(jobConfigs.keySet());
-		if (!jobConfigs.containsKey(shortName)) {
+			if (!jobConfigs.containsKey(shortName)) {
 			// try a rescan if not already present
 			findJobConfigs();
 		}

@@ -332,7 +332,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 							.get(changeFreq.trim()));
 
 				} else {
-					System.out.println("invalid change rate: " + changeFreq.trim());
+			//		System.out.println("invalid change rate: " + changeFreq.trim());
 					url.setChangeRate(SitemapChangeRateProvider.YEARLY);
 				}
 				// if (priority.trim().length() > 0) {

@@ -629,13 +629,13 @@ public class FetchHTTP extends Processor implements Lifecycle {
             curi.setContentDigest(algorithm, 
                 rec.getRecordedInput().getDigestValue());
         }
-        if (logger.isLoggable(Level.INFO)) {
-            logger.info(((curi.getFetchType() == HTTP_POST) ? "POST" : "GET")
-                    + " " + curi.getUURI().toString() + " "
-                    + method.getStatusCode() + " "
-                    + rec.getRecordedInput().getSize() + " "
-                    + curi.getContentType());
-        }
+//        if (logger.isLoggable(Level.INFO)) {
+//            logger.info(((curi.getFetchType() == HTTP_POST) ? "POST" : "GET")
+//                    + " " + curi.getUURI().toString() + " "
+//                    + method.getStatusCode() + " "
+//                    + rec.getRecordedInput().getSize() + " "
+//                    + curi.getContentType());
+//        }
 
         if (isSuccess(curi) && addedCredentials) {
             // Promote the credentials from the CrawlURI to the CrawlServer

@@ -61,7 +61,6 @@ public class RobotsListLoader {
 			String s = bf.readLine();
 
 			while (s != null && count < endSite) {
-				System.out.println(s);
 				if (!s.trim().startsWith("#")) {
 					if (count >= startSite && count < endSite) {
 						list.add(s);
