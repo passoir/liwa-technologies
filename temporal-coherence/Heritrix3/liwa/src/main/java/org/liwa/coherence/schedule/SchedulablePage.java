@@ -57,8 +57,8 @@ public class SchedulablePage {
 
 	public double getExpectedCoherence() {
 		double expCoherence = Math.exp(-changeRate * (revisit + visit) * delta);
-		System.out.println(publishedUrlId + " " + visit + " " + revisit + " " + delta
-				+ " " + expCoherence);
+//		System.out.println(publishedUrlId + " " + visit + " " + revisit + " " + delta
+//				+ " " + expCoherence);
 		return expCoherence;
 	}
 
