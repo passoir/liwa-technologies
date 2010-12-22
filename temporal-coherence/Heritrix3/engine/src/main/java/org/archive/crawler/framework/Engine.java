@@ -75,11 +75,16 @@ public class Engine {
 		// remove crawljobs whose directories have disappeared
 		// TODO: try a more delicate cleanup; eg: if appCtx exists?
 		for (String jobName : jobConfigs.keySet().toArray(new String[0])) {
-			CrawlJob cj = jobConfigs.get(jobName);
-			if (cj != null && cj.getJobDir() != null) {
-				if (!cj.getJobDir().exists()) {
-					jobConfigs.remove(jobName);
+			try {
+				CrawlJob cj = jobConfigs.get(jobName);
+				if (cj != null && cj.getJobDir() != null) {
+					if (!cj.getJobDir().exists()) {
+						jobConfigs.remove(jobName);
+					}
 				}
+			} catch (NullPointerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 
