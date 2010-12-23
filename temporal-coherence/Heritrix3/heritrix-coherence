@@ -1,6 +1,6 @@
 echo start Heritrix
 CLASSPATH=`echo $(ls lib/*.jar)":heritrix-3.0.0/bin" | sed -e 's/ /:/g'`
-I=783
+I=866
 COUNT=1
 END=$(wc -l seeds/allrobottxt| cut -f1 -d\ )
 while   [ $I -le $END ]
