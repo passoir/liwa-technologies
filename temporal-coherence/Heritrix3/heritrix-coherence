@@ -1,11 +1,11 @@
 echo start Heritrix
 CLASSPATH=`echo $(ls lib/*.jar)":heritrix-3.0.0/bin" | sed -e 's/ /:/g'`
-I=866
+I=3153
 COUNT=1
 END=$(wc -l seeds/allrobottxt| cut -f1 -d\ )
 while   [ $I -le $END ]
 do
-java -Xmx2048M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH -Drobots.start=$I -Drobots.count=$COUNT org.liwa.coherence.HeritrixLauncher -a liwa -p 8845
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH -Drobots.start=$I -Drobots.count=$COUNT org.liwa.coherence.HeritrixLauncher -a liwa -p 8845
 I=$(( $I + $COUNT))
 echo $START
 done
