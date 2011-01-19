@@ -6,7 +6,7 @@ END=$(wc -l seeds/suspicious| cut -f1 -d\ )
 while   [ $I -le 10 ]
 do
 java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH -Drobots.start=$I -Drobots.count=$COUNT org.liwa.coherence.HeritrixLauncher -a liwa -p 8845
-I=$(( $I + $COUNT) % 7)
+I=$((( $I + $COUNT) % 7))
 echo $START
 done
 echo end
