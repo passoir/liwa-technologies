@@ -1,6 +1,9 @@
 package org.liwa.coherence.dao;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +30,7 @@ import org.liwa.coherence.db.Queries;
 import org.liwa.coherence.pojo.Page;
 import org.liwa.coherence.schedule.DatasetProvider;
 import org.liwa.coherence.schedule.SchedulablePage;
+import org.liwa.coherence.shingling.Signature;
 import org.liwa.coherence.sitemap.CompressedUrl;
 
 public class PageDao {
@@ -155,18 +159,42 @@ public class PageDao {
 		if (method != null) {
 			page.setStatusCode(method.getStatusCode());
 		}
-		/*
-		 * if (uri.getContentType().indexOf("text") != -1) { try {
-		 * InputStreamReader reader = new InputStreamReader(uri
-		 * .getRecorder().getReplayInputStream()); int b = reader.read();
-		 * StringBuffer buffer = new StringBuffer(); boolean start = false;
-		 * while (b != -1) { start |= (char) b == '<'; if (start) {
-		 * buffer.append((char) b); } b = reader.read(); } //
-		 * System.out.println(buffer); Signature signature = new
-		 * Signature(buffer.toString(), 10, 10, 3);
-		 * page.setSignatures(signature.getSignature()); } catch (IOException e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); } }
-		 */
+
+		if (uri.getContentType().indexOf("text") != -1) {
+			try {
+				InputStreamReader reader = new InputStreamReader(uri
+						.getRecorder().getReplayInputStream());
+				int b = reader.read();
+				StringBuffer buffer = new StringBuffer();
+				boolean start = false;
+				while (b != -1) {
+					start |= (char) b == '<';
+					if (start) {
+						buffer.append((char) b);
+					}
+					b = reader.read();
+				} 
+//				System.out.println(buffer);
+				Signature signature = new Signature(buffer.toString(), 10, 10,
+						3);
+				if(signature.getSignature()[5] == 976349){
+					File f = new File("wrong-url.html");
+					PrintStream out = new PrintStream(f);
+					out.println(buffer);
+					System.out.println("wrong");
+				}else if (signature.getSignature()[5] == 464234){
+					File f = new File("right-url.html");
+					PrintStream out = new PrintStream(f);
+					out.println(buffer);
+					System.out.println("right");
+				}
+				page.setSignatures(signature.getSignature());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		return page;
 	}
 
@@ -197,6 +225,15 @@ public class PageDao {
 			ps.executeUpdate();
 			ps.close();
 			c.close();
+//
+//			try {
+//				uri.getRecorder().getReplayInputStream().readContentTo(
+//						System.out);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -223,7 +260,7 @@ public class PageDao {
 		}
 	}
 
-	private double getExpectedCoherence(String url) throws SQLException{
+	private double getExpectedCoherence(String url) throws SQLException {
 		if (datasetProvider != null && datasetProvider.getDataset() != null) {
 			SchedulablePage page = datasetProvider.getDataset().getPage(
 					publishedUrlDao.getUrlId(url));
