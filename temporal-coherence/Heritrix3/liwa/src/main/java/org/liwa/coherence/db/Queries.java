@@ -30,8 +30,8 @@ public class Queries {
 		+ " checksum, status_code,  priority, frequency, " +
 				"expected_coherence, change_rate," +
 				"sig0,sig1,sig2,sig3,sig4,sig5,sig6," +
-				"sig7,sig8,sig9) "
-		+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				"sig7,sig8,sig9, content) "
+		+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)";
 
 	private static final String GET_PAGE_ID_QUERY = "select page_id from t_pages "
 			+ "where crawl_id = ? and url = ?";

@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.URIException;
+import org.archive.io.ReplayInputStream;
 import org.archive.modules.CrawlURI;
 import org.archive.modules.extractor.Hop;
 import org.archive.modules.extractor.Link;
@@ -159,7 +160,7 @@ public class PageDao {
 		if (method != null) {
 			page.setStatusCode(method.getStatusCode());
 		}
-
+		
 		if (uri.getContentType().indexOf("text") != -1) {
 			try {
 				InputStreamReader reader = new InputStreamReader(uri
@@ -189,10 +190,20 @@ public class PageDao {
 					System.out.println("right");
 				}
 				page.setSignatures(signature.getSignature());
+				reader.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			try {
+				ReplayInputStream is = uri.getRecorder().getReplayInputStream();
+				is.setToResponseBodyStart();
+				page.setContent(is);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		}
 
 		return page;
@@ -221,6 +232,17 @@ public class PageDao {
 			ps.setDouble(12, page.getChangeRate());
 			for (int i = 0; i < 10; i++) {
 				ps.setInt(13 + i, page.getSignatures()[i]);
+			}
+			try {
+				ps.setBinaryStream(23, page.getContent());
+			} catch (Throwable t) {
+				// catch not implemented methods, degrade gracefully
+				System.out.println(t);
+				int size = 0;
+				if (page.getContent() != null) {
+					size = (int) page.getContent().getContentSize();
+				}
+				ps.setBinaryStream(23, page.getContent(), size);
 			}
 			ps.executeUpdate();
 			ps.close();
