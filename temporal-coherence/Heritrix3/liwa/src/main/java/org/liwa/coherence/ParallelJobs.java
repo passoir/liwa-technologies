@@ -63,6 +63,7 @@ public class ParallelJobs implements ProcessorListener {
 				} else {
 					calls++;
 					try {
+						Thread.sleep(500);
 						this.wait();
 						this.notifyAll();
 					} catch (InterruptedException e) {
