@@ -57,13 +57,18 @@ public class ParallelJobs implements ProcessorListener {
 				// long difference = 1000-(now-lastDownload);
 				// difference = Math.max(0, difference);
 				// lastDownload = now;
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if (calls == JOB_COUNT - 1) {
 					calls = 0;
 					this.notifyAll();
 				} else {
 					calls++;
 					try {
-						Thread.sleep(500);
 						this.wait();
 						this.notifyAll();
 					} catch (InterruptedException e) {

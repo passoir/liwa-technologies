@@ -36,8 +36,8 @@
 
 	<bean id="robotsListLoader"
 		class="org.liwa.coherence.RobotsListLoader">
-		<property name="robotsFile" value="seeds/allrobottxt" />
-		<!-- <property name="robotsFile" value="seeds/suspicious" /> -->
+		<!-- <property name="robotsFile" value="seeds/allrobottxt" /> -->
+		<property name="robotsFile" value="seeds/suspicious" />
 		<property name="maxSites" value="1" />
 		<property name="startSite" value="0" />
 	</bean>
