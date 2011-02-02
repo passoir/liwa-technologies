@@ -231,44 +231,44 @@ implements Lifecycle, Checkpointable, BeanNameAware {
         if (logger.isLoggable(Level.INFO)) {
             logger.info("Count of alreadyseen on close " + count.get());
         }
-        Environment env = null;
-        if (this.alreadySeen != null) {
-            try {
-                env = this.alreadySeen.getEnvironment();
-                alreadySeen.sync();
-            } catch (DatabaseException e) {
-                logger.severe(e.getMessage());
-            }
-        }
-        if (env != null) {
-            try {
-                // This sync flushes whats in RAM. Its expensive operation.
-                // Without, data can be lost. Not for transactional operation.
-                env.sync();
-            } catch (DatabaseException e) {
-                logger.severe(e.getMessage());
-            }
-        }
+//        Environment env = null;
+//        if (this.alreadySeen != null) {
+//            try {
+//                env = this.alreadySeen.getEnvironment();
+//                alreadySeen.sync();
+//            } catch (DatabaseException e) {
+//                logger.severe(e.getMessage());
+//            }
+//        }
+//        if (env != null) {
+//            try {
+//                // This sync flushes whats in RAM. Its expensive operation.
+//                // Without, data can be lost. Not for transactional operation.
+//                env.sync();
+//            } catch (DatabaseException e) {
+//                logger.severe(e.getMessage());
+//            }
+//        }
         
-        if (createdEnvironment) {
-            // Only manually close database if it were created via a
-            // constructor, and not via a BdbModule. Databases created by a 
-            // BdbModule will be closed by that BdbModule.
-            if (this.alreadySeen != null) {
-                try {
-                    alreadySeen.close();
-                } catch (DatabaseException e) {
-                    logger.severe(e.getMessage());
-                }
-            }
-            if (env != null) {
-                try {
-                    env.close();
-                } catch (DatabaseException e) {
-                    logger.severe(e.getMessage());
-                }
-            }
-        }
+//        if (createdEnvironment) {
+//            // Only manually close database if it were created via a
+//            // constructor, and not via a BdbModule. Databases created by a 
+//            // BdbModule will be closed by that BdbModule.
+//            if (this.alreadySeen != null) {
+//                try {
+//                    alreadySeen.close();
+//                } catch (DatabaseException e) {
+//                    logger.severe(e.getMessage());
+//                }
+//            }
+//            if (env != null) {
+//                try {
+//                    env.close();
+//                } catch (DatabaseException e) {
+//                    logger.severe(e.getMessage());
+//                }
+//            }
+//        }
     }
     
     public synchronized long getCacheMisses() {

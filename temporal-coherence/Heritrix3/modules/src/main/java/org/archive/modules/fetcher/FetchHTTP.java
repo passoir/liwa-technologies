@@ -529,6 +529,7 @@ public class FetchHTTP extends Processor implements Lifecycle {
             rec.getRecordedInput().setDigest((MessageDigest)null);
         }
 
+        System.out.println("trying to fetch: " + curi.getURI());
         // Below we do two inner classes that add check of midfetch
         // filters just as we're about to receive the response body.
         String curiString = curi.getUURI().toString();

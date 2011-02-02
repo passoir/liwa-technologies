@@ -179,11 +179,11 @@ implements Serializable {
     }
 
     public void close() {
-        try {
-            queueDb.sync();
-            queueDb.close();
-        } catch (DatabaseException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            queueDb.sync();
+//            queueDb.close();
+//        } catch (DatabaseException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

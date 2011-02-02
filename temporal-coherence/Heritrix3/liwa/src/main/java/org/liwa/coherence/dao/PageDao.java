@@ -237,7 +237,7 @@ public class PageDao {
 				ps.setBinaryStream(23, page.getContent());
 			} catch (Throwable t) {
 				// catch not implemented methods, degrade gracefully
-				System.out.println(t);
+				//System.out.println(t);
 				int size = 0;
 				if (page.getContent() != null) {
 					size = (int) page.getContent().getContentSize();
