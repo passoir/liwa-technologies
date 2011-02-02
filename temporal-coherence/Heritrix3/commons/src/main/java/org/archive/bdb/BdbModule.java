@@ -293,17 +293,17 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
     }
     
     public void closeDatabase(String name) {
-        DatabasePlusConfig dpc = databases.remove(name);
-        if (dpc == null) {
-            throw new IllegalStateException("No such database: " + name);
-        }
-        Database db = dpc.database;
-        try {
-            db.sync();
-            db.close();
-        } catch (DatabaseException e) {
-            LOGGER.log(Level.WARNING, "Error closing db " + name, e);
-        }
+//        DatabasePlusConfig dpc = databases.remove(name);
+//        if (dpc == null) {
+//            throw new IllegalStateException("No such database: " + name);
+//        }
+//        Database db = dpc.database;
+//        try {
+//            db.sync();
+//            db.close();
+//        } catch (DatabaseException e) {
+//            LOGGER.log(Level.WARNING, "Error closing db " + name, e);
+//        }
     }
     
     public void disposeDatabase(String name) {
@@ -589,7 +589,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         
         for(ObjectIdentityCache cache : oiCaches.values()) {
             try {
-                cache.close();
+             //   cache.close();
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error closing oiCache " + cache, e);
             }
@@ -603,7 +603,7 @@ public class BdbModule implements Lifecycle, Checkpointable, Closeable {
         }
 
         try {
-            this.bdbEnvironment.sync();           
+           // this.bdbEnvironment.sync();           
             this.bdbEnvironment.close();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error closing environment.", e);

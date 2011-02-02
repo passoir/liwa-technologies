@@ -568,8 +568,8 @@ public class StatisticsTracker
     public void crawlEnded(String sExitMessage) {
         logNote("CRAWL ENDED - " + sExitMessage);
         crawlEndTime = System.currentTimeMillis();
-        progressStatisticsEvent();
-        dumpReports();
+//        progressStatisticsEvent();
+//        dumpReports();
     }
 
     /**
@@ -803,13 +803,13 @@ public class StatisticsTracker
     protected void handleSeed(final CrawlURI curi, final String disposition) {
         if(getTrackSeeds()) {
             if(curi.isSeed()){
-                SeedRecord sr = processedSeedsRecords.getOrUse(
-                        curi.getURI(),
-                        new Supplier<SeedRecord>() {
-                            public SeedRecord get() {
-                                return new SeedRecord(curi, disposition);
-                            }});
-                sr.updateWith(curi,disposition); 
+//                SeedRecord sr = processedSeedsRecords.getOrUse(
+//                        curi.getURI(),
+//                        new Supplier<SeedRecord>() {
+//                            public SeedRecord get() {
+//                                return new SeedRecord(curi, disposition);
+//                            }});
+//                sr.updateWith(curi,disposition); 
             }
         } // else ignore
     }
