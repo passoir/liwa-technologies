@@ -510,6 +510,7 @@ public class FetchHTTP extends Processor implements Lifecycle {
     public FetchHTTP() {
     }
 
+    private static Object monitor = new Object();
     protected void innerProcess(final CrawlURI curi)
             throws InterruptedException {
         // Note begin time
@@ -529,6 +530,10 @@ public class FetchHTTP extends Processor implements Lifecycle {
             rec.getRecordedInput().setDigest((MessageDigest)null);
         }
 
+        synchronized(monitor){
+        	Thread.sleep(1000);
+        }
+        
         System.out.println("trying to fetch: " + curi.getURI());
         // Below we do two inner classes that add check of midfetch
         // filters just as we're about to receive the response body.
