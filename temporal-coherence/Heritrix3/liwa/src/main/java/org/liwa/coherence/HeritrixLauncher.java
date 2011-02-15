@@ -12,6 +12,6 @@ public class HeritrixLauncher {
 		Heritrix heritrix = new Heritrix();
 		heritrix.instanceMain(args); 
 		System.setProperty("coherence.profile-auto", "selective-auto");
-		CoherenceControllerFactory.setHeritrix(heritrix);
+		CoherenceControllerFactory.setRobotsHeritrix(heritrix, "coherence-controller/coherence-controller.cxml");
 	}
 }
