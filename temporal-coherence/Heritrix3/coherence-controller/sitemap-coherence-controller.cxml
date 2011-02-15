@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	HERITRIX 3 CRAWL JOB CONFIGURATION FILE
+	
+	This is a relatively minimal configuration suitable for many crawls.
+	
+	Commented-out beans and properties are provided as an example; values
+	shown in comments reflect the actual defaults which are in effect
+	without specificationtest. (To change from the default behavior, 
+	uncomment AND alter the shown values.)   
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:annotation-config />
+
+	<!-- Database Connection -->
+	<bean id="coherenceConfiguration"
+		class="org.liwa.coherence.Configuration">
+		<property name="selective" value="selective" />
+		<property name="hottest" value="hottest" />
+		<property name="breadthFirst" value="breadth-first" />
+		<property name="highestPriority" value="highest-priority" />
+		<property name="runs" value="1" />
+		<property name="parallelSites" value="1" />
+		<property name="deleteOldJobs" value="true" />
+	</bean>
+
+    <bean id="sitemaps"
+		class="org.liwa.coherence.SitemapsBean">
+		<property name="sitemaps">
+			<list>
+    			<ref bean="dwSitemaps"/>
+				<ref bean="bbcSitemaps"/>
+				<ref bean="euronewsSitemaps"/>
+				<ref bean="nytimesSitemaps"/>
+				<ref bean="bloombergSitemaps"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="bbcSitemaps" class="org.liwa.coherence.SitemapSet">
+		<property name="domain"><value>www.bbc.co.uk</value></property>
+		<property name="sitemaps">
+			<list>
+				<value>http://www.bbc.co.uk/news/sitemap.xml</value>
+				<value>http://www.bbc.co.uk/bbcvisionsitemap.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dwSitemaps" class="org.liwa.coherence.SitemapSet">
+		<property name="domain"><value>www.dw-world.de</value></property>
+		<property name="sitemaps">
+			<list>
+				<value>http://www.dw-world.de/sitemap_rubrik.xml</value>
+				<value>http://www.dw-world.de/sitemap_s.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="euronewsSitemaps" class="org.liwa.coherence.SitemapSet">
+		<property name="domain"><value>euronews.org</value></property>
+		<property name="sitemaps">
+			<list>
+				<value>http://www.euronews.net/sitemaps/sitemap-pages-en.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="nytimesSitemaps" class="org.liwa.coherence.SitemapSet">
+		<property name="domain"><value>nytimes.com</value></property>
+		<property name="sitemaps">
+			<list>
+				<value>http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/opentopics_00000.xml.gz</value>
+				<value>http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/recent_00000.xml.gz</value>
+				<value>http://spiderbites.nytimes.com/sitemaps/www.nytimes.com/sections_00000.xml.gz</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="bloombergSitemaps" class="org.liwa.coherence.SitemapSet">
+		<property name="domain"><value>bloomberg.com</value></property>
+		<property name="sitemaps">
+			<list>
+				<value>http://www.bloomberg.com/sitemap_data_index_recent.xml</value>
+				<value>http://www.bloomberg.com/sitemap_data_index_2011_1.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="publishedUrlDao"
+		class="org.liwa.coherence.dao.PublishedUrlDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+
+	<bean id="robotsFileDao"
+		class="org.liwa.coherence.dao.RobotFileDao">
+		<property name="connectionPool">
+			<ref bean="connectionPool" />
+		</property>
+		<property name="queries">
+			<ref bean="queries" />
+		</property>
+	</bean>
+
+	<!-- DB specific queries -->
+	<bean id="queries" class="org.liwa.coherence.db.Queries">
+		<property name="queriesLocation" value="queries.properties" />
+	</bean>
+
+	<!-- Database Connection -->
+	<bean id="connectionPool"
+		class="org.liwa.coherence.db.ConnectionPool">
+		<property name="dataSourceName" value="Coherence Data Source" />
+		<property name="serverName" value="debug.europarchive.org" />
+		<property name="databaseName" value="liva_coherence" />
+		<property name="user" value="liwa" />
+		<property name="password" value="liwa" />
+		<property name="maxConnections" value="150" />
+		<property name="dataSourceClass"
+			value="org.postgresql.ds.PGPoolingDataSource" />
+	</bean>
+
+</beans>
