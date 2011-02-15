@@ -8,14 +8,27 @@ public class CoherenceControllerFactory {
 	private static Heritrix heritrix;
 	private static RevisitLauncher launcher;
 
-	public static void setHeritrix(Heritrix heritrixParam) {
+	public static void setRobotsHeritrix(Heritrix heritrixParam, String file) {
 		heritrix = heritrixParam;
 		String singleJob = System.getProperty("coherence.singleJob");
 		if (singleJob != null) {
 			heritrix.getEngine().requestLaunch(singleJob);
 		}
-		CoherenceController coherenceController = new CoherenceController(
-				new File("coherence-controller/coherence-controller.cxml"), heritrix
+		RobotsCoherenceController coherenceController = new RobotsCoherenceController(new File(file), heritrix
+						.getEngine());
+		launcher = new RevisitLauncher(heritrix);
+		launcher.setCoherenceController(coherenceController);
+		coherenceController.deleteOldJobs();
+		coherenceController.startCoherenceJobs();
+	}
+	
+	public static void setSitemapHeritrix(Heritrix heritrixParam, String file) {
+		heritrix = heritrixParam;
+		String singleJob = System.getProperty("coherence.singleJob");
+		if (singleJob != null) {
+			heritrix.getEngine().requestLaunch(singleJob);
+		}
+		SitemapCoherenceController coherenceController = new SitemapCoherenceController(new File(file), heritrix
 						.getEngine());
 		launcher = new RevisitLauncher(heritrix);
 		launcher.setCoherenceController(coherenceController);
