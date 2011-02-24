@@ -29,8 +29,8 @@ import org.liwa.coherence.sitemap.SitemapLoader;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
-public class SitemapCoherenceController implements ApplicationListener, JobListener,
-		SitemapHandler, CoherenceController {
+public class SitemapCoherenceController implements ApplicationListener,
+		JobListener, SitemapHandler, CoherenceController {
 
 	private Engine engine;
 
@@ -43,10 +43,11 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 	private Configuration configuration;
 
 	private Map<ParallelJobs, ParallelJobs> revisitMap;
-	
+
 	private PublishedUrlDao publishedUrlDao;
+
 	private RobotFileDao robotsDao;
-	
+
 	private int run = 0;
 
 	private int jobCursor = 0;
@@ -64,7 +65,7 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 		ac.validate();
 		configuration = (Configuration) ac.getBean("coherenceConfiguration");
 		publishedUrlDao = (PublishedUrlDao) ac.getBean("publishedUrlDao");
-		sitemaps = ((SitemapsBean)ac.getBean("sitemaps")).getSitemaps();
+		sitemaps = ((SitemapsBean) ac.getBean("sitemaps")).getSitemaps();
 		robotsDao = (RobotFileDao) ac.getBean("robotsFileDao");
 	}
 
@@ -73,7 +74,6 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 
 	}
 
-	
 	public PublishedUrlDao getPublishedUrlDao() {
 		return publishedUrlDao;
 	}
@@ -82,22 +82,29 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 		this.publishedUrlDao = publishedUrlDao;
 	}
 
-
 	public void startCoherenceJobs() {
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-		startJob(sitemaps.get(jobCursor));
+		for (int i = 0; i < 4; i++) {
+			startJob(sitemaps.get(jobCursor));
+		}
 	}
 
 	private void startJob(SitemapSet sitemapSet) {
+
+		jobCursor++;
+		if (jobCursor == sitemaps.size()) {
+			jobCursor = 0;
+		}
 		ParallelJobs pj = new ParallelJobs();
 		pjs.add(pj);
 		String domain = sitemapSet.getDomain();
 		int domainId = this.insertDomain(domain);
 		publishedUrlDao.setRobotFileId(domainId);
 		List<CompressedUrl> urlList = sitemapSet.getUrls();
-		if(urlList == null){
-			urlList = SitemapLoader.loadCompressedUrls(sitemapSet.getSitemaps(), this);
+		if (urlList == null) {
+			urlList = SitemapLoader.loadCompressedUrls(
+					sitemapSet.getSitemaps(), this);
 			sitemapSet.setUrls(urlList);
 			urlList = sitemapSet.getUrls();
 		}
@@ -256,13 +263,9 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 					// }
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
-					jobCursor++;
-					if (jobCursor < sitemaps.size()) {
-						startJob(sitemaps.get(jobCursor));
-					}else{
-						jobCursor = 0;
-						startJob(sitemaps.get(jobCursor));
-					}
+
+					startJob(sitemaps.get(jobCursor));
+
 					// jobsToDelete.add(cj);
 				}
 			}
@@ -289,7 +292,7 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 				run++;
 				if (run < configuration.getRuns()) {
 					startCoherenceJobs();
-				}else{
+				} else {
 					System.out.println("all jobs are done");
 					System.exit(0);
 				}
@@ -334,7 +337,8 @@ public class SitemapCoherenceController implements ApplicationListener, JobListe
 			Date lastModified) {
 		int id = -1;
 		try {
-			id = publishedUrlDao.insertPublishedUrl(url, frequency, priority, lastModified);
+			id = publishedUrlDao.insertPublishedUrl(url, frequency, priority,
+					lastModified);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
