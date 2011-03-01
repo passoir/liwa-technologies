@@ -343,7 +343,7 @@ public class SitemapLoader extends DefaultHandler implements InitializingBean {
 					dPriority = Double.parseDouble(priority);
 				}
 				url.setPriority(dPriority);
-				if (changeFreq.trim().length() > 0
+				if (callback != null && changeFreq.trim().length() > 0
 						&& getDomain(location).equalsIgnoreCase(host)) {
 					int id = callback.saveUrl(location, changeFreq, dPriority,
 							null);
