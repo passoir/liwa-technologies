@@ -24,6 +24,8 @@ import org.liwa.coherence.schedule.AbstractSchedule;
 import org.liwa.coherence.schedule.ChangeRateProvider;
 import org.liwa.coherence.schedule.DatasetProvider;
 import org.liwa.coherence.sitemap.CompressedUrl;
+import org.liwa.coherence.sitemap.PublishedUrl;
+import org.liwa.coherence.sitemap.SitemapChangeRateProvider;
 import org.liwa.coherence.sitemap.SitemapHandler;
 import org.liwa.coherence.sitemap.SitemapLoader;
 import org.springframework.context.ApplicationEvent;
@@ -50,8 +52,6 @@ public class SitemapCoherenceController implements ApplicationListener,
 
 	private int run = 0;
 
-	private int jobCursor = 0;
-
 	public SitemapCoherenceController(File cxml, Engine engine) {
 		this.pjs = new ArrayList<ParallelJobs>();
 		this.revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
@@ -65,8 +65,14 @@ public class SitemapCoherenceController implements ApplicationListener,
 		ac.validate();
 		configuration = (Configuration) ac.getBean("coherenceConfiguration");
 		publishedUrlDao = (PublishedUrlDao) ac.getBean("publishedUrlDao");
-		sitemaps = ((SitemapsBean) ac.getBean("sitemaps")).getSitemaps();
 		robotsDao = (RobotFileDao) ac.getBean("robotsFileDao");
+
+		SitemapsBean bean = (SitemapsBean) ac.getBean("sitemaps");
+		List<String> s = bean.getSitemaps();
+		sitemaps = new ArrayList<SitemapSet>();
+		for (String sitemap : s) {
+			sitemaps.add(bean.loadSitemapSet(sitemap));
+		}
 	}
 
 	public void onApplicationEvent(ApplicationEvent arg0) {
@@ -85,34 +91,39 @@ public class SitemapCoherenceController implements ApplicationListener,
 	public void startCoherenceJobs() {
 		pjs = new ArrayList<ParallelJobs>();
 		revisitMap = new HashMap<ParallelJobs, ParallelJobs>();
-		for (int i = 0; i < 4; i++) {
-			startJob(sitemaps.get(jobCursor));
+		for (SitemapSet s : sitemaps) {
+			System.out.println(s.getDomain());
+			startJob(s);
 		}
 	}
 
 	private void startJob(SitemapSet sitemapSet) {
-
-		jobCursor++;
-		if (jobCursor == sitemaps.size()) {
-			jobCursor = 0;
-		}
 		ParallelJobs pj = new ParallelJobs();
 		pjs.add(pj);
 		String domain = sitemapSet.getDomain();
 		int domainId = this.insertDomain(domain);
 		publishedUrlDao.setRobotFileId(domainId);
-		List<CompressedUrl> urlList = sitemapSet.getUrls();
-		if (urlList == null) {
-			urlList = SitemapLoader.loadCompressedUrls(
-					sitemapSet.getSitemaps(), this);
-			sitemapSet.setUrls(urlList);
-			urlList = sitemapSet.getUrls();
-		}
+		List<CompressedUrl> urlList = compressUrls(sitemapSet.getUrls());
 		// startThresholdJob(configuration, domain, sitemapList, pj);
 		startHottestJob(configuration, domain, urlList, domainId, pj);
 		startBreadthFirstJob(configuration, domain, urlList, domainId, pj);
 		startHighestPriorityJob(configuration, domain, urlList, domainId, pj);
 		startSelectiveJob(configuration, domain, urlList, domainId, pj);
+	}
+
+	private List<CompressedUrl> compressUrls(List<PublishedUrl> published) {
+		List<CompressedUrl> compressed = new ArrayList<CompressedUrl>();
+		for (PublishedUrl p : published) {
+			int id = saveUrl(p.getLocation(), p.getChangeRate(), p
+					.getPriority(), p.getLastModified());
+			CompressedUrl c = new CompressedUrl();
+			c.setId(id);
+			c.setChangeRate(SitemapChangeRateProvider.CHANGE_RATE_MAP.get(p
+					.getChangeRate().trim()));
+			p.setPriority(p.getPriority());
+			compressed.add(c);
+		}
+		return compressed;
 	}
 
 	public void deleteOldJobs() {
@@ -263,9 +274,6 @@ public class SitemapCoherenceController implements ApplicationListener,
 					// }
 					pjs.remove(pjVisit);
 					revisitMap.remove(pjVisit);
-
-					startJob(sitemaps.get(jobCursor));
-
 					// jobsToDelete.add(cj);
 				}
 			}
@@ -289,13 +297,8 @@ public class SitemapCoherenceController implements ApplicationListener,
 				allDone &= pj.areJobsDone();
 			}
 			if (allDone) {
-				run++;
-				if (run < configuration.getRuns()) {
-					startCoherenceJobs();
-				} else {
-					System.out.println("all jobs are done");
-					System.exit(0);
-				}
+				System.out.println("all jobs are done");
+				System.exit(0);
 			}
 		}
 	}

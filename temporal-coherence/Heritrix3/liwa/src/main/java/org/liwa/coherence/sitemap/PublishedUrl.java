@@ -54,7 +54,7 @@ public class PublishedUrl {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "[Url: "+location+ ", lastModified " + lastModified + ", changeFrequency " +changeRate +"]";
+		return "[Url: "+location+ ", lastModified " + lastModified + ", changeFrequency " +changeRate +", priority " +priority+"]";
 	}
 
 	public double getPriority() {
