@@ -1,0 +1,7 @@
+echo start Heritrix
+CLASSPATH=`echo $(ls lib/*.jar)":heritrix-3.0.0/bin" | sed -e 's/ /:/g'`
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH org.liwa.coherence.sitemap.SitemapExporter bbc http://www.bbc.co.uk/news/sitemap.xml http://www.bbc.co.uk/bbcvisionsitemap.xml
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH org.liwa.coherence.sitemap.SitemapExporter bloomberg http://www.bloomberg.com/sitemap_data_index_recent.xml http://www.bloomberg.com/sitemap_data_index_2011_1.xml
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH org.liwa.coherence.sitemap.SitemapExporter dw http://www.dw-world.de/sitemap_rubrik.xml http://www.dw-world.de/sitemap_s.xml
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH org.liwa.coherence.sitemap.SitemapExporter euronews http://www.euronews.net/sitemaps/sitemap-pages-en.xml
+echo end
