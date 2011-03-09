@@ -21,7 +21,7 @@ public class SitemapExporter implements SitemapHandler {
 	private String path = "seeds";
 	
 	
-	private int size = 500;
+	private int size = 5000;
 
 	public SitemapExporter() {
 		map = new HashMap<String, List<PublishedUrl>>();
