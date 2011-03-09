@@ -75,12 +75,12 @@
 	<bean id="connectionPool"
 		class="org.liwa.coherence.db.ConnectionPool">
 		<property name="dataSourceName" value="Coherence Data Source" />
-		<property name="serverName" value="debug.europarchive.org" /> 
-<!-- 		<property name="serverName" value="infao5802" />  -->
-		<property name="databaseName" value="liva_coherence" />
-		<!-- <property name="databaseName" value="liwa_coherence_test" /> -->
- 		<property name="user" value="liwa" />
-<!-- 		<property name="user" value="ddenev" /> -->
+<!-- 		<property name="serverName" value="debug.europarchive.org" />  -->
+		<property name="serverName" value="infao5802" /> 
+<!-- 		<property name="databaseName" value="liva_coherence" /> -->
+        <property name="databaseName" value="liwa_coherence_test" />
+<!--  		<property name="user" value="liwa" />-->
+		<property name="user" value="ddenev" /> 
 		<property name="password" value="liwa" />
 		<property name="maxConnections" value="150" />
 		<property name="dataSourceClass"

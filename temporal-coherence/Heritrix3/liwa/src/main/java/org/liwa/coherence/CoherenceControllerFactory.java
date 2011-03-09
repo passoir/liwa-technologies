@@ -35,6 +35,20 @@ public class CoherenceControllerFactory {
 		coherenceController.deleteOldJobs();
 		coherenceController.startCoherenceJobs();
 	}
+	
+	public static void setDefaultSitemapHeritrix(Heritrix heritrixParam, String file) {
+		heritrix = heritrixParam;
+		String singleJob = System.getProperty("coherence.singleJob");
+		if (singleJob != null) {
+			heritrix.getEngine().requestLaunch(singleJob);
+		}
+		DefaultSitemapController coherenceController = new DefaultSitemapController(new File(file), heritrix
+						.getEngine());
+//		launcher = new RevisitLauncher(heritrix);
+//		launcher.setCoherenceController(coherenceController);
+		coherenceController.deleteOldJobs();
+		coherenceController.startCoherenceJobs();
+	}
 
 	public static RevisitLauncher createNewRevisitLauncher()
 			throws NullPointerException {
