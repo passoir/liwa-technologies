@@ -1,0 +1,8 @@
+echo start Heritrix
+CLASSPATH=`echo $(ls lib/*.jar)":heritrix-3.0.0/bin" | sed -e 's/ /:/g'`
+I=0
+while   [ $I -le 10 ]
+do
+java -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -classpath $CLASSPATH org.liwa.coherence.DefaultSitemapHeritrixLauncher -a liwa -p 8845
+done
+echo end
