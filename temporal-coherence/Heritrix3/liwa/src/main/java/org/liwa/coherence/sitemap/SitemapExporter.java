@@ -56,7 +56,7 @@ public class SitemapExporter implements SitemapHandler {
 		List<PublishedUrl> filtered = new ArrayList<PublishedUrl>();
 		int keyIndex = 0;
 		int urlsLeft = size;
-		while(filtered.size() < 200 && urlsLeft > 0 && keys.size() > 0){
+		while(filtered.size() < size && urlsLeft > 0 && keys.size() > 0){
 			if(keyIndex >= keys.size()){
 				keyIndex = 0;
 			}
