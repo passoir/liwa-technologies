@@ -56,7 +56,8 @@ public class SitemapExporter implements SitemapHandler {
 		List<PublishedUrl> filtered = new ArrayList<PublishedUrl>();
 		int keyIndex = 0;
 		int urlsLeft = size;
-		while(filtered.size() < size && urlsLeft > 0 && keys.size() > 0){
+		Set<Integer> empty = new HashSet<Integer>();
+		while(filtered.size() < size && urlsLeft > 0 && keys.size() > 0 && empty.size() < keys.size()){
 			if(keyIndex >= keys.size()){
 				keyIndex = 0;
 			}
@@ -66,6 +67,8 @@ public class SitemapExporter implements SitemapHandler {
 				filtered.add(u);
 				ps.println(u.getLocation() + " " + u.getChangeRate() + " "  + u.getPriority());
 				urlsLeft--;
+			}else{
+				empty.add(keyIndex);
 			}
 			keyIndex++;
 		}
